@@ -10,5 +10,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="skip_button">Skip Button</string>
     <string name="like_button">Like button</string>
+    <string name="swipe_view">Swipe View</string>
+    <string name="profile_image">Profile Image</string>
 
 </resources>
