@@ -9,6 +9,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.appcompat.widget.Toolbar;
+
 
 import com.mindbriks.sparkle.databinding.ActivityMainBinding;
 
@@ -22,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Toolbar actionBarToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(actionBarToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

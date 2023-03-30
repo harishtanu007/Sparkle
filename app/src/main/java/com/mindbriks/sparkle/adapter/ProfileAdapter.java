@@ -24,7 +24,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public ProfileAdapter(@NonNull Context context, List<Profile> profileList) {
         this.context = context;
         this.profileList = profileList;
-
     }
 
     @NonNull
