@@ -12,4 +12,5 @@
 
     <color name="home_start_color">#F7F7F7</color>
     <color name="home_end_color">#FFFFFF</color>
+    <color name="bottom_navigation">#FFFFFF</color>
 </resources>
