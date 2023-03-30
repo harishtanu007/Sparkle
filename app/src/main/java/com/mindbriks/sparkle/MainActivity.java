@@ -1,61 +1,37 @@
 package com.mindbriks.sparkle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mindbriks.sparkle.fragments.ChatsFragment;
-import com.mindbriks.sparkle.fragments.LikesFragment;
-import com.mindbriks.sparkle.fragments.ProfileFragment;
-import com.mindbriks.sparkle.fragments.SwipeFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.mindbriks.sparkle.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
-    private Fragment selectedFragment = null;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        // Show the initial fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new SwipeFragment()).commit();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_likes, R.id.navigation_chats, R.id.navigation_profile)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
-    // Listen for navigation item selection events
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.navigation_home:
-                            selectedFragment = new SwipeFragment();
-                            break;
-                        case R.id.navigation_likes:
-                            selectedFragment = new LikesFragment();
-                            break;
-                        case R.id.navigation_chats:
-                            selectedFragment = new ChatsFragment();
-                            break;
-                        case R.id.navigation_profile:
-                            selectedFragment = new ProfileFragment();
-                            break;
-                    }
-
-                    // Replace the current fragment with the selected fragment
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
-
-                    return true;
-                }
-            };
 }
