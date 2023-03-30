@@ -7,6 +7,9 @@
     <color name="button_color">#AA3FEC</color>
 
     <!--    linear gradient-->
-    <color name="start_color">#8B1ECF</color>
-    <color name="end_color">#BC7BE4</color>
+    <color name="splash_start_color">#8B1ECF</color>
+    <color name="splash_end_color">#BC7BE4</color>
+
+    <color name="home_start_color">#F7F7F7</color>
+    <color name="home_end_color">#FFFFFF</color>
 </resources>
