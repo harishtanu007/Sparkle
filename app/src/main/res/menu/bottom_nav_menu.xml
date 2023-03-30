@@ -6,7 +6,7 @@
         android:title="@string/menu_home" />
     <item
         android:id="@+id/navigation_likes"
-        android:icon="@drawable/ic_baseline_heart_broken_24"
+        android:icon="@drawable/ic_baseline_heart_24"
         android:title="@string/menu_likes" />
     <item
         android:id="@+id/navigation_chats"

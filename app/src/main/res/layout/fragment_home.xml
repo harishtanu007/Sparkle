@@ -11,7 +11,7 @@
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/card_stack_view"
         android:layout_width="match_parent"
-        android:layout_height="580dp"
+        android:layout_height="620dp"
         android:layout_margin="16dp"
         android:clipToPadding="false"
         android:contentDescription="@string/swipe_view"
@@ -33,7 +33,7 @@
             android:id="@+id/skip_button"
             layout="@layout/skip_button"
             android:layout_width="0dp"
-            android:layout_marginRight="64dp"
+            android:layout_marginRight="72dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1" />
@@ -42,7 +42,7 @@
             android:id="@+id/like_button"
             layout="@layout/like_button"
             android:layout_width="0dp"
-            android:layout_marginLeft="64dp"
+            android:layout_marginLeft="72dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1" />

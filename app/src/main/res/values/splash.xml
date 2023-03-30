@@ -3,7 +3,7 @@
     <style name="Theme.Sparkle.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FFFFFF</item>
         <!--        TODO: Update the icon-->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/app_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="postSplashScreenTheme">@style/Theme.Sparkle</item>
     </style>
 </resources>

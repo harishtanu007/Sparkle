@@ -41,7 +41,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         final Profile profile = profileList.get(position);
         if (profile != null) {
             holder.cardViewName.setText(profile.getName() + ", " + profile.getAge());
-            holder.cardViewDistance.setText(profile.getDistance() + " "+ getDistanceMetric());
+            holder.cardViewDistance.setText(profile.getDistance() + " " + getDistanceMetric());
             String imageUrl = profile.getProfilePic();
 
             if (imageUrl == null || imageUrl.isEmpty()) {
