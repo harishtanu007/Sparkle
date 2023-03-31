@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,8 +40,6 @@ public class HomeFragment extends Fragment implements CardStackListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //final TextView textView = binding.textHome;
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         cardStackView = binding.cardStackView;
         layoutManager = new CardStackLayoutManager(getContext(), this);
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
@@ -69,7 +66,7 @@ public class HomeFragment extends Fragment implements CardStackListener {
     // set up buttons actions
     private void setupButton(FragmentHomeBinding homeView) {
         // skip button
-        FloatingActionButton skip = homeView.skipButton.skipButton;
+        FloatingActionButton skip = homeView.buttonContainer.skipButton.skipButton;
         skip.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
                     .setDirection(Direction.Left)
@@ -80,7 +77,7 @@ public class HomeFragment extends Fragment implements CardStackListener {
             cardStackView.swipe();
         });
         // like button
-        FloatingActionButton like = binding.likeButton.likeButton;
+        FloatingActionButton like = binding.buttonContainer.likeButton.likeButton;
         like.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
                     .setDirection(Direction.Right)

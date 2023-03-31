@@ -20,6 +20,7 @@
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2"
             tools:itemCount="7"
+            android:paddingBottom="80dp"
             tools:listitem="@layout/like_card">
 
         </androidx.recyclerview.widget.RecyclerView>
