@@ -14,5 +14,6 @@
     <string name="profile_image">Profile Image</string>
     <string name="last_message">Last Message</string>
     <string name="chat_example_time">14:30 PM</string>
+    <string name="account_settings">Account Settings</string>
 
 </resources>
