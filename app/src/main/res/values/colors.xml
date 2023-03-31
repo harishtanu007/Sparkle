@@ -14,4 +14,5 @@
     <color name="home_end_color">#FFFFFF</color>
     <color name="bottom_navigation">#FFFFFF</color>
     <color name="reject">#FF2D2D</color>
+    <color name="chat_message_color">#606060</color>
 </resources>

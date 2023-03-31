@@ -12,5 +12,6 @@
     <string name="like_button">Like button</string>
     <string name="swipe_view">Swipe View</string>
     <string name="profile_image">Profile Image</string>
+    <string name="last_message">Last Message</string>
 
 </resources>

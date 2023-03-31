@@ -36,15 +36,15 @@ public class LikesFragment extends Fragment {
         populateUsers();
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
-        RecyclerView mRecyclerView = binding.likes;
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setClipToPadding(false);
-        mRecyclerView.setHasFixedSize(true);
+        RecyclerView mLikesList = binding.likes;
+        mLikesList.setLayoutManager(layoutManager);
+        mLikesList.setClipToPadding(false);
+        mLikesList.setHasFixedSize(true);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
+        mLikesList.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
 
-        mRecyclerView.setAdapter(mLikesAdapter);
+        mLikesList.setAdapter(mLikesAdapter);
         return root;
     }
 
