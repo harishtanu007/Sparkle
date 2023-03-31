@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/threadLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,23 +37,70 @@
             app:layout_constraintStart_toEndOf="@+id/chat_profile_image"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/chat_username"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/roboto"
-                android:text="Username"
-                android:textColor="@android:color/black"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0" />
+                android:orientation="horizontal"
+                android:weightSum="10"
+                android:padding="0dp">
+
+                <TextView
+                    android:id="@+id/chat_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="Username"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:gravity="center|right"
+                    android:text="@string/chat_example_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    />
+
+                <ImageView
+                    android:id="@+id/online"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/chat_last_message"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/chat_username"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:visibility="gone" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/chat_last_message"
@@ -60,11 +109,14 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toEndOf="@+id/chat_profile_image"
                 android:fontFamily="@font/roboto"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
                 android:text="@string/last_message"
                 android:textColor="@color/chat_message_color"
                 android:textSize="18sp"
@@ -75,25 +127,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/chat_username"
                 app:layout_constraintVertical_bias="0.333" />
 
-            <ImageView
-                android:id="@+id/online"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/chat_last_message"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/chat_username"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:visibility="gone" />
+
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

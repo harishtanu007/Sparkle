@@ -51,7 +51,7 @@ public class ChatsFragment extends Fragment {
     private List<ChatThread> getChats() {
         List<ChatThread> chatThreads = new ArrayList<>();
 
-        ChatThread chatThread1 = new ChatThread("1", "Harish", "harish@gmail.com");
+        ChatThread chatThread1 = new ChatThread("1", "Harish", "This is a very very long string to test the UI");
         ChatThread chatThread2 = new ChatThread("2", "Barre", "Barre@gmail.com");
         ChatThread chatThread3 = new ChatThread("3", "comp", "comp@gmail.com");
 

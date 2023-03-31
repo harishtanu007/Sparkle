@@ -13,5 +13,6 @@
     <string name="swipe_view">Swipe View</string>
     <string name="profile_image">Profile Image</string>
     <string name="last_message">Last Message</string>
+    <string name="chat_example_time">14:30 PM</string>
 
 </resources>
