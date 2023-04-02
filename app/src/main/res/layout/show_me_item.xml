@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/gender_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:fontFamily="@font/roboto"
+    android:maxLines="1"
+    android:scrollHorizontally="true"
+    android:textSize="20dp"
+    android:padding="16dp"
+    android:text="@string/last_message"
+    android:textColor="@android:color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

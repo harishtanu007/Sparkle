@@ -3,7 +3,6 @@ package com.mindbriks.sparkle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import android.os.Bundle;
 import android.view.MenuItem;
