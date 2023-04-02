@@ -10,8 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        >
+        android:background="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,8 +94,8 @@
                             android:id="@+id/profile_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Jenny, 21"
                             android:fontFamily="@font/roboto"
+                            android:text="Jenny, 21"
                             android:textColor="@android:color/white"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -110,16 +109,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/account_settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:fontFamily="@font/roboto"
-                    android:gravity="left"
-                    android:text="@string/account_settings"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_margin="0dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_weight="2"
+                        android:text="@string/account_settings"
+                       style="@style/ProfileHeaderStyle" />
+
+                    <TextView
+                        android:id="@+id/account_settings_edit_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:fontFamily="@font/roboto"
+                        android:layout_weight="3"
+                        android:gravity="right"
+                        android:text="@string/edit"
+                        android:textColor="#247DCF"
+                        android:textSize="18sp"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/setting_name"
@@ -130,33 +148,25 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/setting_name_title"
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_title_text"
+                        style="@style/ProfileTitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="left"
-                        android:padding="8dp"
-                        android:text="Name"
-                        android:textColor="#2D2D2D"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="Name" />
 
-                    <TextView
-                        android:id="@+id/setting_name_value"
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_title_value"
+                        style="@style/ProfileValueStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="right"
-                        android:padding="8dp"
-                        android:text="Jenny"
-                        android:textColor="#8E8E8E"
-                        android:textSize="18sp" />
+                        android:text="Jenny" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/setting_phone_number"
                     android:layout_width="match_parent"
@@ -166,33 +176,25 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <TextView
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/setting_phone_number_title"
+                        style="@style/ProfileTitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="left"
-                        android:padding="8dp"
-                        android:text="Phone Number"
-                        android:textColor="#2D2D2D"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="Phone Number" />
 
-                    <TextView
-                        android:id="@+id/setting_phone_number_value"
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_phone_number_value"
+                        style="@style/ProfileValueStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="right"
-                        android:padding="8dp"
-                        android:text="+1 6786969619"
-                        android:textColor="#8E8E8E"
-                        android:textSize="18sp" />
+                        android:text="+1 6786969619" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/setting_dob"
                     android:layout_width="match_parent"
@@ -202,33 +204,25 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <TextView
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/setting_dob_title"
+                        style="@style/ProfileTitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="left"
-                        android:padding="8dp"
-                        android:text="Date of Birth"
-                        android:textColor="#2D2D2D"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="Date of birth" />
 
-                    <TextView
-                        android:id="@+id/setting_dob_value"
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_dob_value"
+                        style="@style/ProfileValueStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="right"
-                        android:padding="8dp"
-                        android:text="10th August 1996"
-                        android:textColor="#8E8E8E"
-                        android:textSize="18sp" />
+                        android:text="10th August 1996" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/setting_email"
                     android:layout_width="match_parent"
@@ -238,35 +232,150 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <TextView
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/setting_email_title"
+                        style="@style/ProfileTitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="left"
-                        android:padding="8dp"
-                        android:text="Email"
-                        android:textColor="#2D2D2D"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="Email" />
 
-                    <TextView
-                        android:id="@+id/setting_email_value"
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_email_value"
+                        style="@style/ProfileValueStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:gravity="right"
-                        android:padding="8dp"
-                        android:text="harishtanu007@gmail.com"
-                        android:textColor="#8E8E8E"
-                        android:textSize="18sp" />
+                        android:text="harishtanu007@gmail.com" />
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="left"
+                    android:text="Discovery Settings"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/setting_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/line_background"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_location_text"
+                        style="@style/ProfileTitleStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Location" />
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/profile_location_value"
+                        style="@style/ProfileValueStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Miyapur" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/line_background"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/setting_language_title"
+                        style="@style/ProfileTitleStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Preferred Languages" />
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/setting_language_value"
+                        style="@style/ProfileValueStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="English" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_show_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/line_background"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/setting_show_me_title"
+                        style="@style/ProfileTitleStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Show me" />
+
+                    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/setting_show_me_value"
+                        style="@style/ProfileValueStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Men" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/ProfileDivider" />
+
+            <Button
+                android:id="@+id/profile_logout_button"
+                style="@style/ProfileButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/line_background"
+                android:text="Logout"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/profile_delete_account_button"
+                style="@style/ProfileButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/line_background"
+                android:text="DeleteAccount"
+                android:textColor="#C02929" />
 
         </LinearLayout>
     </ScrollView>
