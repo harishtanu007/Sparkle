@@ -1,9 +1,11 @@
 package com.mindbriks.sparkle;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(actionBarToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+
+    private void switchHeaderColor(Toolbar actionBarToolbar, int color) {
+        actionBarToolbar.setBackgroundColor(color);
     }
 
 }

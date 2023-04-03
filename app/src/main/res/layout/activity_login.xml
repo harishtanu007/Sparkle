@@ -28,12 +28,13 @@
         android:textAppearance="@style/by_clicking"
         android:translationY="-1.88sp" />
 
-    <Button
+    <com.shobhitpuri.custombuttons.GoogleSignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Sign in" />
+        android:text="@string/google_sign_up"
+        app:isDarkTheme="false" />
 </LinearLayout>
