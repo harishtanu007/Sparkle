@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.adapter.ChatAdapter;
 import com.mindbriks.sparkle.model.ChatMessage;
 
@@ -19,6 +21,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private ChatAdapter mAdapter;
+    private ImageView mUserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,21 @@ public class ChatActivity extends AppCompatActivity {
             actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24);
+        }
+
+        mUserImage = (ImageView) toolbar.findViewById(R.id.profile_image);
+        String imageUrl = "";
+
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            // If the image value is null, load a default placeholder image
+            Glide.with(getApplicationContext())
+                    .load(R.drawable.card_view_place_holder_image)
+                    .into(mUserImage);
+        } else {
+            // If the image value is not null, load the actual image using Glide
+            Glide.with(getApplicationContext())
+                    .load(imageUrl)
+                    .into(mUserImage);
         }
 
         // Set up the RecyclerView

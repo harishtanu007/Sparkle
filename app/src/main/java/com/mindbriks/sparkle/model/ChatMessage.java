@@ -32,7 +32,7 @@ public class ChatMessage {
     }
 
     public String getMessageTime() {
-        return "10:40";
+        return "10:40 PM";
     }
 
     public void setMessageTime(long messageTime) {
