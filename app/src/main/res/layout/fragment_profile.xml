@@ -73,7 +73,7 @@
                                     app:layout_constraintVertical_bias="0.0"></de.hdodenhof.circleimageview.CircleImageView>
 
                                 <ImageButton
-                                    android:id="@+id/edit_profile"
+                                    android:id="@+id/edit_profile_image"
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_marginTop="16dp"

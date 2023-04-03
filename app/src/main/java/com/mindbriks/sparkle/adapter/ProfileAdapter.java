@@ -1,17 +1,21 @@
 package com.mindbriks.sparkle.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.UserProfileActivity;
 import com.mindbriks.sparkle.model.Profile;
 
 import java.util.List;
@@ -54,6 +58,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                         .load(imageUrl)
                         .into(holder.cardViewImage);
             }
+
+            holder.cardViewImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), UserProfileActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
 
     }
