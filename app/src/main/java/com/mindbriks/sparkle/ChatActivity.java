@@ -1,12 +1,20 @@
 package com.mindbriks.sparkle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MenuItem;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -20,8 +28,6 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private ChatAdapter mAdapter;
-    private ImageView mUserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +44,10 @@ public class ChatActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24);
         }
 
-        mUserImage = (ImageView) toolbar.findViewById(R.id.profile_image);
+        ImageView mUserImage = (ImageView) toolbar.findViewById(R.id.profile_image);
         String imageUrl = "";
 
-        if (imageUrl == null || imageUrl.isEmpty()) {
+        if (imageUrl.isEmpty()) {
             // If the image value is null, load a default placeholder image
             Glide.with(getApplicationContext())
                     .load(R.drawable.card_view_place_holder_image)
@@ -56,8 +62,44 @@ public class ChatActivity extends AppCompatActivity {
         // Set up the RecyclerView
         mRecyclerView = findViewById(R.id.message_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ChatAdapter(getApplicationContext(), getMessages(), "2");
+        ChatAdapter mAdapter = new ChatAdapter(getApplicationContext(), getMessages(), "2");
         mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        ImageView mSendMessageButton = findViewById(R.id.send_message_button);
+        EditText messageText = findViewById(R.id.message_input);
+        messageText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not used
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Check if the EditText has any text
+                if (s.toString().trim().length() > 0) {
+                    // Change the background color of the button
+                    mSendMessageButton.setBackground(getResources().getDrawable(R.drawable.rounded_corner_enabled_button));
+                    mSendMessageButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+                } else {
+                    // Revert the background color of the button to its original color
+                    mSendMessageButton.setBackground(getResources().getDrawable(R.drawable.rounded_corner_disabled_button));
+                    mSendMessageButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.send_button_tint), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Not used
+            }
+        });
     }
 
     private List<ChatMessage> getMessages() {
@@ -76,5 +118,15 @@ public class ChatActivity extends AppCompatActivity {
         messages.add(new ChatMessage("Really? You should definitely check it out sometime.", true, new Date(), "2"));
         messages.add(new ChatMessage("Maybe I will. Thanks for the recommendation.", false, new Date(), "1"));
         return messages;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
