@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,8 +74,24 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+            }
+        });
+
         ImageView mSendMessageButton = findViewById(R.id.send_message_button);
         EditText messageText = findViewById(R.id.message_input);
+        messageText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
+                } else {
+                }
+            }
+        });
         messageText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -83,13 +100,10 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Check if the EditText has any text
                 if (s.toString().trim().length() > 0) {
-                    // Change the background color of the button
                     mSendMessageButton.setBackground(getResources().getDrawable(R.drawable.rounded_corner_enabled_button));
                     mSendMessageButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
                 } else {
-                    // Revert the background color of the button to its original color
                     mSendMessageButton.setBackground(getResources().getDrawable(R.drawable.rounded_corner_disabled_button));
                     mSendMessageButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.send_button_tint), android.graphics.PorterDuff.Mode.SRC_IN);
                 }
@@ -98,6 +112,19 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 // Not used
+            }
+        });
+
+        mSendMessageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = messageText.getText().toString();
+                if (message.trim().length() > 0) {
+                    mAdapter.add(message);
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+                    messageText.setText("");
+                }
             }
         });
     }

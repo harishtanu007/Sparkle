@@ -19,16 +19,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sample text"
+        android:gravity="left"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <TextView
         android:id="@+id/text_view_time_sent"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="11:30 PM"
         android:gravity="right|end"
+        android:layout_gravity="right"
         android:textColor="@android:color/white"
         android:textSize="10sp" />
     </LinearLayout>

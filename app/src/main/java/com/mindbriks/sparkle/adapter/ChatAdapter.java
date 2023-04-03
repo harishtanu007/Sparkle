@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.ChatMessage;
 
+import java.util.Date;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -73,6 +74,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    public void add(String message) {
+        messageList.add(new ChatMessage(message, true, new Date(), "2"));
+    }
+
     private static class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
@@ -104,7 +109,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void bind(ChatMessage message) {
             messageText.setText(message.getMessageText());
             timeText.setText(message.getMessageTime());
-           // nameText.setText(message.getSenderName());
+            // nameText.setText(message.getSenderName());
             Glide.with(itemView.getContext())
                     .load(R.drawable.card_view_place_holder_image)
                     .into(profileImage);
