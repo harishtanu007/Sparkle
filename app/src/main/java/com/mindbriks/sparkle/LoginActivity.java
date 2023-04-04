@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         Button mSignInButton = findViewById(R.id.sign_in_button);
         //sign button
         mSignInButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
             startActivity(intent);
             finish();
         });

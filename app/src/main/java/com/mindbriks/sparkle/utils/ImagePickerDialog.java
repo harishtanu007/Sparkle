@@ -1,15 +1,17 @@
 package com.mindbriks.sparkle.utils;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+
+import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 
 public class ImagePickerDialog extends Dialog {
@@ -18,41 +20,39 @@ public class ImagePickerDialog extends Dialog {
     private static final int REQUEST_IMAGE_CAPTURE = 111;
     private ImageView imageViewGallery;
     private ImageView imageViewCamera;
-    private TextView textViewTitle;
+    Uri cam_uri = null;
 
-    public ImagePickerDialog(Context context) {
+    public ImagePickerDialog(Context context, ActivityResultLauncher<String> mGetContent, ActivityResultLauncher<Intent> getImageFromCamera) {
         super(context);
         setContentView(R.layout.dialog_image_picker);
         setTitle("");
 
         imageViewGallery = findViewById(R.id.imageViewGallery);
         imageViewCamera = findViewById(R.id.imageViewCamera);
-        textViewTitle = findViewById(R.id.textViewTitle);
+
+        Glide.with(context)
+                .load(R.drawable.ic_baseline_photo_library_24)
+                .into(imageViewGallery);
+
+        Glide.with(context)
+                .load(R.drawable.ic_baseline_photo_camera_24)
+                .into(imageViewCamera);
 
         imageViewGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (context instanceof Activity) {
-                    ((Activity) context).startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_GALLERY);
-                } else {
-                    Toast.makeText(context, "This is not a activity", Toast.LENGTH_SHORT).show();
-                }
+                mGetContent.launch("image/*");
             }
         });
 
         imageViewCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
-                    if (context instanceof Activity) {
-                        ((Activity) context).startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    } else {
-                        Toast.makeText(context, "This is not a activity", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                getImageFromCamera.launch(cameraIntent);
             }
         });
     }

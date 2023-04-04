@@ -2,51 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16sp"
+    android:background="@drawable/rounded_corner_match_background">
 
     <TextView
-        android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
         android:text="Select an image"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="42sp"
         android:textStyle="bold" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    android:layout_margin="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="16dp">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewGallery"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@color/white"
+        app:srcCompat="@drawable/ic_baseline_photo_library_24"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Open gallery" />
 
-        <ImageView
-            android:id="@+id/imageViewGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_photo_library_24"
-            android:layout_marginRight="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="Open gallery" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewCamera"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@color/white"
+        app:srcCompat="@drawable/ic_baseline_photo_camera_24"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Open camera" />
+</LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageViewCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_photo_camera_24"
-            android:layout_marginLeft="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="Open camera" />
-    </LinearLayout>
 
 </LinearLayout>

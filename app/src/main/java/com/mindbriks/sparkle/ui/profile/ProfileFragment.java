@@ -2,6 +2,7 @@ package com.mindbriks.sparkle.ui.profile;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +17,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -31,6 +37,7 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
 import com.mindbriks.sparkle.utils.ImagePickerDialog;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ProfileFragment extends Fragment {
@@ -75,15 +82,39 @@ public class ProfileFragment extends Fragment {
                 builderSingle.show();
             }
         });
+        ActivityResultLauncher<String> getImageFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        // Handle the returned Uri
+                        Glide.with(getContext()).load(uri).into(profileImage);
+                    }
+                });
+
+        ActivityResultLauncher<Intent> getImageFromCamera = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                            Bundle bundle = result.getData().getExtras();
+                            Bitmap bitmap = (Bitmap) bundle.get("data");
+                            Glide.with(getContext()).load(bitmap).into(profileImage);
+                        }
+                    }
+                });
+
         profileImage = binding.profileImage;
         ImageButton editProfileImage = binding.editProfileImage;
         editProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePickerDialog imagePickerDialog = new ImagePickerDialog(getContext());
+                ImagePickerDialog imagePickerDialog = new ImagePickerDialog(getContext(), getImageFromGallery, getImageFromCamera);
                 imagePickerDialog.show();
             }
         });
+
 
         return root;
     }
@@ -92,23 +123,5 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                // Get the image taken by the camera and display it
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Glide.with(this).load(imageBitmap).into(profileImage);
-            } else if (requestCode == REQUEST_IMAGE_GALLERY) {
-                // Get the image selected from the gallery and display it
-                Uri selectedImage = data.getData();
-                Glide.with(this).load(selectedImage).into(profileImage);
-            }
-        }
     }
 }
