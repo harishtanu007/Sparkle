@@ -19,4 +19,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="send_button_tint">#B9B9B9</color>
+    <color name="radio_button_checked">#EOEAFF</color>
+    <color name="radio_button_unchecked">#FFFFFF</color>
 </resources>
