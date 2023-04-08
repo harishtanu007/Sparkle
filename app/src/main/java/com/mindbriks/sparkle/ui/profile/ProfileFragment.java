@@ -1,44 +1,37 @@
 package com.mindbriks.sparkle.ui.profile;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mindbriks.sparkle.EditProfileActivity;
+import com.mindbriks.sparkle.ChooseLoginActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
 import com.mindbriks.sparkle.utils.ImagePickerDialog;
-
-import java.io.File;
-import java.io.IOException;
 
 public class ProfileFragment extends Fragment {
 
@@ -115,6 +108,31 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        Button logOut = binding.profileLogoutButton;
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
+                builderSingle.setTitle("Are you sure you want to logout?");
+                builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                });
+
+                builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+                builderSingle.show();
+            }
+        });
 
         return root;
     }
