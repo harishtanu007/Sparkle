@@ -12,10 +12,11 @@ import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.ChatThread;
 
-public class ChatsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class ChatsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView mUserName, mUserLastMessage;
     public String mUserId;
     public ImageView mUserImage;
+
     public ChatsViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
@@ -27,11 +28,6 @@ public class ChatsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View view) {
-//        Intent intent = new Intent(view.getContext(), ChatActivity.class);
-//        Bundle b = new Bundle();
-//        b.putString("matchId", mMatchId.getText().toString());
-//        intent.putExtras(b);
-//        view.getContext().startActivity(intent);
         Toast.makeText(view.getContext(), mUserName.getText(), Toast.LENGTH_LONG);
     }
 
