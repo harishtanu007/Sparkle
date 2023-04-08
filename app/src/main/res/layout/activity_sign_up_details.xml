@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingTop="?attr/actionBarSize"
     tools:context=".SignUpDetailsActivity">
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/signup_view_pager"

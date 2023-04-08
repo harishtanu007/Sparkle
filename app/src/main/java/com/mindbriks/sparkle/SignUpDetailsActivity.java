@@ -51,28 +51,25 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         signUpDrinkFragment = new SignUpDrinkFragment();
 
         signUpPagerAdapter = new SignUpPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        signUpPagerAdapter.addFragment(signUpDrinkFragment);
-        signUpPagerAdapter.addFragment(signUpHeightFragment);
-        signUpPagerAdapter.addFragment(signUpSmokeFragment);
-        signUpPagerAdapter.addFragment(signUpInterestsFragment);
-        signUpPagerAdapter.addFragment(signUpGenderFragment);
         signUpPagerAdapter.addFragment(signupFullNameFragment);
         signUpPagerAdapter.addFragment(signupPhotoFragment);
         signUpPagerAdapter.addFragment(signupDobFragment);
-
+        signUpPagerAdapter.addFragment(signUpGenderFragment);
+        signUpPagerAdapter.addFragment(signUpInterestsFragment);
+        //TODO: Add education details activity
+        signUpPagerAdapter.addFragment(signUpHeightFragment);
+        signUpPagerAdapter.addFragment(signUpSmokeFragment);
+        signUpPagerAdapter.addFragment(signUpDrinkFragment);
 
         signupViewPager.setAdapter(signUpPagerAdapter);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int currentItem = signupViewPager.getCurrentItem();
-                if (currentItem < signUpPagerAdapter.getCount() - 1) {
-                    signupViewPager.setCurrentItem(currentItem + 1);
-                } else {
-                    // handle form submission
-                    submitForm();
-                }
+        nextButton.setOnClickListener(v -> {
+            int currentItem = signupViewPager.getCurrentItem();
+            if (currentItem < signUpPagerAdapter.getCount() - 1) {
+                signupViewPager.setCurrentItem(currentItem + 1);
+            } else {
+                // handle form submission
+                submitForm();
             }
         });
     }

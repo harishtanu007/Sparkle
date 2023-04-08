@@ -4,101 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <LinearLayout
-        android:id="@+id/account_settings"
+    <TextView
+        style="@style/ProfileHeaderStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:orientation="horizontal">
+        android:layout_margin="8dp"
+        android:text="When is your birthday?" />
 
-        <TextView
-            style="@style/ProfileHeaderStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_weight="2"
-            android:text="When is your birthday?" />
-    </LinearLayout>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/sign_up_dob"
+        style="@style/ProfileEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:weightSum="3"
-        android:orientation="horizontal">
+        android:layout_margin="8dp"
+        android:background="@drawable/line_background"
+        android:focusable="false"
+        android:hint="Date of Birth"
+        android:maxLines="1"
+        android:padding="8dp" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/ProfileHeaderStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Day" />
-
-            <EditText
-                android:id="@+id/sign_up_dob_day"
-                style="@style/ProfileEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@drawable/line_background"
-                 />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/ProfileHeaderStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Month" />
-
-            <EditText
-                android:id="@+id/sign_up_dob_month"
-                style="@style/ProfileEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@drawable/line_background"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/ProfileHeaderStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Year" />
-
-            <EditText
-                android:id="@+id/sign_up_year"
-                style="@style/ProfileEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@drawable/line_background"
-                />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

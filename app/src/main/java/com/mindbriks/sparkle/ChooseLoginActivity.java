@@ -34,7 +34,7 @@ public class ChooseLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_login);
         Button mSignInGoogleButton = findViewById(R.id.login_google_button);
         mSignInGoogleButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SignUpDetailsActivity.class);
             startActivity(intent);
             finish();
         });
