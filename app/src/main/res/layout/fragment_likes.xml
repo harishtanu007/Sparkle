@@ -11,16 +11,45 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/likes_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/toolbar_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_margin="0dp"
+                    android:fontFamily="@font/arizonia"
+                    android:text="Likes"
+                    android:textColor="@android:color/black"
+                    android:textSize="32sp" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/likes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:paddingBottom="80dp"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2"
             tools:itemCount="7"
-            android:paddingBottom="80dp"
             tools:listitem="@layout/like_card">
 
         </androidx.recyclerview.widget.RecyclerView>

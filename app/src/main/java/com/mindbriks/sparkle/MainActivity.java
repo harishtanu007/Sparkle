@@ -27,10 +27,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Toolbar actionBarToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(actionBarToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         BottomNavigationView navView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
