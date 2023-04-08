@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@android:color/white"
+            app:contentScrim="@color/button_color"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -47,7 +47,9 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/user_content_profile" />
+    <include
+        android:id="@+id/user_content"
+        layout="@layout/user_content_profile" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/close_profile"
@@ -59,7 +61,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         android:tint="@color/white"
-        android:src="@drawable/ic_baseline_close_24" />
+        android:src="@drawable/ic_baseline_heart_24" />
 
 
 

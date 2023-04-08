@@ -125,17 +125,20 @@ public class ProfileFragment extends Fragment {
                 final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.show_me_item);
                 showMeAdapter.add("Upload photo");
                 showMeAdapter.add("Take Photo");
+                showMeAdapter.add("Remove Photo");
                 builderSingle.setAdapter(showMeAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0)
                             getImageFromGallery.launch("image/*");
-                        else {
+                        else if (which == 1) {
                             ContentValues values = new ContentValues();
                             values.put(MediaStore.Images.Media.TITLE, "New Picture");
                             values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
                             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             getImageFromCamera.launch(cameraIntent);
+                        } else if (which == 2) {
+                            profileImage.setImageDrawable(null);
                         }
                     }
                 });
