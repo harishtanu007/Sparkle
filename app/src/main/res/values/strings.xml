@@ -32,5 +32,6 @@
     <string name="pick_the_one_that_describes_you_the_best">Pick the one that describes you the best</string>
     <string name="option_1">Men</string>
     <string name="option_2">Women</string>
+    <string name="don_t_have_an_account_signup">Don\'t have an account? <b>Signup</b></string>
 
 </resources>
