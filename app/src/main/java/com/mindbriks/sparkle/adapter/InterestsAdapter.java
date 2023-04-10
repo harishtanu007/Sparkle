@@ -8,16 +8,20 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.Profile;
 import com.mindbriks.sparkle.viewholder.InterestsViewHolder;
 import com.mindbriks.sparkle.viewholder.LikesViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> {
     private List<Interest> interestList;
     private Context context;
+
+    private List<Interest> selectedInterests = new ArrayList<>();
 
     public InterestsAdapter(List<Interest> interestList, Context context) {
         this.interestList = interestList;
@@ -40,6 +44,17 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
         Interest interest = interestList.get(position);
         holder.name.setText(interest.getName());
         holder.itemView.setOnClickListener(v -> {
+            if (!interest.isSelected()) {
+                interest.setSelected(!interest.isSelected());
+                selectedInterests.add(interest);
+                holder.name.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
+                holder.name.setTextColor(context.getResources().getColor(R.color.button_color));
+            } else {
+                interest.setSelected(!interest.isSelected());
+                selectedInterests.remove(interest);
+                holder.name.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
+                holder.name.setTextColor(context.getResources().getColor(R.color.black));
+            }
         });
     }
 

@@ -50,11 +50,12 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         signUpDrinkFragment = new SignUpDrinkFragment();
 
         signUpPagerAdapter = new SignUpPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        signUpPagerAdapter.addFragment(signUpInterestsFragment);
         signUpPagerAdapter.addFragment(signupFullNameFragment);
         signUpPagerAdapter.addFragment(signupPhotoFragment);
         signUpPagerAdapter.addFragment(signupDobFragment);
         signUpPagerAdapter.addFragment(signUpGenderFragment);
-        signUpPagerAdapter.addFragment(signUpInterestsFragment);
+        //interests
         //TODO: Add education details activity
         signUpPagerAdapter.addFragment(signUpHeightFragment);
         signUpPagerAdapter.addFragment(signUpSmokeFragment);

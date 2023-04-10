@@ -29,7 +29,7 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
     @Override
     public GenderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_me_item, null, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.gender_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
         GenderViewHolder genderViewHolder = new GenderViewHolder(layoutView);

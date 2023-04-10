@@ -11,14 +11,10 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -26,8 +22,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -36,13 +30,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mindbriks.sparkle.EditProfileActivity;
 import com.mindbriks.sparkle.ChooseLoginActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileListAdapter;
 import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
 import com.mindbriks.sparkle.model.ProfileItem;
-import com.mindbriks.sparkle.utils.ImagePickerDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +114,7 @@ public class ProfileFragment extends Fragment {
 //                imagePickerDialog.show();
                 AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
 
-                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.show_me_item);
+                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.gender_item);
                 showMeAdapter.add("Upload photo");
                 showMeAdapter.add("Take Photo");
                 showMeAdapter.add("Remove Photo");

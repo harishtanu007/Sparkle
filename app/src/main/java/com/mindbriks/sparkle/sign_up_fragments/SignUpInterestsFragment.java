@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.InterestsAdapter;
 import com.mindbriks.sparkle.databinding.SignupInterestsFragmentBinding;
 import com.mindbriks.sparkle.model.Interest;
@@ -31,9 +33,11 @@ public class SignUpInterestsFragment extends Fragment {
         populateInterests();
 
         RecyclerView mInterestsList = binding.interestsList;
-        mInterestsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mInterestsList.setClipToPadding(false);
-        mInterestsList.setHasFixedSize(true);
+
+        // Set the GridLayoutManager with dynamic span count
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        mInterestsList.setLayoutManager(layoutManager);
 
         mInterestsList.setAdapter(mInterestsAdapter);
         return root;
@@ -50,6 +54,18 @@ public class SignUpInterestsFragment extends Fragment {
         Interest interest2 = new Interest("Movies");
         Interest interest3 = new Interest("Music");
 
+        interestList.add(interest1);
+        interestList.add(interest2);
+        interestList.add(interest3);
+        interestList.add(interest1);
+        interestList.add(interest2);
+        interestList.add(interest3);
+        interestList.add(interest1);
+        interestList.add(interest2);
+        interestList.add(interest3);
+        interestList.add(interest1);
+        interestList.add(interest2);
+        interestList.add(interest3);
         interestList.add(interest1);
         interestList.add(interest2);
         interestList.add(interest3);
