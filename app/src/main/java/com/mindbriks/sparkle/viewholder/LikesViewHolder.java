@@ -12,27 +12,16 @@ import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Profile;
 
-public class LikesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class LikesViewHolder extends RecyclerView.ViewHolder{
     public TextView mUserName, mUserDistance;
     public String mUserId;
     public ImageView mUserImage;
     public LikesViewHolder(View itemView) {
         super(itemView);
-        itemView.setOnClickListener(this);
 
         mUserName = (TextView) itemView.findViewById(R.id.item_name);
         mUserDistance = (TextView) itemView.findViewById(R.id.item_distance);
         mUserImage = (ImageView) itemView.findViewById(R.id.item_image);
-    }
-
-    @Override
-    public void onClick(View view) {
-//        Intent intent = new Intent(view.getContext(), ChatActivity.class);
-//        Bundle b = new Bundle();
-//        b.putString("matchId", mMatchId.getText().toString());
-//        intent.putExtras(b);
-//        view.getContext().startActivity(intent);
-        Toast.makeText(view.getContext(), mUserName.getText(), Toast.LENGTH_LONG);
     }
 
     public void setPostImage(Profile profile, Context context) {

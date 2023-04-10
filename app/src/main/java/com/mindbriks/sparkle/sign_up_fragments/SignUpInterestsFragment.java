@@ -4,35 +4,62 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.R;
-import com.mindbriks.sparkle.adapter.InterestAdapter;
-import com.mindbriks.sparkle.model.InterestCategory;
+import com.mindbriks.sparkle.adapter.InterestsAdapter;
+import com.mindbriks.sparkle.databinding.SignupInterestsFragmentBinding;
+import com.mindbriks.sparkle.model.Interest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SignUpInterestsFragment extends Fragment {
-    private ExpandableListView expandableListView;
-    private List<InterestCategory> interestCategories;
-    private InterestAdapter interestAdapter;
+
+    private SignupInterestsFragmentBinding binding;
+    private RecyclerView.Adapter mInterestsAdapter;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        binding = SignupInterestsFragmentBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        populateInterests();
+
+        RecyclerView mInterestsList = binding.interestsList;
+        mInterestsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mInterestsList.setClipToPadding(false);
+        mInterestsList.setHasFixedSize(true);
+
+        mInterestsList.setAdapter(mInterestsAdapter);
+        return root;
+    }
+
+    private void populateInterests() {
+        mInterestsAdapter = new InterestsAdapter(getInterests(), getContext());
+    }
+
+    private List<Interest> getInterests() {
+        List<Interest> interestList = new ArrayList<>();
+
+        Interest interest1 = new Interest("Sports");
+        Interest interest2 = new Interest("Movies");
+        Interest interest3 = new Interest("Music");
+
+        interestList.add(interest1);
+        interestList.add(interest2);
+        interestList.add(interest3);
+
+        return interestList;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.signup_interests_fragment, container, false);
-        // Set up the ExpandableListView
-        expandableListView = view.findViewById(R.id.expandable_list_view);
-        interestCategories = new ArrayList<>();
-        interestCategories.add(new InterestCategory("Sports", Arrays.asList("Cricket", "Badminton", "Football")));
-        interestCategories.add(new InterestCategory("Music", Arrays.asList("Rock", "Pop", "Hip-hop")));
-        interestCategories.add(new InterestCategory("Movies", Arrays.asList("Action", "Comedy", "Drama")));
-        interestAdapter = new InterestAdapter(getContext(), interestCategories);
-        expandableListView.setAdapter(interestAdapter);
-        return view;
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
