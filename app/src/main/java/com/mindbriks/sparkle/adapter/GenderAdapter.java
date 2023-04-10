@@ -1,5 +1,6 @@
 package com.mindbriks.sparkle.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,15 +8,19 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.viewholder.GenderViewHolder;
 
 import java.util.List;
 
-public class ShowMeAdapter extends RecyclerView.Adapter<GenderViewHolder> {
-    private List<String> genders;
+public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
+    private List<Gender> genders;
 
-    public ShowMeAdapter(List<String> genders) {
+    private Context context;
+
+    public GenderAdapter(List<Gender> genders, Context context) {
         this.genders = genders;
+        this.context = context;
     }
 
     @Override
@@ -32,8 +37,8 @@ public class ShowMeAdapter extends RecyclerView.Adapter<GenderViewHolder> {
     public void onBindViewHolder(GenderViewHolder holder, int position) {
         //Set ViewTag
         holder.itemView.setTag(position);
-        String gender = genders.get(position);
-        holder.mGenderText.setText(gender);
+        Gender gender = genders.get(position);
+        holder.mGenderText.setText(gender.getName());
         holder.itemView.setOnClickListener(v -> {
         });
     }

@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:padding="8dp"
+    tools:context=".sign_up_fragments.SignUpGenderFragment">
 
     <LinearLayout
         android:id="@+id/account_settings"
@@ -15,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="8dp"
             android:text="@string/what_s_your_gender"
             style="@style/ProfileHeaderStyle" />
 
@@ -23,41 +26,18 @@
             style="@style/ProfileValueStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="8dp"
             android:gravity="left"
             android:text="@string/pick_the_one_that_describes_you_the_best"
             android:textColor="#757575" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gender_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <RadioButton
-                android:id="@+id/radio_button_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_radio_button"
-                android:minHeight="48dp"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/line_background"
-                android:text="@string/option_1" />
-
-            <RadioButton
-                android:id="@+id/radio_button_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_radio_button"
-                android:minHeight="48dp"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/line_background"
-                android:text="@string/option_2" />
-
-        </RadioGroup>
     </LinearLayout>
 
 
