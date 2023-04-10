@@ -50,25 +50,23 @@ public class SignUpInterestsFragment extends Fragment {
     private List<Interest> getInterests() {
         List<Interest> interestList = new ArrayList<>();
 
-        Interest interest1 = new Interest("Sports");
-        Interest interest2 = new Interest("Movies");
-        Interest interest3 = new Interest("Music");
-
-        interestList.add(interest1);
-        interestList.add(interest2);
-        interestList.add(interest3);
-        interestList.add(interest1);
-        interestList.add(interest2);
-        interestList.add(interest3);
-        interestList.add(interest1);
-        interestList.add(interest2);
-        interestList.add(interest3);
-        interestList.add(interest1);
-        interestList.add(interest2);
-        interestList.add(interest3);
-        interestList.add(interest1);
-        interestList.add(interest2);
-        interestList.add(interest3);
+        interestList.add(new Interest("Sports"));
+        interestList.add(new Interest("Movies"));
+        interestList.add(new Interest("Music"));
+        interestList.add(new Interest("Hiking"));
+        interestList.add(new Interest("Fishing"));
+        interestList.add(new Interest("Singing"));
+        interestList.add(new Interest("Biking"));
+        interestList.add(new Interest("Sports"));
+        interestList.add(new Interest("Gym"));
+        interestList.add(new Interest("Instagram"));
+        interestList.add(new Interest("Travel"));
+        interestList.add(new Interest("Walking"));
+        interestList.add(new Interest("Meditation"));
+        interestList.add(new Interest("Partying"));
+        interestList.add(new Interest("Heavy Metal"));
+        interestList.add(new Interest("Painting"));
+        interestList.add(new Interest("Reading"));
 
         return interestList;
     }

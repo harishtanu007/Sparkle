@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.viewholder.GenderViewHolder;
 import com.mindbriks.sparkle.viewholder.InterestsViewHolder;
 import com.mindbriks.sparkle.viewholder.LikesViewHolder;
 
@@ -21,11 +23,14 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
     private List<Interest> interestList;
     private Context context;
 
-    private List<Interest> selectedInterests = new ArrayList<>();
+    private int maxSelection = 5;
+
+    private List<Interest> selectedInterests;
 
     public InterestsAdapter(List<Interest> interestList, Context context) {
         this.interestList = interestList;
         this.context = context;
+        this.selectedInterests =  new ArrayList<>();
     }
 
     @Override
@@ -44,18 +49,28 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
         Interest interest = interestList.get(position);
         holder.name.setText(interest.getName());
         holder.itemView.setOnClickListener(v -> {
-            if (!interest.isSelected()) {
-                interest.setSelected(!interest.isSelected());
-                selectedInterests.add(interest);
-                holder.name.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
-                holder.name.setTextColor(context.getResources().getColor(R.color.button_color));
-            } else {
-                interest.setSelected(!interest.isSelected());
+            if (selectedInterests.contains(interest)) {
                 selectedInterests.remove(interest);
-                holder.name.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
-                holder.name.setTextColor(context.getResources().getColor(R.color.black));
+                setDisabledButton(holder);
+            } else {
+                if (selectedInterests.size() < maxSelection) {
+                    selectedInterests.add(interest);
+                    setEnabledButton(holder);
+                } else {
+                    Toast.makeText(context, "Maximum selection reached", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    void setEnabledButton(InterestsViewHolder holder) {
+        holder.name.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
+        holder.name.setTextColor(context.getResources().getColor(R.color.button_color));
+    }
+
+    void setDisabledButton(InterestsViewHolder holder) {
+        holder.name.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
+        holder.name.setTextColor(context.getResources().getColor(R.color.black));
     }
 
     @Override
