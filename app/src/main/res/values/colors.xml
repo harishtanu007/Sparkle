@@ -21,4 +21,5 @@
     <color name="send_button_tint">#B9B9B9</color>
     <color name="radio_button_checked">#EOEAFF</color>
     <color name="radio_button_unchecked">#FFFFFF</color>
+    <color name="disabled_color">#C6C6C6</color>
 </resources>

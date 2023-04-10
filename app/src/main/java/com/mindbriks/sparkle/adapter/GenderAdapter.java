@@ -11,12 +11,15 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.viewholder.GenderViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
     private List<Gender> genders;
 
     private Context context;
+
+    private List<Gender> selectedGenders = new ArrayList<>();
 
     public GenderAdapter(List<Gender> genders, Context context) {
         this.genders = genders;
@@ -40,6 +43,17 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
         Gender gender = genders.get(position);
         holder.mGenderText.setText(gender.getName());
         holder.itemView.setOnClickListener(v -> {
+            if (!gender.isSelected()) {
+                gender.setSelected(!gender.isSelected());
+                selectedGenders.add(gender);
+                holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
+                holder.mGenderText.setTextColor(context.getResources().getColor(R.color.button_color));
+            } else {
+                gender.setSelected(!gender.isSelected());
+                selectedGenders.remove(gender);
+                holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
+                holder.mGenderText.setTextColor(context.getResources().getColor(R.color.black));
+            }
         });
     }
 

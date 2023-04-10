@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +32,8 @@ public class SignUpGenderFragment extends Fragment {
         populateInterests();
 
         RecyclerView mGenderList = binding.genderList;
-        mGenderList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mGenderList.setLayoutManager(layoutManager);
         mGenderList.setClipToPadding(false);
         mGenderList.setHasFixedSize(true);
 

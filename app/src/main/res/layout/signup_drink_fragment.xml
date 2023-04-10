@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="8dp"
     android:background="@color/white">
 
     <LinearLayout
@@ -19,47 +20,13 @@
             android:text="Do you drink?"
             style="@style/ProfileHeaderStyle" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/drink_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="16dp"
-            android:orientation="vertical">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <RadioButton
-                android:id="@+id/radio_button_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_radio_button"
-                android:minHeight="48dp"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/line_background"
-                android:text="Yes" />
-
-            <RadioButton
-                android:id="@+id/radio_button_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_radio_button"
-                android:minHeight="48dp"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/line_background"
-                android:text="No" />
-
-            <RadioButton
-                android:id="@+id/radio_button_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_radio_button"
-                android:minHeight="48dp"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/line_background"
-                android:text="Never" />
-
-        </RadioGroup>
     </LinearLayout>
 
 

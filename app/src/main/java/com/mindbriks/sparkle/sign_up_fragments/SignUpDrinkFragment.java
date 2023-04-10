@@ -4,25 +4,64 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.adapter.GenderAdapter;
+import com.mindbriks.sparkle.databinding.SignupDrinkFragmentBinding;
+import com.mindbriks.sparkle.databinding.SignupSmokeFragmentBinding;
+import com.mindbriks.sparkle.model.Gender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpDrinkFragment extends Fragment {
 
-    private EditText fullNameEditText;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.signup_drink_fragment, container, false);
-        //fullNameEditText = view.findViewById(R.id.sign_up_full_name);
-        return view;
+    private SignupDrinkFragmentBinding binding;
+    private RecyclerView.Adapter mSmokeAdapter;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        binding = SignupDrinkFragmentBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        populateInterests();
+
+        RecyclerView mGenderList = binding.drinkList;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mGenderList.setLayoutManager(layoutManager);
+        mGenderList.setClipToPadding(false);
+        mGenderList.setHasFixedSize(true);
+
+        mGenderList.setAdapter(mSmokeAdapter);
+        return root;
     }
 
-    public String getFullName() {
-        return fullNameEditText.getText().toString().trim();
+    private void populateInterests() {
+        mSmokeAdapter = new GenderAdapter(getInterests(), getContext());
+    }
+
+    private List<Gender> getInterests() {
+        List<Gender> genderList = new ArrayList<>();
+
+        Gender gender1 = new Gender("Yes");
+        Gender gender2 = new Gender("No");
+        Gender gender3 = new Gender("Never");
+
+        genderList.add(gender1);
+        genderList.add(gender2);
+        genderList.add(gender3);
+
+        return genderList;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
