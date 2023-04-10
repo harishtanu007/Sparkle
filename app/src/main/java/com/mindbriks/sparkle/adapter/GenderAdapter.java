@@ -11,7 +11,6 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.viewholder.GenderViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
@@ -19,7 +18,7 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
 
     private Context context;
 
-    private List<Gender> selectedGenders = new ArrayList<>();
+    private int checkedPosition = -1;
 
     public GenderAdapter(List<Gender> genders, Context context) {
         this.genders = genders;
@@ -42,19 +41,32 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
         holder.itemView.setTag(position);
         Gender gender = genders.get(position);
         holder.mGenderText.setText(gender.getName());
-        holder.itemView.setOnClickListener(v -> {
-            if (!gender.isSelected()) {
-                gender.setSelected(!gender.isSelected());
-                selectedGenders.add(gender);
-                holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
-                holder.mGenderText.setTextColor(context.getResources().getColor(R.color.button_color));
+        if (checkedPosition == -1) {
+            setDisabledButton(holder);
+        } else {
+            if (checkedPosition == holder.getAdapterPosition()) {
+                setEnabledButton(holder);
             } else {
-                gender.setSelected(!gender.isSelected());
-                selectedGenders.remove(gender);
-                holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
-                holder.mGenderText.setTextColor(context.getResources().getColor(R.color.black));
+                setDisabledButton(holder);
+            }
+        }
+        holder.itemView.setOnClickListener(v -> {
+            setEnabledButton(holder);
+            if (checkedPosition != holder.getAdapterPosition()) {
+                notifyItemChanged(checkedPosition);
+                checkedPosition = holder.getAdapterPosition();
             }
         });
+    }
+
+    void setEnabledButton(GenderViewHolder holder){
+        holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
+        holder.mGenderText.setTextColor(context.getResources().getColor(R.color.button_color));
+    }
+
+    void setDisabledButton(GenderViewHolder holder){
+        holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
+        holder.mGenderText.setTextColor(context.getResources().getColor(R.color.black));
     }
 
     @Override

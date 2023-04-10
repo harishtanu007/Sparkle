@@ -110,11 +110,9 @@ public class ProfileFragment extends Fragment {
         editProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ImagePickerDialog imagePickerDialog = new ImagePickerDialog(getContext(), getImageFromGallery, getImageFromCamera);
-//                imagePickerDialog.show();
                 AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
 
-                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.gender_item);
+                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.alert_dialog_item);
                 showMeAdapter.add("Upload photo");
                 showMeAdapter.add("Take Photo");
                 showMeAdapter.add("Remove Photo");
