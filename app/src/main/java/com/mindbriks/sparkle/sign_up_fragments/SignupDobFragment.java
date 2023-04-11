@@ -34,6 +34,17 @@ public class SignupDobFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        dobText.post(new Runnable() {
+            @Override
+            public void run() {
+                showDatePickerDialog();
+            }
+            });
+    }
+
     public void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),

@@ -12,17 +12,17 @@ import com.mindbriks.sparkle.R;
 
 public class SignUpHeightFragment extends Fragment {
 
-    private EditText fullNameEditText;
+    private EditText heightEditText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.signup_height_fragment, container, false);
-        fullNameEditText = view.findViewById(R.id.sign_up_full_name);
+        heightEditText = view.findViewById(R.id.sign_up_height);
         return view;
     }
 
     public String getFullName() {
-        return fullNameEditText.getText().toString().trim();
+        return heightEditText.getText().toString().trim();
     }
 }
