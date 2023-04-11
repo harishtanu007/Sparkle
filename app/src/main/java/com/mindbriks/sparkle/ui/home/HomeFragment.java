@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -28,13 +29,15 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements CardStackListener {
+public class HomeFragment extends Fragment implements CardStackListener, FilterFragment.OnFilterSelectedListener {
 
     private FragmentHomeBinding binding;
     private CardStackLayoutManager layoutManager;
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
     List<Profile> profileList;
+
+    private ImageView filterButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,10 +48,18 @@ public class HomeFragment extends Fragment implements CardStackListener {
         View root = binding.getRoot();
 
         cardStackView = binding.cardStackView;
+        filterButton = binding.filter;
         layoutManager = new CardStackLayoutManager(getContext(), this);
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
         setupButton(binding);
         populateUsers();
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FilterFragment filterFragment = new FilterFragment();
+                filterFragment.show(getFragmentManager(), "FilterFragment");
+            }
+        });
         return root;
     }
 
@@ -141,6 +152,11 @@ public class HomeFragment extends Fragment implements CardStackListener {
 
     @Override
     public void onCardDisappeared(View view, int position) {
+
+    }
+
+    @Override
+    public void onFilterSelected(int distance, int minAge, int maxAge, int gender) {
 
     }
 }

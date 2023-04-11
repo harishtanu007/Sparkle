@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -50,12 +51,12 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         signUpDrinkFragment = new SignUpDrinkFragment();
 
         signUpPagerAdapter = new SignUpPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        signUpPagerAdapter.addFragment(signUpInterestsFragment);
+
         signUpPagerAdapter.addFragment(signupFullNameFragment);
         signUpPagerAdapter.addFragment(signupPhotoFragment);
         signUpPagerAdapter.addFragment(signupDobFragment);
         signUpPagerAdapter.addFragment(signUpGenderFragment);
-        //interests
+        signUpPagerAdapter.addFragment(signUpInterestsFragment);
         //TODO: Add education details activity
         signUpPagerAdapter.addFragment(signUpHeightFragment);
         signUpPagerAdapter.addFragment(signUpSmokeFragment);
@@ -76,9 +77,9 @@ public class SignUpDetailsActivity extends AppCompatActivity {
 
     private void submitForm() {
         String fullNameText = signupFullNameFragment.getFullName();
-
-        // validate input and submit form
-        // ...
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

@@ -33,5 +33,7 @@
     <string name="option_1">Men</string>
     <string name="option_2">Women</string>
     <string name="don_t_have_an_account_signup">Don\'t have an account? <b>Signup</b></string>
+    <string name="distance_format">%d km away</string>
+    <string name="age_range">Range</string>
 
 </resources>

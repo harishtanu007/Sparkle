@@ -19,6 +19,7 @@ import java.util.Calendar;
 public class SignupDobFragment extends Fragment {
 
     private EditText dobText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,11 +38,12 @@ public class SignupDobFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        dobText.post(new Runnable() {
-            @Override
-            public void run() {
-                showDatePickerDialog();
-            }
+        if (dobText.getText().toString().isEmpty())
+            dobText.post(new Runnable() {
+                @Override
+                public void run() {
+                    showDatePickerDialog();
+                }
             });
     }
 

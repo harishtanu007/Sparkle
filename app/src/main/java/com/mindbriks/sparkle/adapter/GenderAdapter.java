@@ -41,15 +41,12 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
         holder.itemView.setTag(position);
         Gender gender = genders.get(position);
         holder.mGenderText.setText(gender.getName());
-        if (checkedPosition == -1) {
-            setDisabledButton(holder);
-        } else {
+
             if (checkedPosition == holder.getAdapterPosition()) {
                 setEnabledButton(holder);
             } else {
                 setDisabledButton(holder);
             }
-        }
         holder.itemView.setOnClickListener(v -> {
             setEnabledButton(holder);
             if (checkedPosition != holder.getAdapterPosition()) {

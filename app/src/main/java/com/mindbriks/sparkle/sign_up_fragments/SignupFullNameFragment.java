@@ -33,12 +33,16 @@ public class SignupFullNameFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        openKeyboard();
+    }
+
+    private void openKeyboard(){
         fullNameEditText.post(new Runnable() {
             @Override
             public void run() {
                 fullNameEditText.requestFocus();
                 InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imgr.showSoftInput(fullNameEditText, InputMethodManager.SHOW_IMPLICIT);
+                imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
     }
