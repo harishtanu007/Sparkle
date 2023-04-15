@@ -2,7 +2,6 @@ package com.mindbriks.sparkle;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -10,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+
+import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.DataSource;
+import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
 
 public class ChooseLoginActivity extends AppCompatActivity {
 
@@ -26,7 +29,7 @@ public class ChooseLoginActivity extends AppCompatActivity {
             public boolean onPreDraw() {
                 if (isAndroidReady)
                     content.getViewTreeObserver().removeOnPreDrawListener(this);
-                dimissSplashScreen();
+                verifyUserLoggedIn();
                 return false;
             }
         });
@@ -52,7 +55,16 @@ public class ChooseLoginActivity extends AppCompatActivity {
     }
 
     //TODO: Update this method to check if the user has already logged in
-    private void dimissSplashScreen() {
-        new Handler().postDelayed(() -> isAndroidReady = true, 1000);
+    private void verifyUserLoggedIn() {
+        DataSource dataSource = DataSourceHelper.getDataSource();
+        dataSource.onLoginVerification(new LoginVerificationListener() {
+            @Override
+            public void onLoginVerification(boolean isLoggedIn) {
+                if(isLoggedIn){
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }

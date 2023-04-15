@@ -17,6 +17,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
 import com.mindbriks.sparkle.interfaces.OnUploadProfileImageListener;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
@@ -143,4 +144,12 @@ public class FirebaseDataSource implements DataSource {
                     callback.onFailure(e.getMessage());
                 });
     }
+
+    @Override
+    public void onLoginVerification(LoginVerificationListener listener) {
+        boolean isLoggedIn = mAuth.getCurrentUser() != null;
+        listener.onLoginVerification(isLoggedIn);
+    }
+
+
 }

@@ -19,4 +19,5 @@ public interface DataSource {
     void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback);
 
     void login(String email, String password, DataSourceCallback callback);
+    void onLoginVerification(LoginVerificationListener listener);
 }
