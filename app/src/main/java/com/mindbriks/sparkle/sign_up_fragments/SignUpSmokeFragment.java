@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.adapter.GenderAdapter;
+import com.mindbriks.sparkle.adapter.PreferencesAdapter;
 import com.mindbriks.sparkle.databinding.SignupSmokeFragmentBinding;
-import com.mindbriks.sparkle.model.Gender;
+import com.mindbriks.sparkle.model.SmokingPreference;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SignUpSmokeFragment extends Fragment {
 
     private SignupSmokeFragmentBinding binding;
-    private RecyclerView.Adapter mSmokeAdapter;
+    private PreferencesAdapter mSmokeAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class SignUpSmokeFragment extends Fragment {
         binding = SignupSmokeFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        populateInterests();
+        populateSmokePreferences();
 
         RecyclerView mGenderList = binding.smokeList;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -40,27 +40,25 @@ public class SignUpSmokeFragment extends Fragment {
         return root;
     }
 
-    private void populateInterests() {
-        mSmokeAdapter = new GenderAdapter(getInterests(), getContext());
+    private void populateSmokePreferences() {
+        mSmokeAdapter = new PreferencesAdapter(getSmokingPreferences(), getContext());
     }
 
-    private List<Gender> getInterests() {
-        List<Gender> genderList = new ArrayList<>();
-
-        Gender gender1 = new Gender("Yes");
-        Gender gender2 = new Gender("No");
-        Gender gender3 = new Gender("Never");
-
-        genderList.add(gender1);
-        genderList.add(gender2);
-        genderList.add(gender3);
-
-        return genderList;
+    private List<SmokingPreference> getSmokingPreferences() {
+        List<SmokingPreference> smokingPreferences = Arrays.asList(SmokingPreference.values());
+        return smokingPreferences;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public String getSmokingPreference() {
+        SmokingPreference smokingPreference = (SmokingPreference) mSmokeAdapter.getSelectedItem();
+        if (smokingPreference != null)
+            return smokingPreference.name();
+        return "";
     }
 }

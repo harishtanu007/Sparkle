@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.adapter.GenderAdapter;
+import com.mindbriks.sparkle.adapter.PreferencesAdapter;
 import com.mindbriks.sparkle.databinding.SignupDrinkFragmentBinding;
-import com.mindbriks.sparkle.model.Gender;
+import com.mindbriks.sparkle.model.DrinkingPreference;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SignUpDrinkFragment extends Fragment {
 
     private SignupDrinkFragmentBinding binding;
-    private RecyclerView.Adapter mSmokeAdapter;
+    private PreferencesAdapter mDrinkAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,39 +28,37 @@ public class SignUpDrinkFragment extends Fragment {
         binding = SignupDrinkFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        populateInterests();
+        populateDrinkPreferences();
 
-        RecyclerView mGenderList = binding.drinkList;
+        RecyclerView mDrinkingPreferences = binding.drinkList;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mGenderList.setLayoutManager(layoutManager);
-        mGenderList.setClipToPadding(false);
-        mGenderList.setHasFixedSize(true);
+        mDrinkingPreferences.setLayoutManager(layoutManager);
+        mDrinkingPreferences.setClipToPadding(false);
+        mDrinkingPreferences.setHasFixedSize(true);
 
-        mGenderList.setAdapter(mSmokeAdapter);
+        mDrinkingPreferences.setAdapter(mDrinkAdapter);
         return root;
     }
 
-    private void populateInterests() {
-        mSmokeAdapter = new GenderAdapter(getInterests(), getContext());
+    private void populateDrinkPreferences() {
+        mDrinkAdapter = new PreferencesAdapter(getDrinkingPreferences(), getContext());
     }
 
-    private List<Gender> getInterests() {
-        List<Gender> genderList = new ArrayList<>();
-
-        Gender gender1 = new Gender("Yes");
-        Gender gender2 = new Gender("No");
-        Gender gender3 = new Gender("Never");
-
-        genderList.add(gender1);
-        genderList.add(gender2);
-        genderList.add(gender3);
-
-        return genderList;
+    private List<DrinkingPreference> getDrinkingPreferences() {
+        List<DrinkingPreference> drinkingPreferences = Arrays.asList(DrinkingPreference.values());
+        return drinkingPreferences;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public String getDrinkingPreference() {
+        DrinkingPreference drinkingPreference = (DrinkingPreference) mDrinkAdapter.getSelectedItem();
+        if (drinkingPreference != null)
+            return drinkingPreference.name();
+        return "";
     }
 }

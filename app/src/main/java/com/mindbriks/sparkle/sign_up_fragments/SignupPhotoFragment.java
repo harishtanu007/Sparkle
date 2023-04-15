@@ -30,7 +30,7 @@ import com.mindbriks.sparkle.databinding.SignupPhotoFragmentBinding;
 public class SignupPhotoFragment extends Fragment {
 
     private SignupPhotoFragmentBinding binding;
-    private String profileImageUrl;
+    private Uri profileImageUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +45,7 @@ public class SignupPhotoFragment extends Fragment {
                     @Override
                     public void onActivityResult(Uri uri) {
                         // Handle the returned Uri
+                        profileImageUri = uri;
                         Glide.with(getContext()).load(uri).into(profileImage);
                     }
                 });
@@ -95,8 +96,8 @@ public class SignupPhotoFragment extends Fragment {
         return root;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
+    public Uri getProfileImageUri() {
+        return profileImageUri;
     }
 
 }

@@ -9,7 +9,7 @@ public class FirebaseDbUser {
     public String name;
     public String email;
     public String gender;
-    public int dob;
+    public long dob;
     public List<Interest> interests;
 
     public FirebaseDbUser(String id, String email) {
@@ -34,11 +34,11 @@ public class FirebaseDbUser {
         this.interests = interests;
     }
 
-    public int getDob() {
+    public long getDob() {
         return dob;
     }
 
-    public void setDob(int dob) {
+    public void setDob(long dob) {
         this.dob = dob;
     }
 

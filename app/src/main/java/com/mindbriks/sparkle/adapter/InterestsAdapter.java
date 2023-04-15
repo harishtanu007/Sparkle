@@ -9,12 +9,8 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
-import com.mindbriks.sparkle.model.Gender;
 import com.mindbriks.sparkle.model.Interest;
-import com.mindbriks.sparkle.model.Profile;
-import com.mindbriks.sparkle.viewholder.GenderViewHolder;
 import com.mindbriks.sparkle.viewholder.InterestsViewHolder;
-import com.mindbriks.sparkle.viewholder.LikesViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,5 +72,9 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
     @Override
     public int getItemCount() {
         return this.interestList.size();
+    }
+
+    public List<Interest> getSelectedInterests(){
+        return selectedInterests;
     }
 }

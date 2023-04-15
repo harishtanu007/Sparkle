@@ -1,10 +1,10 @@
 package com.mindbriks.sparkle.model;
 
-public class Gender {
+public class Option {
     String name;
     private boolean isSelected = false;
 
-    public Gender(String name) {
+    public Option(String name) {
         this.name = name;
     }
 

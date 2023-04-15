@@ -20,7 +20,7 @@ import java.util.List;
 public class SignUpInterestsFragment extends Fragment {
 
     private SignupInterestsFragmentBinding binding;
-    private RecyclerView.Adapter mInterestsAdapter;
+    private InterestsAdapter mInterestsAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,4 +74,9 @@ public class SignUpInterestsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    public List<Interest> getSelectedInterests(){
+        return mInterestsAdapter.getSelectedInterests();
+    }
+
 }

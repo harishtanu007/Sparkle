@@ -20,17 +20,15 @@
             android:layout_margin="16dp"
             android:layout_weight="2"
             android:text="What is your height? (in CM)" />
+
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/sign_up_height"
-        style="@style/ProfileEditTextStyle"
+    <NumberPicker
+        android:id="@+id/height_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/line_background"
-        android:hint="Height"
-        android:inputType="number" />
-
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="16dp" />
 
 </LinearLayout>

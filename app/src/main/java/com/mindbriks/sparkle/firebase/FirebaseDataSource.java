@@ -72,7 +72,6 @@ public class FirebaseDataSource implements DataSource {
 
     @Override
     public boolean isUserDetailsExist() {
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
         return false;
     }
 

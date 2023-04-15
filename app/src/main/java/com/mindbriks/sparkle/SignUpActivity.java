@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mindbriks.sparkle.databinding.ActivitySignUpBinding;
+import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.firebase.FirebaseDataSource;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
@@ -62,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                 mRegProgress.setMessage("Creating Account...");
                 mRegProgress.show();
                 User user = new User(userEmailText, userPasswordText);
-                DataSource dataSource = new FirebaseDataSource();
+                DataSource dataSource = DataSourceHelper.getDataSource();
                 dataSource.createUser(user, new DataSourceCallback() {
                     @Override
                     public void onSuccess() {

@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
+import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.firebase.FirebaseDataSource;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -43,7 +44,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
-        dataSource = new FirebaseDataSource();
+        dataSource = DataSourceHelper.getDataSource();
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

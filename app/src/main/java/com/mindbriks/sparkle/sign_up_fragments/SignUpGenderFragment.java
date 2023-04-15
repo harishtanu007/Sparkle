@@ -10,17 +10,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.adapter.GenderAdapter;
+import com.mindbriks.sparkle.adapter.PreferencesAdapter;
 import com.mindbriks.sparkle.databinding.SignupGenderFragmentBinding;
-import com.mindbriks.sparkle.model.Gender;
+import com.mindbriks.sparkle.model.GenderPreference;
+import com.mindbriks.sparkle.model.SmokingPreference;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SignUpGenderFragment extends Fragment {
 
     private SignupGenderFragmentBinding binding;
-    private RecyclerView.Adapter mGenderAdapter;
+    private PreferencesAdapter mGenderAdapter;
+
+    private String gender;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class SignUpGenderFragment extends Fragment {
         binding = SignupGenderFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        populateInterests();
+        populateGenderPreferences();
 
         RecyclerView mGenderList = binding.genderList;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -40,27 +43,25 @@ public class SignUpGenderFragment extends Fragment {
         return root;
     }
 
-    private void populateInterests() {
-        mGenderAdapter = new GenderAdapter(getInterests(), getContext());
+    private void populateGenderPreferences() {
+        mGenderAdapter = new PreferencesAdapter(getGenderPreferences(), getContext());
     }
 
-    private List<Gender> getInterests() {
-        List<Gender> genderList = new ArrayList<>();
-
-        Gender gender1 = new Gender("Man");
-        Gender gender2 = new Gender("Woman");
-        Gender gender3 = new Gender("Neither");
-
-        genderList.add(gender1);
-        genderList.add(gender2);
-        genderList.add(gender3);
-
-        return genderList;
+    private List<GenderPreference> getGenderPreferences() {
+        List<GenderPreference> genderPreferences = Arrays.asList(GenderPreference.values());
+        return genderPreferences;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public String getGenderPreference() {
+        SmokingPreference smokingPreference = (SmokingPreference) mGenderAdapter.getSelectedItem();
+        if (smokingPreference != null)
+            return smokingPreference.name();
+        return "";
     }
 }

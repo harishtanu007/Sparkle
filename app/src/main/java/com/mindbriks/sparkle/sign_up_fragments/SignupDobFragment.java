@@ -19,6 +19,7 @@ import java.util.Calendar;
 public class SignupDobFragment extends Fragment {
 
     private EditText dobText;
+    private Calendar calendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,11 +56,15 @@ public class SignupDobFragment extends Fragment {
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -18);
         //User can only register if they are 18 years old
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         datePickerDialog.show();
+    }
+
+    public long getDateOfBirthUnix() {
+        return calendar.getTimeInMillis() / 1000L;
     }
 
 }
