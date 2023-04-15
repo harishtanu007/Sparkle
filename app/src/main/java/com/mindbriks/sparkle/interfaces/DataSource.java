@@ -17,4 +17,6 @@ public interface DataSource {
     void uploadProfileImage(Uri imageUri, OnUploadProfileImageListener listener);
 
     void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback);
+
+    void login(String email, String password, DataSourceCallback callback);
 }

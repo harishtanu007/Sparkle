@@ -132,4 +132,15 @@ public class FirebaseDataSource implements DataSource {
             }
         });
     }
+
+    @Override
+    public void login(String email, String password, DataSourceCallback callback) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+                    callback.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e.getMessage());
+                });
+    }
 }
