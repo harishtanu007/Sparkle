@@ -59,9 +59,9 @@ public class SignUpGenderFragment extends Fragment {
     }
 
     public String getGenderPreference() {
-        SmokingPreference smokingPreference = (SmokingPreference) mGenderAdapter.getSelectedItem();
-        if (smokingPreference != null)
-            return smokingPreference.name();
+        GenderPreference genderPreference = (GenderPreference) mGenderAdapter.getSelectedItem();
+        if (genderPreference != null)
+            return genderPreference.name();
         return "";
     }
 }

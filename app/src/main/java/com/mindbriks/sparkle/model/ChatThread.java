@@ -2,7 +2,7 @@ package com.mindbriks.sparkle.model;
 
 public class ChatThread {
 
-    public String name, email, uid, threadID, imageUrl;
+    String name, email, uid, threadID, imageUrl;
 
     public ChatThread(String uid, String name, String email) {
         this.name = name;

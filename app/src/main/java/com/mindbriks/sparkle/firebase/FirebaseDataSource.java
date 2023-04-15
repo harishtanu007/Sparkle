@@ -5,6 +5,10 @@ import static com.mindbriks.sparkle.model.FirebaseConstants.USERS;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -14,7 +18,9 @@ import com.google.firebase.storage.StorageReference;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.interfaces.OnUploadProfileImageListener;
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.model.SaveDetailsModel;
 import com.mindbriks.sparkle.model.User;
 
 import java.util.ArrayList;
@@ -25,6 +31,8 @@ public class FirebaseDataSource implements DataSource {
     private DatabaseReference mDatabase;
     private FirebaseUser firebaseUser;
     private StorageReference storageReference;
+    private DatabaseReference usersRef;
+
 
     public FirebaseDataSource() {
         mAuth = FirebaseAuth.getInstance();
@@ -32,6 +40,7 @@ public class FirebaseDataSource implements DataSource {
         firebaseUser = mAuth.getCurrentUser();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        usersRef = FirebaseDatabase.getInstance().getReference(USERS);
     }
 
     @Override
@@ -55,8 +64,8 @@ public class FirebaseDataSource implements DataSource {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        FirebaseDbUser firebaseDbUser = new FirebaseDbUser(firebaseUser.getUid(), user.getEmail());
-                        mDatabase.child(USERS).child(firebaseUser.getUid()).setValue(firebaseDbUser)
+                        DbUser dbUser = new DbUser(firebaseUser.getUid(), user.getEmail());
+                        usersRef.child(firebaseUser.getUid()).setValue(dbUser)
                                 .addOnCompleteListener(innerTask -> {
                                     if (innerTask.isSuccessful()) {
                                         callback.onSuccess();
@@ -78,7 +87,7 @@ public class FirebaseDataSource implements DataSource {
     @Override
     public void uploadProfileImage(Uri imageUri, OnUploadProfileImageListener listener) {
         String fileName = firebaseUser.getUid();
-        StorageReference imageRef = storageReference.child(PROFILE_IMAGES + "/" + fileName);
+        StorageReference imageRef = storageReference.child(PROFILE_IMAGES).child(fileName + ".jpg");
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get image URL after successful upload
@@ -94,5 +103,33 @@ public class FirebaseDataSource implements DataSource {
                 .addOnFailureListener(e -> {
                     listener.onFailure(e.getMessage());
                 });
+    }
+
+    @Override
+    public void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback) {
+        uploadProfileImage(saveDetailsModel.getProfileImageUri(), new OnUploadProfileImageListener() {
+            @Override
+            public void onSuccess(String imageUrl) {
+                DbUser dbUser = new DbUser(firebaseUser.getUid(), saveDetailsModel.getName(), firebaseUser.getEmail(), saveDetailsModel.getGender(), saveDetailsModel.getDob(), saveDetailsModel.getInterests(), imageUrl, saveDetailsModel.getHeight(), saveDetailsModel.getSmokePreference(), saveDetailsModel.getDrinkingPreference());
+                //TODO: verify the error message and change it to on complete listener if error message is too long
+                usersRef.child(firebaseUser.getUid()).setValue(dbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                callback.onSuccess();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onFailure(e.getMessage());
+                            }
+                        });
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+        });
     }
 }
