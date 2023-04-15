@@ -1,12 +1,12 @@
 package com.mindbriks.sparkle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.mindbriks.sparkle.adapter.SignUpPagerAdapter;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpDrinkFragment;

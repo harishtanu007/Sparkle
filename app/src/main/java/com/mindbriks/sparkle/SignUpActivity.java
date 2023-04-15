@@ -1,11 +1,11 @@
 package com.mindbriks.sparkle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 

@@ -1,6 +1,20 @@
 package com.mindbriks.sparkle.model;
 
 public class Profile {
+    private String id;
+    private String name;
+    private int age;
+    private String profile_pic;
+    private int distance;
+
+    public Profile(String id, String name, int age, String profile_pic, int distance) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.profile_pic = profile_pic;
+        this.distance = distance;
+    }
+
     public String getId() {
         return id;
     }
@@ -33,27 +47,13 @@ public class Profile {
         this.profile_pic = profile_pic;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
-    }
-
     public int getDistance() {
         return distance;
     }
 
-    public Profile(String id, String name, int age, String profile_pic, int distance) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.profile_pic = profile_pic;
+    public void setDistance(int distance) {
         this.distance = distance;
     }
-
-    private String id;
-    private String name;
-    private int age;
-    private String profile_pic;
-    private int distance;
 }
 
 

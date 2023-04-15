@@ -1,5 +1,14 @@
 package com.mindbriks.sparkle;
 
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.EditText;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,16 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.adapter.ChatAdapter;

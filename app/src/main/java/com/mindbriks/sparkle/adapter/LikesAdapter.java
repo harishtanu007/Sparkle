@@ -14,8 +14,8 @@ import com.mindbriks.sparkle.viewholder.LikesViewHolder;
 import java.util.List;
 
 public class LikesAdapter extends RecyclerView.Adapter<LikesViewHolder> {
-    private List<Profile> likesList;
-    private Context context;
+    private final List<Profile> likesList;
+    private final Context context;
 
     public LikesAdapter(List<Profile> likesList, Context context) {
         this.likesList = likesList;

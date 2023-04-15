@@ -139,10 +139,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="8dp"
                 android:orientation="vertical">
-
 
                 <TextView
                     style="@style/ProfileHeaderStyle"
@@ -158,14 +157,13 @@
                     android:text="Write a catchy one-liner about yourself" />
 
                 <EditText
-                    style="@style/ProfileEditTextStyle"
+                    style="@style/ProfileBioStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="8dp"
-                    android:minLines="2"
                     android:background="@drawable/line_background"
+                    android:minLines="3"
                     android:text="This is a long description of myself. So that I can check if I can fir these many lines in the android app view" />
-
 
 
             </LinearLayout>

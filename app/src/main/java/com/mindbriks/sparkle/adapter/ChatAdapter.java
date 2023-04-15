@@ -19,12 +19,11 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ChatMessage> messageList;
-    private Context context;
-    private String currentUserID;
-
     private final int MESSAGE_TYPE_SENT = 1;
     private final int MESSAGE_TYPE_RECEIVED = 2;
+    private final List<ChatMessage> messageList;
+    private final Context context;
+    private final String currentUserID;
 
     public ChatAdapter(Context context, List<ChatMessage> messageList, String currentUserID) {
         this.context = context;
@@ -110,9 +109,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             messageText.setText(message.getMessageText());
             timeText.setText(message.getMessageTime());
             // nameText.setText(message.getSenderName());
-            Glide.with(itemView.getContext())
-                    .load(R.drawable.card_view_place_holder_image)
-                    .into(profileImage);
+            Glide.with(itemView.getContext()).load(R.drawable.card_view_place_holder_image).into(profileImage);
         }
     }
 }

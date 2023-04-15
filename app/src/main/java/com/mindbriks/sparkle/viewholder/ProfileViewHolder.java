@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
 
-public class ProfileViewHolder extends RecyclerView.ViewHolder{
+public class ProfileViewHolder extends RecyclerView.ViewHolder {
     public TextView mTitle, mValue;
+
     public ProfileViewHolder(View itemView) {
         super(itemView);
 

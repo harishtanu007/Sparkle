@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,8 +20,8 @@ import java.util.List;
 
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-    private Context context;
-    private List<Profile> profileList;
+    private final Context context;
+    private final List<Profile> profileList;
 
     public ProfileAdapter(@NonNull Context context, List<Profile> profileList) {
         this.context = context;
@@ -49,14 +47,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
             if (imageUrl == null || imageUrl.isEmpty()) {
                 // If the image value is null, load a default placeholder image
-                Glide.with(context)
-                        .load(R.drawable.card_view_place_holder_image)
-                        .into(holder.cardViewImage);
+                Glide.with(context).load(R.drawable.card_view_place_holder_image).into(holder.cardViewImage);
             } else {
                 // If the image value is not null, load the actual image using Glide
-                Glide.with(context)
-                        .load(imageUrl)
-                        .into(holder.cardViewImage);
+                Glide.with(context).load(imageUrl).into(holder.cardViewImage);
             }
 
             holder.cardViewImage.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +78,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        if (profileList == null)
-            return 0;
+        if (profileList == null) return 0;
         return profileList.size();
     }
 

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.adapter.GenderAdapter;
 import com.mindbriks.sparkle.databinding.SignupDrinkFragmentBinding;
-import com.mindbriks.sparkle.databinding.SignupSmokeFragmentBinding;
 import com.mindbriks.sparkle.model.Gender;
 
 import java.util.ArrayList;

@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.mindbriks.sparkle.R;
 
 public class InterestsViewHolder extends RecyclerView.ViewHolder {

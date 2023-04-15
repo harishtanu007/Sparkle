@@ -31,12 +31,11 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements CardStackListener, FilterFragment.OnFilterSelectedListener {
 
+    List<Profile> profileList;
     private FragmentHomeBinding binding;
     private CardStackLayoutManager layoutManager;
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
-    List<Profile> profileList;
-
     private ImageView filterButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,

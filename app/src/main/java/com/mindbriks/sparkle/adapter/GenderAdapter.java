@@ -58,12 +58,12 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
         notifyDataSetChanged();
     }
 
-    void setEnabledButton(GenderViewHolder holder){
+    void setEnabledButton(GenderViewHolder holder) {
         holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.enabled_button));
         holder.mGenderText.setTextColor(context.getResources().getColor(R.color.button_color));
     }
 
-    void setDisabledButton(GenderViewHolder holder){
+    void setDisabledButton(GenderViewHolder holder) {
         holder.mGenderText.setBackground(context.getResources().getDrawable(R.drawable.disabled_button));
         holder.mGenderText.setTextColor(context.getResources().getColor(R.color.black));
     }

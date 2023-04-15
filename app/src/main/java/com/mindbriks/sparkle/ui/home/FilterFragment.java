@@ -27,10 +27,6 @@ public class FilterFragment extends BottomSheetDialogFragment {
 
     private OnFilterSelectedListener mListener;
 
-    public interface OnFilterSelectedListener {
-        void onFilterSelected(int distance, int minAge, int maxAge, int gender);
-    }
-
     public void setOnFilterSelectedListener(OnFilterSelectedListener listener) {
         mListener = listener;
     }
@@ -103,5 +99,9 @@ public class FilterFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+    }
+
+    public interface OnFilterSelectedListener {
+        void onFilterSelected(int distance, int minAge, int maxAge, int gender);
     }
 }

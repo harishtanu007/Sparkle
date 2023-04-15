@@ -13,12 +13,12 @@ public class ProfileItem {
         return title;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public void setValue(String value) {

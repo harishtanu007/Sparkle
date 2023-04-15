@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,10 +11,11 @@ import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Profile;
 
-public class LikesViewHolder extends RecyclerView.ViewHolder{
+public class LikesViewHolder extends RecyclerView.ViewHolder {
     public TextView mUserName, mUserDistance;
     public String mUserId;
     public ImageView mUserImage;
+
     public LikesViewHolder(View itemView) {
         super(itemView);
 

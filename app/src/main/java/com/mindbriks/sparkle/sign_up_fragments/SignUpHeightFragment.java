@@ -13,6 +13,7 @@ import com.mindbriks.sparkle.R;
 public class SignUpHeightFragment extends Fragment {
 
     private EditText heightEditText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

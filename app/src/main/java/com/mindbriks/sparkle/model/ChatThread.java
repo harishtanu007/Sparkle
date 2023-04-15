@@ -4,6 +4,16 @@ public class ChatThread {
 
     public String name, email, uid, threadID, imageUrl;
 
+    public ChatThread(String uid, String name, String email) {
+        this.name = name;
+        this.email = email;
+        this.uid = uid;
+    }
+
+    public ChatThread(String uid, String threadID) {
+        this.uid = uid;
+        this.threadID = threadID;
+    }
 
     public String getName() {
         return name;
@@ -15,6 +25,10 @@ public class ChatThread {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String image) {
+        this.email = image;
     }
 
     public String getImageUrl() {
@@ -33,26 +47,11 @@ public class ChatThread {
         this.threadID = threadID;
     }
 
-    public void setEmail(String image) {
-        this.email = image;
-    }
-
     public String getUid() {
         return uid;
     }
 
     public void setUid(String status) {
         this.uid = status;
-    }
-
-    public ChatThread(String uid, String name, String email) {
-        this.name = name;
-        this.email = email;
-        this.uid = uid;
-    }
-
-    public ChatThread(String uid, String threadID) {
-        this.uid = uid;
-        this.threadID = threadID;
     }
 }

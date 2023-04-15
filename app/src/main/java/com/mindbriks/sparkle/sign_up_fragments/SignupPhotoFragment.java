@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mindbriks.sparkle.R;
-import com.mindbriks.sparkle.databinding.SignupGenderFragmentBinding;
 import com.mindbriks.sparkle.databinding.SignupPhotoFragmentBinding;
 
 public class SignupPhotoFragment extends Fragment {

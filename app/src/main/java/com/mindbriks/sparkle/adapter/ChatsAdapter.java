@@ -16,8 +16,8 @@ import com.mindbriks.sparkle.viewholder.ChatsViewHolder;
 import java.util.List;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsViewHolder> {
-    private List<ChatThread> chatThreads;
-    private Context context;
+    private final List<ChatThread> chatThreads;
+    private final Context context;
 
     public ChatsAdapter(List<ChatThread> chatThreads, Context context) {
         this.chatThreads = chatThreads;

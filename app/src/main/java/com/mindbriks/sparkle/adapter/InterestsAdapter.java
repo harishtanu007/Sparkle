@@ -30,7 +30,7 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
     public InterestsAdapter(List<Interest> interestList, Context context) {
         this.interestList = interestList;
         this.context = context;
-        this.selectedInterests =  new ArrayList<>();
+        this.selectedInterests = new ArrayList<>();
     }
 
     @Override

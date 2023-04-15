@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.InterestsAdapter;
 import com.mindbriks.sparkle.databinding.SignupInterestsFragmentBinding;
 import com.mindbriks.sparkle.model.Interest;

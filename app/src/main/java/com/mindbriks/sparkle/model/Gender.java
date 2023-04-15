@@ -1,6 +1,9 @@
 package com.mindbriks.sparkle.model;
 
 public class Gender {
+    String name;
+    private boolean isSelected = false;
+
     public Gender(String name) {
         this.name = name;
     }
@@ -13,15 +16,11 @@ public class Gender {
         this.name = name;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
     public boolean isSelected() {
         return isSelected;
     }
 
-    String name;
-
-    private boolean isSelected = false;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }
