@@ -18,7 +18,7 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
 
     private Context context;
 
-    private int checkedPosition = -1;
+    private int selectedItem = -1;
 
     public GenderAdapter(List<Gender> genders, Context context) {
         this.genders = genders;
@@ -42,18 +42,20 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderViewHolder> {
         Gender gender = genders.get(position);
         holder.mGenderText.setText(gender.getName());
 
-            if (checkedPosition == holder.getAdapterPosition()) {
-                setEnabledButton(holder);
-            } else {
-                setDisabledButton(holder);
-            }
-        holder.itemView.setOnClickListener(v -> {
+        if (position == selectedItem) {
             setEnabledButton(holder);
-            if (checkedPosition != holder.getAdapterPosition()) {
-                notifyItemChanged(checkedPosition);
-                checkedPosition = holder.getAdapterPosition();
-            }
+        } else {
+            setDisabledButton(holder);
+        }
+
+        holder.mGenderText.setOnClickListener(v -> {
+            setSelectedItem(position);
         });
+    }
+
+    private void setSelectedItem(int position) {
+        selectedItem = position;
+        notifyDataSetChanged();
     }
 
     void setEnabledButton(GenderViewHolder holder){

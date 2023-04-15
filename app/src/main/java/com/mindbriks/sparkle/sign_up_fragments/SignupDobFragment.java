@@ -38,13 +38,6 @@ public class SignupDobFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (dobText.getText().toString().isEmpty())
-            dobText.post(new Runnable() {
-                @Override
-                public void run() {
-                    showDatePickerDialog();
-                }
-            });
     }
 
     public void showDatePickerDialog() {

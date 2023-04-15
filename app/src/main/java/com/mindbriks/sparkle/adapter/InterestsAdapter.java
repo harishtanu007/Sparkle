@@ -48,7 +48,7 @@ public class InterestsAdapter extends RecyclerView.Adapter<InterestsViewHolder> 
         holder.itemView.setTag(position);
         Interest interest = interestList.get(position);
         holder.name.setText(interest.getName());
-        holder.itemView.setOnClickListener(v -> {
+        holder.name.setOnClickListener(v -> {
             if (selectedInterests.contains(interest)) {
                 selectedInterests.remove(interest);
                 setDisabledButton(holder);
