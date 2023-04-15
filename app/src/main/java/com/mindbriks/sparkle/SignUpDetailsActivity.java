@@ -77,9 +77,7 @@ public class SignUpDetailsActivity extends AppCompatActivity {
 
     private void submitForm() {
         String fullNameText = signupFullNameFragment.getFullName();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
+
     }
 
 

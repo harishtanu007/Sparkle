@@ -30,6 +30,7 @@ import com.mindbriks.sparkle.databinding.SignupPhotoFragmentBinding;
 public class SignupPhotoFragment extends Fragment {
 
     private SignupPhotoFragmentBinding binding;
+    private String profileImageUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,4 +94,9 @@ public class SignupPhotoFragment extends Fragment {
         });
         return root;
     }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
 }

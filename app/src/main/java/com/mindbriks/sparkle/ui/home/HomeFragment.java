@@ -18,7 +18,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
-import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.firebase.FirebaseDataSource;
+import com.mindbriks.sparkle.interfaces.DataSource;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -26,22 +27,23 @@ import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment implements CardStackListener, FilterFragment.OnFilterSelectedListener {
 
-    List<Profile> profileList;
     private FragmentHomeBinding binding;
     private CardStackLayoutManager layoutManager;
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
     private ImageView filterButton;
 
+    private DataSource dataSource;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
+
+        dataSource = new FirebaseDataSource();
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -52,28 +54,15 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
         setupButton(binding);
         populateUsers();
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FilterFragment filterFragment = new FilterFragment();
-                filterFragment.show(getFragmentManager(), "FilterFragment");
-            }
+        filterButton.setOnClickListener(v -> {
+            FilterFragment filterFragment = new FilterFragment();
+            filterFragment.show(getFragmentManager(), "FilterFragment");
         });
         return root;
     }
 
     private void populateUsers() {
-        profileList = new ArrayList<>();
-
-        Profile profile1 = new Profile("1", "Harish", 21, "", 12);
-        Profile profile2 = new Profile("2", "Barre", 26, "", 13);
-        Profile profile3 = new Profile("3", "comp", 22, "", 14);
-
-        profileList.add(profile1);
-        profileList.add(profile2);
-        profileList.add(profile3);
-
-        profileAdapter = new ProfileAdapter(getContext(), profileList);
+        profileAdapter = new ProfileAdapter(getContext(), dataSource.getUsers());
         cardStackView.setAdapter(profileAdapter);
     }
 

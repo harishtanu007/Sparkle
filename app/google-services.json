@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "623536591299",
+    "firebase_url": "https://sparkle-6f119-default-rtdb.firebaseio.com",
+    "project_id": "sparkle-6f119",
+    "storage_bucket": "sparkle-6f119.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623536591299:android:f31ec34dabb2f4fbd52d76",
+        "android_client_info": {
+          "package_name": "com.mindbriks.sparkle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623536591299-33d8lh52a3qojmtjt7qmkn6jjs0mdovh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkor8VamqRKtMeWV68meEwJpwf0zpqJck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623536591299-33d8lh52a3qojmtjt7qmkn6jjs0mdovh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

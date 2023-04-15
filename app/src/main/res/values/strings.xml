@@ -36,4 +36,9 @@
     <string name="distance_format">%d km away</string>
     <string name="age_range">Range</string>
 
+    <string name="enter_valid_email">Enter valid email</string>
+    <string name="email_cannot_contain_capital_letters">Email cannot contain capital letters</string>
+    <string name="enter_password">Enter password</string>
+    <string name="passwords_not_match">Passwords do not match</string>
+
 </resources>

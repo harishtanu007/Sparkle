@@ -128,6 +128,12 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="AppThemeDialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
     <style name="SignUpHeaderStyle">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:gravity">left</item>
