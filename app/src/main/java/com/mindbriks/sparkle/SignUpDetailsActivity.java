@@ -16,8 +16,10 @@ import com.mindbriks.sparkle.adapter.SignUpPagerAdapter;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.SaveDetailsModel;
+import com.mindbriks.sparkle.model.SmokingPreference;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpDrinkFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpGenderFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpHeightFragment;
@@ -96,8 +98,8 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         String userGender = signUpGenderFragment.getGenderPreference();
         List<Interest> userInterests = signUpInterestsFragment.getSelectedInterests();
         String userHeight = signUpHeightFragment.getUserHeight();
-        String userSmokePreference = signUpSmokeFragment.getSmokingPreference();
-        String userDrinkingPreference = signUpDrinkFragment.getDrinkingPreference();
+        SmokingPreference userSmokePreference = signUpSmokeFragment.getSmokingPreference();
+        DrinkingPreference userDrinkingPreference = signUpDrinkFragment.getDrinkingPreference();
 
         SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference);
         mRegProgress = new ProgressDialog(SignUpDetailsActivity.this, R.style.AppThemeDialog);

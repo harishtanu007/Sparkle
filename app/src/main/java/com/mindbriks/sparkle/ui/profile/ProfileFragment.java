@@ -34,6 +34,9 @@ import com.mindbriks.sparkle.ChooseLoginActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileListAdapter;
 import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
+import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.DataSource;
+import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.model.ProfileItem;
 
 import java.util.ArrayList;
@@ -55,33 +58,6 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//        TextView editProfileButton = binding.accountSettingsEditButton;
-//        editProfileButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(getContext(), EditProfileActivity.class);
-//            startActivity(intent);
-//        });
-
-//        TextView mShowMeValue = binding.settingShowMeValue;
-//
-//        LinearLayout showMe = binding.settingShowMe;
-//        showMe.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
-//
-//                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.show_me_item);
-//                showMeAdapter.add("Men");
-//                showMeAdapter.add("Women");
-//
-//                builderSingle.setAdapter(showMeAdapter, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        mShowMeValue.setText(showMeAdapter.getItem(which));
-//                    }
-//                });
-//                builderSingle.show();
-//            }
-//        });
         ActivityResultLauncher<String> getImageFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
                     @Override
@@ -145,9 +121,20 @@ public class ProfileFragment extends Fragment {
                 builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        DataSource dataSource = DataSourceHelper.getDataSource();
+                        dataSource.logoutUser(new DataSourceCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+
+                            }
+                        });
                     }
                 });
 

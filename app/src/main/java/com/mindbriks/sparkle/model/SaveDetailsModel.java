@@ -5,17 +5,17 @@ import android.net.Uri;
 import java.util.List;
 
 public class SaveDetailsModel {
-    public String name;
-    public String gender;
-    public long dob;
-    public List<Interest> interests;
+    String name;
+    String gender;
+    long dob;
+    List<Interest> interests;
 
-    public Uri profileImageUri;
-    public String height;
-    String smokePreference;
-    String drinkingPreference;
+    Uri profileImageUri;
+    String height;
+    SmokingPreference smokePreference;
+    DrinkingPreference drinkingPreference;
 
-    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, String userSmokePreference, String userDrinkingPreference) {
+    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, SmokingPreference userSmokePreference, DrinkingPreference userDrinkingPreference) {
         this.name = userFullNameText;
         this.profileImageUri = userProfilePictureUri;
         this.dob = userDob;
@@ -24,6 +24,22 @@ public class SaveDetailsModel {
         this.height = userHeight;
         this.smokePreference = userSmokePreference;
         this.drinkingPreference = userDrinkingPreference;
+    }
+
+    public SmokingPreference getSmokePreference() {
+        return smokePreference;
+    }
+
+    public void setSmokePreference(SmokingPreference smokePreference) {
+        this.smokePreference = smokePreference;
+    }
+
+    public DrinkingPreference getDrinkingPreference() {
+        return drinkingPreference;
+    }
+
+    public void setDrinkingPreference(DrinkingPreference drinkingPreference) {
+        this.drinkingPreference = drinkingPreference;
     }
 
     public String getName() {
@@ -74,19 +90,4 @@ public class SaveDetailsModel {
         this.height = height;
     }
 
-    public String getSmokePreference() {
-        return smokePreference;
-    }
-
-    public void setSmokePreference(String smokePreference) {
-        this.smokePreference = smokePreference;
-    }
-
-    public String getDrinkingPreference() {
-        return drinkingPreference;
-    }
-
-    public void setDrinkingPreference(String drinkingPreference) {
-        this.drinkingPreference = drinkingPreference;
-    }
 }

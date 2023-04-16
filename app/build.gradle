@@ -70,4 +70,6 @@ dependencies {
     //range seek bar
     implementation 'com.github.MohammedAlaaMorsi:RangeSeekBar:1.0.6'
 
+    implementation 'org.bouncycastle:bcpkix-jdk15to18:1.68'
+
 }

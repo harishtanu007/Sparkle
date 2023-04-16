@@ -29,8 +29,7 @@ public class ChooseLoginActivity extends AppCompatActivity {
             public boolean onPreDraw() {
                 if (isAndroidReady)
                     content.getViewTreeObserver().removeOnPreDrawListener(this);
-                verifyUserLoggedIn();
-                return false;
+                return verifyUserLoggedIn();
             }
         });
 
@@ -55,7 +54,7 @@ public class ChooseLoginActivity extends AppCompatActivity {
     }
 
     //TODO: Update this method to check if the user has already logged in
-    private void verifyUserLoggedIn() {
+    private boolean verifyUserLoggedIn() {
         DataSource dataSource = DataSourceHelper.getDataSource();
         dataSource.onLoginVerification(new LoginVerificationListener() {
             @Override
@@ -63,8 +62,10 @@ public class ChooseLoginActivity extends AppCompatActivity {
                 if(isLoggedIn){
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
+        return true;
     }
 }

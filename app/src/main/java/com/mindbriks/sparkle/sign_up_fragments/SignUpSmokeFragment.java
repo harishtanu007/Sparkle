@@ -55,10 +55,7 @@ public class SignUpSmokeFragment extends Fragment {
         binding = null;
     }
 
-    public String getSmokingPreference() {
-        SmokingPreference smokingPreference = (SmokingPreference) mSmokeAdapter.getSelectedItem();
-        if (smokingPreference != null)
-            return smokingPreference.name();
-        return "";
+    public SmokingPreference getSmokingPreference() {
+        return  (SmokingPreference) mSmokeAdapter.getSelectedItem();
     }
 }

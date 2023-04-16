@@ -1,9 +1,8 @@
 package com.mindbriks.sparkle.model;
 
 import java.util.List;
-import java.util.Objects;
 
-public class DbUser {
+public class EncryptedDbUser {
     List<Interest> interests;
     String profile_image;
     String height;
@@ -11,11 +10,11 @@ public class DbUser {
     String name;
     String email;
     String gender;
-    long dob;
-    SmokingPreference smoke_preference;
-    DrinkingPreference drinking_preference;
+    String dob;
+    String smoke_preference;
+    String drinking_preference;
 
-    public DbUser(String id, String name, String email, String gender, long dob, List<Interest> interests, String profileImage, String height, SmokingPreference smoke_preference, DrinkingPreference drinking_preference) {
+    public EncryptedDbUser(String id, String name, String email, String gender, String dob, List<Interest> interests, String profileImage, String height, String smoke_preference, String drinking_preference) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -28,18 +27,18 @@ public class DbUser {
         this.drinking_preference = drinking_preference;
     }
 
-    public DbUser(String id, String email) {
+    public EncryptedDbUser(String id, String email) {
         this.id = id;
         this.email = email;
     }
 
-    public DbUser(String id, String name, String email) {
+    public EncryptedDbUser(String id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
 
-    public DbUser() {
+    public EncryptedDbUser() {
     }
 
     public String getProfile_image() {
@@ -58,19 +57,19 @@ public class DbUser {
         this.height = height;
     }
 
-    public SmokingPreference getSmoke_preference() {
+    public String getSmoke_preference() {
         return smoke_preference;
     }
 
-    public void setSmoke_preference(SmokingPreference smoke_preference) {
+    public void setSmoke_preference(String smoke_preference) {
         this.smoke_preference = smoke_preference;
     }
 
-    public DrinkingPreference getDrinking_preference() {
+    public String getDrinking_preference() {
         return drinking_preference;
     }
 
-    public void setDrinking_preference(DrinkingPreference drinking_preference) {
+    public void setDrinking_preference(String drinking_preference) {
         this.drinking_preference = drinking_preference;
     }
 
@@ -82,11 +81,11 @@ public class DbUser {
         this.interests = interests;
     }
 
-    public long getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(long dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
@@ -120,26 +119,5 @@ public class DbUser {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof DbUser)) {
-            return false;
-        }
-        DbUser other = (DbUser) obj;
-        return Objects.equals(interests, other.interests) &&
-                Objects.equals(profile_image, other.profile_image) &&
-                Objects.equals(height, other.height) &&
-                Objects.equals(id, other.id) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(email, other.email) &&
-                Objects.equals(gender, other.gender) &&
-                dob == other.dob &&
-                smoke_preference == other.smoke_preference &&
-                drinking_preference == other.drinking_preference;
     }
 }

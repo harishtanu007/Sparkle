@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface DataSource {
     List<Profile> getUsers();
+
     void createUser(User user, DataSourceCallback callback);
 
     boolean isUserDetailsExist();
@@ -19,5 +20,8 @@ public interface DataSource {
     void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback);
 
     void login(String email, String password, DataSourceCallback callback);
+
     void onLoginVerification(LoginVerificationListener listener);
+
+    void logoutUser(DataSourceCallback callback);
 }

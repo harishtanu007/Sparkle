@@ -4,8 +4,10 @@ import static com.mindbriks.sparkle.model.FirebaseConstants.PROFILE_IMAGES;
 import static com.mindbriks.sparkle.model.FirebaseConstants.USERS;
 
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,9 +22,11 @@ import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
 import com.mindbriks.sparkle.interfaces.OnUploadProfileImageListener;
 import com.mindbriks.sparkle.model.DbUser;
+import com.mindbriks.sparkle.model.EncryptedDbUser;
 import com.mindbriks.sparkle.model.Profile;
 import com.mindbriks.sparkle.model.SaveDetailsModel;
 import com.mindbriks.sparkle.model.User;
+import com.mindbriks.sparkle.utils.EncryptionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,22 +113,30 @@ public class FirebaseDataSource implements DataSource {
     @Override
     public void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback) {
         uploadProfileImage(saveDetailsModel.getProfileImageUri(), new OnUploadProfileImageListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSuccess(String imageUrl) {
                 DbUser dbUser = new DbUser(firebaseUser.getUid(), saveDetailsModel.getName(), firebaseUser.getEmail(), saveDetailsModel.getGender(), saveDetailsModel.getDob(), saveDetailsModel.getInterests(), imageUrl, saveDetailsModel.getHeight(), saveDetailsModel.getSmokePreference(), saveDetailsModel.getDrinkingPreference());
-                //TODO: verify the error message and change it to on complete listener if error message is too long
-                usersRef.child(firebaseUser.getUid()).setValue(dbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                callback.onSuccess();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                callback.onFailure(e.getMessage());
-                            }
-                        });
+                //encrypt user data
+                EncryptedDbUser encryptedDbUser = EncryptionUtils.encryptUser(dbUser, firebaseUser.getUid());
+
+                if (encryptedDbUser == null) {
+                    callback.onFailure("Error while encrypting the data");
+                } else {
+                    //TODO: verify the error message and change it to on complete listener if error message is too long
+                    usersRef.child(firebaseUser.getUid()).setValue(encryptedDbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    callback.onSuccess();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    callback.onFailure(e.getMessage());
+                                }
+                            });
+                }
             }
 
             @Override
@@ -151,5 +163,10 @@ public class FirebaseDataSource implements DataSource {
         listener.onLoginVerification(isLoggedIn);
     }
 
+    @Override
+    public void logoutUser(DataSourceCallback callback) {
+        mAuth.signOut();
+        callback.onSuccess();
+    }
 
 }

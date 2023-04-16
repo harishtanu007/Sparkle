@@ -55,10 +55,7 @@ public class SignUpDrinkFragment extends Fragment {
         binding = null;
     }
 
-    public String getDrinkingPreference() {
-        DrinkingPreference drinkingPreference = (DrinkingPreference) mDrinkAdapter.getSelectedItem();
-        if (drinkingPreference != null)
-            return drinkingPreference.name();
-        return "";
+    public DrinkingPreference getDrinkingPreference() {
+        return (DrinkingPreference) mDrinkAdapter.getSelectedItem();
     }
 }
