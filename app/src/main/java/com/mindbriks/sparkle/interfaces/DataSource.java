@@ -24,4 +24,8 @@ public interface DataSource {
     void onLoginVerification(LoginVerificationListener listener);
 
     void logoutUser(DataSourceCallback callback);
+
+    void getCurrentUserDetails(UserDetailsCallback callback);
+
+    void getUserDetails(String userId, UserDetailsCallback callback);
 }

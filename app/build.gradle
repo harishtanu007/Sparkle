@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
-
 android {
     namespace 'com.mindbriks.sparkle'
     compileSdk 33
@@ -31,6 +30,8 @@ android {
         viewBinding true
     }
 }
+
+apply plugin: 'androidx.navigation.safeargs'
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'

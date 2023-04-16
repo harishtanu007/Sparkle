@@ -37,6 +37,7 @@ import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.ProfileItem;
 
 import java.util.ArrayList;
@@ -44,111 +45,29 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
+    ActivityResultLauncher<String> getImageFromGallery;
+    ActivityResultLauncher<Intent> getImageFromCamera;
     private FragmentProfileBinding binding;
     private ImageView profileImage;
     private List<ProfileItem> profileItemList = new ArrayList<>();
     private List<ProfileItem> basicsItemList = new ArrayList<>();
     private ProfileListAdapter profileListAdapter, basicsListAdapter;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel profileViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
+    private DbUser mUser;
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ProfileFragmentArgs args = ProfileFragmentArgs.fromBundle(getArguments());
+        if (args != null) {
+            mUser = ProfileFragmentArgs.fromBundle(getArguments()).getUser();
+        }
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        ActivityResultLauncher<String> getImageFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri uri) {
-                        // Handle the returned Uri
-                        Glide.with(getContext()).load(uri).into(profileImage);
-                    }
-                });
-
-        ActivityResultLauncher<Intent> getImageFromCamera = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            // There are no request codes
-                            Bundle bundle = result.getData().getExtras();
-                            Bitmap bitmap = (Bitmap) bundle.get("data");
-                            Glide.with(getContext()).load(bitmap).into(profileImage);
-                        }
-                    }
-                });
-
+        registerImagePickers();
+        setupLogOut();
         profileImage = binding.profileImage;
-        ImageButton editProfileImage = binding.editProfileImage;
-        editProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
-
-                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.alert_dialog_item);
-                showMeAdapter.add("Upload photo");
-                showMeAdapter.add("Take Photo");
-                showMeAdapter.add("Remove Photo");
-                builderSingle.setAdapter(showMeAdapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0)
-                            getImageFromGallery.launch("image/*");
-                        else if (which == 1) {
-                            ContentValues values = new ContentValues();
-                            values.put(MediaStore.Images.Media.TITLE, "New Picture");
-                            values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
-                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            getImageFromCamera.launch(cameraIntent);
-                        } else if (which == 2) {
-                            profileImage.setImageDrawable(null);
-                        }
-                    }
-                });
-                builderSingle.show();
-            }
-        });
-
-        Button logOut = binding.profileLogoutButton;
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
-                builderSingle.setTitle("Are you sure you want to logout?");
-                builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DataSource dataSource = DataSourceHelper.getDataSource();
-                        dataSource.logoutUser(new DataSourceCallback() {
-                            @Override
-                            public void onSuccess() {
-                                Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                            }
-
-                            @Override
-                            public void onFailure(String errorMessage) {
-
-                            }
-                        });
-                    }
-                });
-
-                builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                    }
-                });
-                builderSingle.show();
-            }
-        });
-
         RecyclerView mProfileList = binding.profileListView;
         LinearLayoutManager profileListLayoutManager = new LinearLayoutManager(getContext());
         mProfileList.setLayoutManager(profileListLayoutManager);
@@ -187,6 +106,96 @@ public class ProfileFragment extends Fragment {
         mBasicsList.setAdapter(basicsListAdapter);
 
         return root;
+    }
+
+    private void setupLogOut() {
+        Button logOut = binding.profileLogoutButton;
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
+                builderSingle.setTitle("Are you sure you want to logout?");
+                builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DataSource dataSource = DataSourceHelper.getDataSource();
+                        dataSource.logoutUser(new DataSourceCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+
+                            }
+                        });
+                    }
+                });
+
+                builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+                builderSingle.show();
+            }
+        });
+    }
+
+    private void registerImagePickers() {
+        getImageFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+                // Handle the returned Uri
+                Glide.with(getContext()).load(uri).into(profileImage);
+            }
+        });
+
+        getImageFromCamera = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // There are no request codes
+                    Bundle bundle = result.getData().getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");
+                    Glide.with(getContext()).load(bitmap).into(profileImage);
+                }
+            }
+        });
+
+        ImageButton editProfileImage = binding.editProfileImage;
+        editProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
+
+                final ArrayAdapter<String> showMeAdapter = new ArrayAdapter<String>(getContext(), R.layout.alert_dialog_item);
+                showMeAdapter.add("Upload photo");
+                showMeAdapter.add("Take Photo");
+                showMeAdapter.add("Remove Photo");
+                builderSingle.setAdapter(showMeAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) getImageFromGallery.launch("image/*");
+                        else if (which == 1) {
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                            values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            getImageFromCamera.launch(cameraIntent);
+                        } else if (which == 2) {
+                            profileImage.setImageDrawable(null);
+                        }
+                    }
+                });
+                builderSingle.show();
+            }
+        });
     }
 
     @Override

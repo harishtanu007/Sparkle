@@ -2,6 +2,7 @@ package com.mindbriks.sparkle.firebase;
 
 import static com.mindbriks.sparkle.model.FirebaseConstants.PROFILE_IMAGES;
 import static com.mindbriks.sparkle.model.FirebaseConstants.USERS;
+import static com.mindbriks.sparkle.utils.EncryptionUtils.decryptUser;
 
 import android.net.Uri;
 import android.os.Build;
@@ -13,14 +14,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
 import com.mindbriks.sparkle.interfaces.OnUploadProfileImageListener;
+import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.EncryptedDbUser;
 import com.mindbriks.sparkle.model.Profile;
@@ -167,6 +172,44 @@ public class FirebaseDataSource implements DataSource {
     public void logoutUser(DataSourceCallback callback) {
         mAuth.signOut();
         callback.onSuccess();
+    }
+
+    @Override
+    public void getCurrentUserDetails(UserDetailsCallback callback){
+        getUserDetails(firebaseUser.getUid(), new UserDetailsCallback() {
+            @Override
+            public void onUserDetailsFetched(DbUser userDetails) {
+                callback.onUserDetailsFetched(userDetails);
+            }
+
+            @Override
+            public void onUserDetailsFetchFailed(String errorMessage) {
+                callback.onUserDetailsFetchFailed(errorMessage);
+            }
+        });
+    }
+
+    @Override
+    public void getUserDetails(String userId, UserDetailsCallback callback) {
+        DatabaseReference userRef = usersRef.child(userId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    EncryptedDbUser user = snapshot.getValue(EncryptedDbUser.class);
+                    DbUser decryptUser = decryptUser(user, userId);
+                    callback.onUserDetailsFetched(decryptUser);
+                } else {
+                    callback.onUserDetailsFetchFailed("User not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onUserDetailsFetchFailed(error.getMessage());
+            }
+        });
     }
 
 }

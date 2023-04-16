@@ -1,9 +1,10 @@
 package com.mindbriks.sparkle.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class DbUser {
+public class DbUser implements Serializable {
     List<Interest> interests;
     String profile_image;
     String height;
