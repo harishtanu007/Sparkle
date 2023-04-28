@@ -55,8 +55,8 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<String> getImageFromGallery;
     ActivityResultLauncher<Intent> getImageFromCamera;
     private FragmentProfileBinding binding;
-    private ImageView profileImage;
-    private TextView profileName;
+    private ImageView mProfileImage;
+    private TextView mProfileName;
     private List<ProfileItem> profileItemList = new ArrayList<>();
     private List<ProfileItem> basicsItemList = new ArrayList<>();
     private ProfileListAdapter profileListAdapter, basicsListAdapter;
@@ -82,7 +82,8 @@ public class ProfileFragment extends Fragment {
 
         registerImagePickers();
         setupLogOut();
-        profileImage = binding.profileImage;
+        mProfileImage = binding.profileImage;
+        mProfileName = binding.profileName;
         populateUserProfilePage();
         RecyclerView mProfileList = binding.profileListView;
         LinearLayoutManager profileListLayoutManager = new LinearLayoutManager(getContext());
@@ -129,7 +130,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setupProfileBar() {
+        setProfileName();
         setProfileImage();
+    }
+
+    private void setProfileName() {
+        String profileName = mUser.getName();
+        mProfileName.setText(profileName);
     }
 
     private void setProfileImage() {
@@ -147,9 +154,9 @@ public class ProfileFragment extends Fragment {
                     .with(getContext())
                     .load(profileImageUrl)
                     .apply(options)
-                    .into(profileImage);
+                    .into(mProfileImage);
         } else {
-            profileImage.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.card_view_place_holder_image));
+            mProfileImage.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.card_view_place_holder_image));
         }
     }
 
@@ -197,7 +204,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onActivityResult(Uri uri) {
                 // Handle the returned Uri
-                Glide.with(getContext()).load(uri).into(profileImage);
+                Glide.with(getContext()).load(uri).into(mProfileImage);
             }
         });
 
@@ -208,7 +215,7 @@ public class ProfileFragment extends Fragment {
                     // There are no request codes
                     Bundle bundle = result.getData().getExtras();
                     Bitmap bitmap = (Bitmap) bundle.get("data");
-                    Glide.with(getContext()).load(bitmap).into(profileImage);
+                    Glide.with(getContext()).load(bitmap).into(mProfileImage);
                 }
             }
         });
@@ -234,7 +241,7 @@ public class ProfileFragment extends Fragment {
                             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             getImageFromCamera.launch(cameraIntent);
                         } else if (which == 2) {
-                            profileImage.setImageDrawable(null);
+                            mProfileImage.setImageDrawable(null);
                         }
                     }
                 });
