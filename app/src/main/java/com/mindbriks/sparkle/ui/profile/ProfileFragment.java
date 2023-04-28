@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -22,8 +23,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -31,6 +32,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.ChooseLoginActivity;
@@ -52,6 +56,7 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> getImageFromCamera;
     private FragmentProfileBinding binding;
     private ImageView profileImage;
+    private TextView profileName;
     private List<ProfileItem> profileItemList = new ArrayList<>();
     private List<ProfileItem> basicsItemList = new ArrayList<>();
     private ProfileListAdapter profileListAdapter, basicsListAdapter;
@@ -67,7 +72,7 @@ public class ProfileFragment extends Fragment {
 
         mUser = (DbUser) i.getSerializableExtra("user");
 
-        if(mUser == null){
+        if (mUser == null) {
             Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
         }
 
@@ -78,6 +83,7 @@ public class ProfileFragment extends Fragment {
         registerImagePickers();
         setupLogOut();
         profileImage = binding.profileImage;
+        populateUserProfilePage();
         RecyclerView mProfileList = binding.profileListView;
         LinearLayoutManager profileListLayoutManager = new LinearLayoutManager(getContext());
         mProfileList.setLayoutManager(profileListLayoutManager);
@@ -116,6 +122,35 @@ public class ProfileFragment extends Fragment {
         mBasicsList.setAdapter(basicsListAdapter);
 
         return root;
+    }
+
+    private void populateUserProfilePage() {
+        setupProfileBar();
+    }
+
+    private void setupProfileBar() {
+        setProfileImage();
+    }
+
+    private void setProfileImage() {
+        String profileImageUrl = mUser.getProfile_image();
+        if (profileImageUrl != null) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.card_view_place_holder_image)
+                    .error(R.drawable.card_view_place_holder_image)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.HIGH)
+                    .dontAnimate()
+                    .dontTransform();
+            Glide
+                    .with(getContext())
+                    .load(profileImageUrl)
+                    .apply(options)
+                    .into(profileImage);
+        } else {
+            profileImage.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.card_view_place_holder_image));
+        }
     }
 
     private void setupLogOut() {
