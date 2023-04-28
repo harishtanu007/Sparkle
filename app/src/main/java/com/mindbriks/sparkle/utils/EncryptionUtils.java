@@ -8,6 +8,7 @@ import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.EncryptedDbUser;
 import com.mindbriks.sparkle.model.Interest;
+import com.mindbriks.sparkle.model.Location;
 import com.mindbriks.sparkle.model.SmokingPreference;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -67,7 +68,8 @@ public class EncryptionUtils {
             String heightEncrypted = user.getHeight();
             String smokingPreferenceEncrypted = encryptField(cipher, user.getSmoke_preference());
             String drinkingPreferenceEncrypted = encryptField(cipher, user.getDrinking_preference());
-            return new EncryptedDbUser(idEncrypted, nameEncrypted, emailEncrypted, genderEncrypted, dobEncrypted, encryptedInterests, profileImageEncrypted, heightEncrypted, smokingPreferenceEncrypted, drinkingPreferenceEncrypted);
+            String locationEncrypted = encryptField(cipher, user.getLocation());
+            return new EncryptedDbUser(idEncrypted, nameEncrypted, emailEncrypted, genderEncrypted, dobEncrypted, encryptedInterests, profileImageEncrypted, heightEncrypted, smokingPreferenceEncrypted, drinkingPreferenceEncrypted, locationEncrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +88,6 @@ public class EncryptionUtils {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static DbUser decryptUser(EncryptedDbUser encryptedDbUser, String firebaseUserId) {
         try {
-
             Key secretKey = getPasswordBasedKey(SECRET_KEY_ALGORITHM, keyLength, firebaseUserId);
             Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");
             byte[] iv = new byte[cipher.getBlockSize()];
@@ -109,8 +110,9 @@ public class EncryptionUtils {
             String height = encryptedDbUser.getHeight();
             SmokingPreference smokingPreference = (SmokingPreference) decryptField(cipher, encryptedDbUser.getSmoke_preference(), SmokingPreference.class);
             DrinkingPreference drinkingPreference = (DrinkingPreference) decryptField(cipher, encryptedDbUser.getDrinking_preference(), DrinkingPreference.class);
+            Location location = (Location) decryptField(cipher, encryptedDbUser.getLocation(), Location.class);
 
-            DbUser dbUser = new DbUser(id, name, email, gender, dob, decryptedInterests, profileImage, height, smokingPreference, drinkingPreference);
+            DbUser dbUser = new DbUser(id, name, email, gender, dob, decryptedInterests, profileImage, height, smokingPreference, drinkingPreference, location);
             return dbUser;
         } catch (Exception e) {
             e.printStackTrace();

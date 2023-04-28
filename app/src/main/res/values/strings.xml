@@ -40,5 +40,7 @@
     <string name="email_cannot_contain_capital_letters">Email cannot contain capital letters</string>
     <string name="enter_password">Enter password</string>
     <string name="passwords_not_match">Passwords do not match</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core  functionality.</string>
+    <string name="settings">Settings</string>
 
 </resources>

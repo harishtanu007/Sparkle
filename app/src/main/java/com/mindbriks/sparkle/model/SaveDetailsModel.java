@@ -14,8 +14,9 @@ public class SaveDetailsModel {
     String height;
     SmokingPreference smokePreference;
     DrinkingPreference drinkingPreference;
+    Location location;
 
-    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, SmokingPreference userSmokePreference, DrinkingPreference userDrinkingPreference) {
+    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, SmokingPreference userSmokePreference, DrinkingPreference userDrinkingPreference, Location location) {
         this.name = userFullNameText;
         this.profileImageUri = userProfilePictureUri;
         this.dob = userDob;
@@ -24,6 +25,15 @@ public class SaveDetailsModel {
         this.height = userHeight;
         this.smokePreference = userSmokePreference;
         this.drinkingPreference = userDrinkingPreference;
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public SmokingPreference getSmokePreference() {

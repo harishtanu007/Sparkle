@@ -15,8 +15,10 @@ public class DbUser implements Serializable {
     long dob;
     SmokingPreference smoke_preference;
     DrinkingPreference drinking_preference;
+    double compatibilityScore;
+    Location location;
 
-    public DbUser(String id, String name, String email, String gender, long dob, List<Interest> interests, String profileImage, String height, SmokingPreference smoke_preference, DrinkingPreference drinking_preference) {
+    public DbUser(String id, String name, String email, String gender, long dob, List<Interest> interests, String profileImage, String height, SmokingPreference smoke_preference, DrinkingPreference drinking_preference, Location location) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -27,6 +29,7 @@ public class DbUser implements Serializable {
         this.height = height;
         this.smoke_preference = smoke_preference;
         this.drinking_preference = drinking_preference;
+        this.location = location;
     }
 
     public DbUser(String id, String email) {
@@ -41,6 +44,22 @@ public class DbUser implements Serializable {
     }
 
     public DbUser() {
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public double getCompatibilityScore() {
+        return compatibilityScore;
+    }
+
+    public void setCompatibilityScore(double compatibilityScore) {
+        this.compatibilityScore = compatibilityScore;
     }
 
     public String getProfile_image() {
@@ -132,15 +151,6 @@ public class DbUser implements Serializable {
             return false;
         }
         DbUser other = (DbUser) obj;
-        return Objects.equals(interests, other.interests) &&
-                Objects.equals(profile_image, other.profile_image) &&
-                Objects.equals(height, other.height) &&
-                Objects.equals(id, other.id) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(email, other.email) &&
-                Objects.equals(gender, other.gender) &&
-                dob == other.dob &&
-                smoke_preference == other.smoke_preference &&
-                drinking_preference == other.drinking_preference;
+        return Objects.equals(interests, other.interests) && Objects.equals(profile_image, other.profile_image) && Objects.equals(height, other.height) && Objects.equals(id, other.id) && Objects.equals(name, other.name) && Objects.equals(email, other.email) && Objects.equals(gender, other.gender) && dob == other.dob && smoke_preference == other.smoke_preference && drinking_preference == other.drinking_preference;
     }
 }

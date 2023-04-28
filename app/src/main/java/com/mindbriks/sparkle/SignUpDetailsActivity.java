@@ -18,12 +18,14 @@ import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.Interest;
+import com.mindbriks.sparkle.model.Location;
 import com.mindbriks.sparkle.model.SaveDetailsModel;
 import com.mindbriks.sparkle.model.SmokingPreference;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpDrinkFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpGenderFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpHeightFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpInterestsFragment;
+import com.mindbriks.sparkle.sign_up_fragments.SignUpLocationFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignUpSmokeFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignupDobFragment;
 import com.mindbriks.sparkle.sign_up_fragments.SignupFullNameFragment;
@@ -37,6 +39,7 @@ public class SignUpDetailsActivity extends AppCompatActivity {
     private SignUpPagerAdapter signUpPagerAdapter;
     private ImageView nextButton;
     private SignupFullNameFragment signupFullNameFragment;
+    private SignUpLocationFragment signUpLocationFragment;
     private SignupPhotoFragment signupPhotoFragment;
     private SignupDobFragment signupDobFragment;
     private SignUpGenderFragment signUpGenderFragment;
@@ -58,6 +61,7 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         rootLayout = findViewById(R.id.root_layout);
 
         signupFullNameFragment = new SignupFullNameFragment();
+        signUpLocationFragment = new SignUpLocationFragment();
         signupPhotoFragment = new SignupPhotoFragment();
         signupDobFragment = new SignupDobFragment();
         signUpGenderFragment = new SignUpGenderFragment();
@@ -77,6 +81,7 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         signUpPagerAdapter.addFragment(signUpHeightFragment);
         signUpPagerAdapter.addFragment(signUpSmokeFragment);
         signUpPagerAdapter.addFragment(signUpDrinkFragment);
+        signUpPagerAdapter.addFragment(signUpLocationFragment);
 
         signupViewPager.setAdapter(signUpPagerAdapter);
 
@@ -100,8 +105,9 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         String userHeight = signUpHeightFragment.getUserHeight();
         SmokingPreference userSmokePreference = signUpSmokeFragment.getSmokingPreference();
         DrinkingPreference userDrinkingPreference = signUpDrinkFragment.getDrinkingPreference();
+        Location currentLocation = signUpLocationFragment.getCurrentLocation();
 
-        SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference);
+        SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference, currentLocation);
         mRegProgress = new ProgressDialog(SignUpDetailsActivity.this, R.style.AppThemeDialog);
         mRegProgress.setIndeterminate(true);
         mRegProgress.setCanceledOnTouchOutside(false);

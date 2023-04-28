@@ -121,7 +121,7 @@ public class FirebaseDataSource implements DataSource {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSuccess(String imageUrl) {
-                DbUser dbUser = new DbUser(firebaseUser.getUid(), saveDetailsModel.getName(), firebaseUser.getEmail(), saveDetailsModel.getGender(), saveDetailsModel.getDob(), saveDetailsModel.getInterests(), imageUrl, saveDetailsModel.getHeight(), saveDetailsModel.getSmokePreference(), saveDetailsModel.getDrinkingPreference());
+                DbUser dbUser = new DbUser(firebaseUser.getUid(), saveDetailsModel.getName(), firebaseUser.getEmail(), saveDetailsModel.getGender(), saveDetailsModel.getDob(), saveDetailsModel.getInterests(), imageUrl, saveDetailsModel.getHeight(), saveDetailsModel.getSmokePreference(), saveDetailsModel.getDrinkingPreference(), saveDetailsModel.getLocation());
                 //encrypt user data
                 EncryptedDbUser encryptedDbUser = EncryptionUtils.encryptUser(dbUser, firebaseUser.getUid());
 
