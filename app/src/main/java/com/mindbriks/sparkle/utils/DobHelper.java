@@ -19,9 +19,31 @@ public class DobHelper {
     }
 
     public static String getDateFromUnixTime(long unixTime) {
+        // Convert Unix time to a Date object
         Date date = new Date(unixTime * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+
+        // Format the date string
+        SimpleDateFormat sdf = new SimpleDateFormat("d'" + getDayOfMonthSuffix(date) + "' MMMM yyyy");
         return sdf.format(date);
     }
+
+    // Method to get the day of month suffix (e.g. "st" for "1st", "nd" for "2nd", etc.)
+    private static String getDayOfMonthSuffix(Date date) {
+        int day = Integer.parseInt(new SimpleDateFormat("d").format(date));
+        switch (day) {
+            case 1:
+            case 21:
+            case 31:
+                return "st";
+            case 2:
+            case 22:
+                return "nd";
+            case 3:
+            case 23:
+                return "rd";
+            default:
+                return "th";
+        }
+    }
+
 }
