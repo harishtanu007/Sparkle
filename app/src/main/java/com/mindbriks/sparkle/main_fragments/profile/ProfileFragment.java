@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
 
         // Add items to the list adapter
         profileItemList.add(new ProfileItem("Full Name", mUser.getName()));
-        profileItemList.add(new ProfileItem("Date of Birth", "10th Aug 1996"));
+        profileItemList.add(new ProfileItem("Date of Birth", DobHelper.getDateFromUnixTime(mUser.getDob())));
         profileItemList.add(new ProfileItem("Gender", mUser.getGender()));
         profileItemList.add(new ProfileItem("Sexuality", mUser.getGender()));
 
