@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.home;
+package com.mindbriks.sparkle.main_fragments.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +19,6 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.firebase.FirebaseDataSource;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;

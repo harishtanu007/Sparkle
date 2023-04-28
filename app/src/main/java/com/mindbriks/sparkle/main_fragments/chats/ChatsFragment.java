@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.chats;
+package com.mindbriks.sparkle.main_fragments.chats;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.adapter.ChatsAdapter;
-import com.mindbriks.sparkle.adapter.LikesAdapter;
 import com.mindbriks.sparkle.databinding.FragmentChatsBinding;
 import com.mindbriks.sparkle.model.ChatThread;
-import com.mindbriks.sparkle.model.Profile;
 
 import java.util.ArrayList;
 import java.util.List;

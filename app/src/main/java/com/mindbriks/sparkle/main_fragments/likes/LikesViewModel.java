@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.likes;
+package com.mindbriks.sparkle.main_fragments.likes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

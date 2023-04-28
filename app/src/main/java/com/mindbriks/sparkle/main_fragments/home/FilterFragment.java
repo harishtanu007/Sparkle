@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.home;
+package com.mindbriks.sparkle.main_fragments.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.profile;
+package com.mindbriks.sparkle.main_fragments.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

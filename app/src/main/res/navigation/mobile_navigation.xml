@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.mindbriks.sparkle.ui.home.HomeFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
 <!--        <action-->
@@ -19,19 +19,19 @@
 
     <fragment
         android:id="@+id/navigation_likes"
-        android:name="com.mindbriks.sparkle.ui.likes.LikesFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.likes.LikesFragment"
         android:label="@string/menu_likes"
         tools:layout="@layout/fragment_likes" />
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.mindbriks.sparkle.ui.chats.ChatsFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.chats.ChatsFragment"
         android:label="@string/menu_chats"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.mindbriks.sparkle.ui.profile.ProfileFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile">
     </fragment>

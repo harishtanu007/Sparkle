@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.profile;
+package com.mindbriks.sparkle.main_fragments.profile;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -46,6 +46,7 @@ import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.ProfileItem;
+import com.mindbriks.sparkle.utils.DobHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +137,7 @@ public class ProfileFragment extends Fragment {
 
     private void setProfileName() {
         String profileName = mUser.getName();
-        mProfileName.setText(profileName);
+        mProfileName.setText(profileName+", "+ DobHelper.calculateAge(mUser.getDob()));
     }
 
     private void setProfileImage() {

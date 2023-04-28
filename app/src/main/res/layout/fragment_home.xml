@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:paddingBottom="80dp"
     android:weightSum="10"
-    tools:context=".ui.chats.ChatsFragment">
+    tools:context=".main_fragments.chats.ChatsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/home_toolbar"

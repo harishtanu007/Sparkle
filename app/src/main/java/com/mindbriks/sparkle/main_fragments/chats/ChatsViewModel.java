@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.ui.chats;
+package com.mindbriks.sparkle.main_fragments.chats;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
