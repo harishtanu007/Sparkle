@@ -94,10 +94,10 @@ public class ProfileFragment extends Fragment {
         mProfileList.addItemDecoration(dividerItemDecoration);
 
         // Add items to the list adapter
-        profileItemList.add(new ProfileItem("Full Name", "Jenny"));
+        profileItemList.add(new ProfileItem("Full Name", mUser.getName()));
         profileItemList.add(new ProfileItem("Date of Birth", "10th Aug 1996"));
-        profileItemList.add(new ProfileItem("Gender", "Man"));
-        profileItemList.add(new ProfileItem("Sexuality", "Straight"));
+        profileItemList.add(new ProfileItem("Gender", mUser.getGender()));
+        profileItemList.add(new ProfileItem("Sexuality", mUser.getGender()));
 
         profileListAdapter = new ProfileListAdapter(profileItemList, getContext());
 
@@ -114,9 +114,9 @@ public class ProfileFragment extends Fragment {
         // Add items to the list adapter
         basicsItemList.add(new ProfileItem("Education", "Harvard"));
         basicsItemList.add(new ProfileItem("Religion", "Hindu"));
-        basicsItemList.add(new ProfileItem("Height", "152 cm"));
-        basicsItemList.add(new ProfileItem("Smoking", "No"));
-        basicsItemList.add(new ProfileItem("Drinking", "Yes"));
+        basicsItemList.add(new ProfileItem("Height", mUser.getHeight()));
+        basicsItemList.add(new ProfileItem("Smoking", mUser.getSmoke_preference().toString()));
+        basicsItemList.add(new ProfileItem("Drinking", mUser.getDrinking_preference().toString()));
 
         basicsListAdapter = new ProfileListAdapter(basicsItemList, getContext());
 
