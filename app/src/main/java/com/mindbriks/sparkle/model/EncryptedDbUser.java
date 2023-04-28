@@ -13,9 +13,9 @@ public class EncryptedDbUser {
     String dob;
     String smoke_preference;
     String drinking_preference;
-    String location;
+    EncryptedLocation location;
 
-    public EncryptedDbUser(String id, String name, String email, String gender, String dob, List<Interest> interests, String profileImage, String height, String smoke_preference, String drinking_preference, String location) {
+    public EncryptedDbUser(String id, String name, String email, String gender, String dob, List<Interest> interests, String profileImage, String height, String smoke_preference, String drinking_preference, EncryptedLocation location) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -43,11 +43,11 @@ public class EncryptedDbUser {
     public EncryptedDbUser() {
     }
 
-    public String getLocation() {
+    public EncryptedLocation getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(EncryptedLocation location) {
         this.location = location;
     }
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class SignUpLocationFragment extends Fragment {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
+    private TextView userLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +39,7 @@ public class SignUpLocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.signup_location_fragment, container, false);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         view.findViewById(R.id.enable_location_button).setOnClickListener(v -> fetchLastLocation());
+        userLocation = view.findViewById(R.id.user_location);
         return view;
     }
 
@@ -54,6 +57,7 @@ public class SignUpLocationFragment extends Fragment {
         task.addOnSuccessListener(location -> {
             if (location != null) {
                 currentLocation = new Location(location.getLatitude(), location.getLongitude());
+                userLocation.setText(currentLocation.getLatitude() + " " + currentLocation.getLongitude());
             } else {
                 Toast.makeText(getContext(), "no location found", Toast.LENGTH_SHORT).show();
             }

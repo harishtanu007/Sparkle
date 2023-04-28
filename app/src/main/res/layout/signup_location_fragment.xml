@@ -33,6 +33,16 @@
             android:gravity="center"
             android:padding="16dp"
             android:text="Enable Location" />
+
+        <TextView
+            android:id="@+id/user_location"
+            style="@style/ProfileValueStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            />
     </LinearLayout>
 
 

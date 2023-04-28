@@ -197,9 +197,14 @@ public class FirebaseDataSource implements DataSource {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    EncryptedDbUser user = snapshot.getValue(EncryptedDbUser.class);
-                    DbUser decryptUser = decryptUser(user, userId);
-                    callback.onUserDetailsFetched(decryptUser);
+                    try {
+                        EncryptedDbUser user = snapshot.getValue(EncryptedDbUser.class);
+                        DbUser decryptUser = decryptUser(user, userId);
+                        callback.onUserDetailsFetched(decryptUser);
+                    }
+                    catch (Exception e){
+                        callback.onUserDetailsFetchFailed(e.getMessage());
+                    }
                 } else {
                     callback.onUserDetailsFetchFailed("User not found");
                 }

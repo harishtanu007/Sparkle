@@ -60,8 +60,8 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.next_button);
         rootLayout = findViewById(R.id.root_layout);
 
+
         signupFullNameFragment = new SignupFullNameFragment();
-        signUpLocationFragment = new SignUpLocationFragment();
         signupPhotoFragment = new SignupPhotoFragment();
         signupDobFragment = new SignupDobFragment();
         signUpGenderFragment = new SignUpGenderFragment();
@@ -69,8 +69,10 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         signUpHeightFragment = new SignUpHeightFragment();
         signUpSmokeFragment = new SignUpSmokeFragment();
         signUpDrinkFragment = new SignUpDrinkFragment();
+        signUpLocationFragment = new SignUpLocationFragment();
 
         signUpPagerAdapter = new SignUpPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
 
         signUpPagerAdapter.addFragment(signupFullNameFragment);
         signUpPagerAdapter.addFragment(signupPhotoFragment);

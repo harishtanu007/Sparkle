@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.EncryptedDbUser;
+import com.mindbriks.sparkle.model.EncryptedLocation;
 import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.Location;
 import com.mindbriks.sparkle.model.SmokingPreference;
@@ -68,7 +69,8 @@ public class EncryptionUtils {
             String heightEncrypted = user.getHeight();
             String smokingPreferenceEncrypted = encryptField(cipher, user.getSmoke_preference());
             String drinkingPreferenceEncrypted = encryptField(cipher, user.getDrinking_preference());
-            String locationEncrypted = encryptField(cipher, user.getLocation());
+            Location location = user.getLocation();
+            EncryptedLocation locationEncrypted = new EncryptedLocation(encryptField(cipher, location.getLatitude()), encryptField(cipher, location.getLongitude()));
             return new EncryptedDbUser(idEncrypted, nameEncrypted, emailEncrypted, genderEncrypted, dobEncrypted, encryptedInterests, profileImageEncrypted, heightEncrypted, smokingPreferenceEncrypted, drinkingPreferenceEncrypted, locationEncrypted);
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +112,8 @@ public class EncryptionUtils {
             String height = encryptedDbUser.getHeight();
             SmokingPreference smokingPreference = (SmokingPreference) decryptField(cipher, encryptedDbUser.getSmoke_preference(), SmokingPreference.class);
             DrinkingPreference drinkingPreference = (DrinkingPreference) decryptField(cipher, encryptedDbUser.getDrinking_preference(), DrinkingPreference.class);
-            Location location = (Location) decryptField(cipher, encryptedDbUser.getLocation(), Location.class);
+            EncryptedLocation encryptedLocation = encryptedDbUser.getLocation();
+            Location location = new Location(((Number) decryptField(cipher, encryptedLocation.getLatitude(), double.class)).doubleValue(), ((Number) decryptField(cipher, encryptedLocation.getLongitude(), double.class)).doubleValue());
 
             DbUser dbUser = new DbUser(id, name, email, gender, dob, decryptedInterests, profileImage, height, smokingPreference, drinkingPreference, location);
             return dbUser;
@@ -130,6 +133,9 @@ public class EncryptionUtils {
             byte[] encryptedValue = cipher.doFinal(((String) field).getBytes(UTF_8));
             return Base64.getEncoder().encodeToString(encryptedValue);
         } else if (field instanceof Long) {
+            byte[] encryptedValue = cipher.doFinal(String.valueOf(field).getBytes(UTF_8));
+            return Base64.getEncoder().encodeToString(encryptedValue);
+        } else if (field instanceof Double) {
             byte[] encryptedValue = cipher.doFinal(String.valueOf(field).getBytes(UTF_8));
             return Base64.getEncoder().encodeToString(encryptedValue);
         } else if (field instanceof Enum) {
@@ -160,6 +166,8 @@ public class EncryptionUtils {
             return type.cast(new String(decryptedData));
         } else if (type == long.class) {
             return (long) Long.parseLong(new String(decryptedData));
+        } else if (type == double.class) {
+            return (double) Double.parseDouble(new String(decryptedData));
         } else if (type == SmokingPreference.class) {
             return type.cast(SmokingPreference.valueOf(new String(decryptedData)));
         } else if (type == DrinkingPreference.class) {
