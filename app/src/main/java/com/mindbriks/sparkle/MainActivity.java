@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,7 +18,6 @@ import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
-import com.mindbriks.sparkle.ui.home.HomeFragmentDirections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,17 +28,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        rootLayout = binding.rootLayout;
-
         DataSource dataSource = DataSourceHelper.getDataSource();
         dataSource.getCurrentUserDetails(new UserDetailsCallback() {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
                 currentUser = userDetails;
+
+                binding = ActivityMainBinding.inflate(getLayoutInflater());
+                setContentView(binding.getRoot());
+
+                rootLayout = binding.rootLayout;
+                getIntent().putExtra("user", currentUser);
+
                 BottomNavigationView navView = binding.navView;
                 // Passing each menu ID as a set of Ids because each
                 // menu should be considered as top level destinations.
@@ -48,10 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main);
                 //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
                 //navController.navigate(ProfileFragmentDirections.actionGlobalHomeFragment(currentUser));
-                HomeFragmentDirections.ActionHomeFragmentToProfileFragment action = HomeFragmentDirections.actionHomeFragmentToProfileFragment(currentUser);
-
-                // Navigate to the profile fragment
-                navController.navigate(action);
                 NavigationUI.setupWithNavController(binding.navView, navController);
             }
 

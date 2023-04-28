@@ -22,6 +22,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -30,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.ChooseLoginActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileListAdapter;
@@ -55,15 +58,22 @@ public class ProfileFragment extends Fragment {
 
     private DbUser mUser;
 
+    private CoordinatorLayout rootLayout;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ProfileFragmentArgs args = ProfileFragmentArgs.fromBundle(getArguments());
-        if (args != null) {
-            mUser = ProfileFragmentArgs.fromBundle(getArguments()).getUser();
-        }
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        Intent i = getActivity().getIntent();
+
+        mUser = (DbUser) i.getSerializableExtra("user");
+
+        if(mUser == null){
+            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+        }
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        rootLayout = binding.rootLayout;
 
         registerImagePickers();
         setupLogOut();

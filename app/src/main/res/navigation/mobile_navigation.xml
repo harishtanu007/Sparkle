@@ -10,11 +10,11 @@
         android:name="com.mindbriks.sparkle.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/navigation_profile"
-            app:popUpTo="@id/navigation_home"
-            app:popUpToInclusive="true" />
+<!--        <action-->
+<!--            android:id="@+id/action_homeFragment_to_profileFragment"-->
+<!--            app:destination="@id/navigation_profile"-->
+<!--            app:popUpTo="@id/navigation_home"-->
+<!--            app:popUpToInclusive="true" />-->
     </fragment>
 
     <fragment
@@ -34,16 +34,6 @@
         android:name="com.mindbriks.sparkle.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile">
-        <argument
-            android:name="user"
-            app:argType="com.mindbriks.sparkle.model.DbUser" />
     </fragment>
 
-    <action
-        android:id="@+id/action_global_homeFragment"
-        app:destination="@id/navigation_profile">
-        <argument
-            android:name="user"
-            app:argType="com.mindbriks.sparkle.model.DbUser" />
-    </action>
 </navigation>
