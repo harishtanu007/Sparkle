@@ -21,6 +21,7 @@ import com.mindbriks.sparkle.model.DbUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    DataSource dataSource;
     private ActivityMainBinding binding;
     private DbUser currentUser;
     private ConstraintLayout rootLayout;
@@ -28,16 +29,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataSource dataSource = DataSourceHelper.getDataSource();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        rootLayout = binding.rootLayout;
+        dataSource = DataSourceHelper.getDataSource();
         dataSource.getCurrentUserDetails(new UserDetailsCallback() {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
                 currentUser = userDetails;
-
-                binding = ActivityMainBinding.inflate(getLayoutInflater());
-                setContentView(binding.getRoot());
-
-                rootLayout = binding.rootLayout;
+                if (currentUser == null) {
+                    logoutUser();
+                }
                 getIntent().putExtra("user", currentUser);
 
                 BottomNavigationView navView = binding.navView;
@@ -53,17 +56,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onUserDetailsFetchFailed(String errorMessage) {
                 Snackbar.make(rootLayout, errorMessage, Snackbar.LENGTH_LONG).show();
-                dataSource.logoutUser(new DataSourceCallback() {
-                    @Override
-                    public void onSuccess() {
-                        sendToStart();
-                    }
+                logoutUser();
+            }
+        });
+    }
 
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        sendToStart();
-                    }
-                });
+    private void logoutUser() {
+        dataSource.logoutUser(new DataSourceCallback() {
+            @Override
+            public void onSuccess() {
+                sendToStart();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                sendToStart();
             }
         });
     }
