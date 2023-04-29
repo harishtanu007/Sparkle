@@ -27,5 +27,9 @@ public interface DataSource {
 
     void getCurrentUserDetails(UserDetailsCallback callback);
 
+    void getAllUserDetails(String userId, AllUserDetailsCallback callback);
+
     void getUserDetails(String userId, UserDetailsCallback callback);
+
+    String getCurrentUserId();
 }

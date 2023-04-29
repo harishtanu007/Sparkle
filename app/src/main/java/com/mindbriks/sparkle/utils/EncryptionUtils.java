@@ -100,7 +100,8 @@ public class EncryptionUtils {
             String name = encryptedDbUser.getName();
             String email = (String) decryptField(cipher, encryptedDbUser.getEmail(), String.class);
             String gender = (String) decryptField(cipher, encryptedDbUser.getGender(), String.class);
-            long dob = (long) decryptField(cipher, encryptedDbUser.getDob(), long.class);
+
+            long dob = decryptField(cipher, encryptedDbUser.getDob(), long.class) == null ? 0 : (long) decryptField(cipher, encryptedDbUser.getDob(), long.class);
 
             List<Interest> decryptedInterests = new ArrayList<>();
             for (Interest interest : encryptedDbUser.getInterests()) {
@@ -113,7 +114,9 @@ public class EncryptionUtils {
             SmokingPreference smokingPreference = (SmokingPreference) decryptField(cipher, encryptedDbUser.getSmoke_preference(), SmokingPreference.class);
             DrinkingPreference drinkingPreference = (DrinkingPreference) decryptField(cipher, encryptedDbUser.getDrinking_preference(), DrinkingPreference.class);
             EncryptedLocation encryptedLocation = encryptedDbUser.getLocation();
-            Location location = new Location(((Number) decryptField(cipher, encryptedLocation.getLatitude(), double.class)).doubleValue(), ((Number) decryptField(cipher, encryptedLocation.getLongitude(), double.class)).doubleValue());
+            double latitude = decryptField(cipher, encryptedLocation.getLongitude(), double.class) == null ? 0 : ((Number) decryptField(cipher, encryptedLocation.getLatitude(), double.class)).doubleValue();
+            double longitude = decryptField(cipher, encryptedLocation.getLongitude(), double.class) == null ? 0 : ((Number) decryptField(cipher, encryptedLocation.getLongitude(), double.class)).doubleValue();
+            Location location = new Location(latitude, longitude);
 
             DbUser dbUser = new DbUser(id, name, email, gender, dob, decryptedInterests, profileImage, height, smokingPreference, drinkingPreference, location);
             return dbUser;
@@ -160,20 +163,23 @@ public class EncryptionUtils {
         }
 
         byte[] encryptedData = Base64.getDecoder().decode(encryptedField);
-        byte[] decryptedData = cipher.doFinal(encryptedData);
-
-        if (type == String.class) {
-            return type.cast(new String(decryptedData));
-        } else if (type == long.class) {
-            return (long) Long.parseLong(new String(decryptedData));
-        } else if (type == double.class) {
-            return (double) Double.parseDouble(new String(decryptedData));
-        } else if (type == SmokingPreference.class) {
-            return type.cast(SmokingPreference.valueOf(new String(decryptedData)));
-        } else if (type == DrinkingPreference.class) {
-            return type.cast(DrinkingPreference.valueOf(new String(decryptedData)));
-        } else {
-            throw new IllegalArgumentException("Unsupported field type: " + type.getSimpleName());
+        try {
+            byte[] decryptedData = cipher.doFinal(encryptedData);
+            if (type == String.class) {
+                return type.cast(new String(decryptedData));
+            } else if (type == long.class) {
+                return (new String(decryptedData) == null) ? null : (long) Long.parseLong(new String(decryptedData));
+            } else if (type == double.class) {
+                return (new String(decryptedData) == null) ? null : (double) Double.parseDouble(new String(decryptedData));
+            } else if (type == SmokingPreference.class) {
+                return type.cast(SmokingPreference.valueOf(new String(decryptedData)));
+            } else if (type == DrinkingPreference.class) {
+                return type.cast(DrinkingPreference.valueOf(new String(decryptedData)));
+            } else {
+                throw new IllegalArgumentException("Unsupported field type: " + type.getSimpleName());
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 }

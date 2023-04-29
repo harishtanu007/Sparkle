@@ -14,16 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.UserProfileActivity;
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.utils.DobHelper;
 
 import java.util.List;
 
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     private final Context context;
-    private final List<Profile> profileList;
+    private final List<DbUser> profileList;
 
-    public ProfileAdapter(@NonNull Context context, List<Profile> profileList) {
+    public ProfileAdapter(@NonNull Context context, List<DbUser> profileList) {
         this.context = context;
         this.profileList = profileList;
     }
@@ -39,11 +41,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Profile profile = profileList.get(position);
+        final DbUser profile = profileList.get(position);
         if (profile != null) {
-            holder.cardViewName.setText(profile.getName() + ", " + profile.getAge());
-            holder.cardViewDistance.setText(profile.getDistance() + " " + getDistanceMetric());
-            String imageUrl = profile.getProfilePic();
+            holder.cardViewName.setText(profile.getName() + ", " + DobHelper.calculateAge(profile.getDob()));
+            holder.cardViewDistance.setText(profile.getHeight() + " " + getDistanceMetric());
+            String imageUrl = profile.getProfile_image();
 
             if (imageUrl == null || imageUrl.isEmpty()) {
                 // If the image value is null, load a default placeholder image

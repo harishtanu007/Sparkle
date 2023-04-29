@@ -72,14 +72,12 @@ public class ProfileFragment extends Fragment {
         Intent i = getActivity().getIntent();
 
         mUser = (DbUser) i.getSerializableExtra("user");
-
-        if (mUser == null) {
-            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
-        }
-
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         rootLayout = binding.rootLayout;
+        if (mUser == null) {
+            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+        }
 
         registerImagePickers();
         setupLogOut();

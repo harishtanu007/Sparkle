@@ -1,5 +1,6 @@
 package com.mindbriks.sparkle.main_fragments.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -15,17 +17,23 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.AllUserDetailsCallback;
 import com.mindbriks.sparkle.interfaces.DataSource;
+import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.model.DbUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
+
+import java.util.List;
 
 
 public class HomeFragment extends Fragment implements CardStackListener, FilterFragment.OnFilterSelectedListener {
@@ -35,8 +43,9 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
     private ImageView filterButton;
-
+    private DbUser mUser;
     private DataSource dataSource;
+    private LinearLayout rootLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,16 +53,19 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         dataSource = DataSourceHelper.getDataSource();
+        String currentUserId = dataSource.getCurrentUserId();
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        rootLayout = binding.rootLayout;
+
 
         cardStackView = binding.cardStackView;
         filterButton = binding.filter;
         layoutManager = new CardStackLayoutManager(getContext(), this);
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
         setupButton(binding);
-        populateUsers();
+        populateUsers(currentUserId);
         filterButton.setOnClickListener(v -> {
             FilterFragment filterFragment = new FilterFragment();
             filterFragment.show(getFragmentManager(), "FilterFragment");
@@ -61,9 +73,20 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
         return root;
     }
 
-    private void populateUsers() {
-        profileAdapter = new ProfileAdapter(getContext(), dataSource.getUsers());
-        cardStackView.setAdapter(profileAdapter);
+    private void populateUsers(String currentUserId) {
+        dataSource.getAllUserDetails(currentUserId, new AllUserDetailsCallback() {
+            @Override
+            public void onUserDetailsFetched(List<DbUser> userDetails) {
+                profileAdapter = new ProfileAdapter(getContext(), userDetails);
+                cardStackView.setAdapter(profileAdapter);
+            }
+
+            @Override
+            public void onUserDetailsFetchFailed(String errorMessage) {
+                Snackbar.make(rootLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     // set up buttons actions

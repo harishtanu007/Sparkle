@@ -1,7 +1,11 @@
 package com.mindbriks.sparkle.firebase;
 
+import static com.mindbriks.sparkle.model.FirebaseConstants.CONNECTIONS;
+import static com.mindbriks.sparkle.model.FirebaseConstants.GENDER;
+import static com.mindbriks.sparkle.model.FirebaseConstants.NOPE;
 import static com.mindbriks.sparkle.model.FirebaseConstants.PROFILE_IMAGES;
 import static com.mindbriks.sparkle.model.FirebaseConstants.USERS;
+import static com.mindbriks.sparkle.model.FirebaseConstants.YEPS;
 import static com.mindbriks.sparkle.utils.EncryptionUtils.decryptUser;
 
 import android.net.Uri;
@@ -14,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mindbriks.sparkle.interfaces.AllUserDetailsCallback;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
@@ -51,6 +57,10 @@ public class FirebaseDataSource implements DataSource {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         usersRef = FirebaseDatabase.getInstance().getReference(USERS);
+    }
+
+    public String getCurrentUserId() {
+        return firebaseUser.getUid();
     }
 
     @Override
@@ -175,7 +185,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void getCurrentUserDetails(UserDetailsCallback callback){
+    public void getCurrentUserDetails(UserDetailsCallback callback) {
         getUserDetails(firebaseUser.getUid(), new UserDetailsCallback() {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
@@ -185,6 +195,45 @@ public class FirebaseDataSource implements DataSource {
             @Override
             public void onUserDetailsFetchFailed(String errorMessage) {
                 callback.onUserDetailsFetchFailed(errorMessage);
+            }
+        });
+    }
+
+    @Override
+    public void getAllUserDetails(String userId, AllUserDetailsCallback callback) {
+        List<DbUser> profileList = new ArrayList<>();
+        usersRef.addChildEventListener(new ChildEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.child(GENDER).getValue() != null) {
+                    if (dataSnapshot.exists() && !dataSnapshot.getKey().equals(userId) && !dataSnapshot.child(CONNECTIONS).child(NOPE).hasChild(userId) && !dataSnapshot.child(CONNECTIONS).child(YEPS).hasChild(userId)) {
+                        try {
+                            EncryptedDbUser user = dataSnapshot.getValue(EncryptedDbUser.class);
+                            DbUser decryptUser = decryptUser(user, userId);
+                            profileList.add(decryptUser);
+                            callback.onUserDetailsFetched(profileList);
+                        } catch (Exception e) {
+                            callback.onUserDetailsFetchFailed(e.getMessage());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -201,8 +250,7 @@ public class FirebaseDataSource implements DataSource {
                         EncryptedDbUser user = snapshot.getValue(EncryptedDbUser.class);
                         DbUser decryptUser = decryptUser(user, userId);
                         callback.onUserDetailsFetched(decryptUser);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         callback.onUserDetailsFetchFailed(e.getMessage());
                     }
                 } else {
