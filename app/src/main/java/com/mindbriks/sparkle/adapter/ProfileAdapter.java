@@ -18,16 +18,22 @@ import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
 import com.mindbriks.sparkle.utils.DobHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     private final Context context;
-    private final List<DbUser> profileList;
+    private List<DbUser> profileList;
 
-    public ProfileAdapter(@NonNull Context context, List<DbUser> profileList) {
+    public ProfileAdapter(@NonNull Context context) {
         this.context = context;
+        this.profileList = new ArrayList<>();
+    }
+
+    public void setMyDataList(List<DbUser> profileList) {
         this.profileList = profileList;
+        notifyDataSetChanged();
     }
 
     @NonNull

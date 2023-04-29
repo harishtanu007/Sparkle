@@ -12,14 +12,14 @@ import java.util.List;
 
 public class MatchingAlgorithm {
     // define matching criteria
-    int maxDistance = 10; // in miles
-    int maxAgeDiff = 5; // in years
+    static int maxDistance = 10; // in miles
+    static int maxAgeDiff = 5; // in years
 
-    List<DbUser> getTopMatches(DbUser dbUser, DbUser currentUser, List<DbUser> allUsers) {
+    public static List<DbUser> getTopMatches(DbUser currentUser, List<DbUser> allUsers) {
         String gender = "female";
-        List<Interest> interests = dbUser.getInterests();
+        List<Interest> interests = currentUser.getInterests();
 
-// filter users based on matching criteria
+        // filter users based on matching criteria
         List<DbUser> filteredUsers = new ArrayList<>();
         for (DbUser user : allUsers) {
             // check distance between user and potential match
@@ -53,12 +53,12 @@ public class MatchingAlgorithm {
             }
         });
 
-// return top matches
+        // return top matches
         List<DbUser> topMatches = sortedUsers.subList(0, 10);
         return topMatches;
     }
 
-    public int getCompatibilityScore(DbUser user, DbUser currentUser) {
+    public static int getCompatibilityScore(DbUser user, DbUser currentUser) {
         int score = 0;
 
         // Age difference
