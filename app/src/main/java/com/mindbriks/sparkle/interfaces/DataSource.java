@@ -13,8 +13,6 @@ public interface DataSource {
 
     void createUser(User user, DataSourceCallback callback);
 
-    boolean isUserDetailsExist();
-
     void uploadProfileImage(Uri imageUri, OnUploadProfileImageListener listener);
 
     void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback);

@@ -163,11 +163,6 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public boolean isUserDetailsExist() {
-        return false;
-    }
-
-    @Override
     public void uploadProfileImage(Uri imageUri, OnUploadProfileImageListener listener) {
         String fileName = firebaseUser.getUid();
         StorageReference imageRef = storageReference.child(PROFILE_IMAGES).child(fileName + ".jpg");
@@ -290,17 +285,22 @@ public class FirebaseDataSource implements DataSource {
 
     @Override
     public void getCurrentUserDetails(UserDetailsCallback callback) {
-        getUserDetails(firebaseUser.getUid(), new UserDetailsCallback() {
-            @Override
-            public void onUserDetailsFetched(DbUser userDetails) {
-                callback.onUserDetailsFetched(userDetails);
-            }
+        if(mAuth.getCurrentUser() !=null) {
+            getUserDetails(mAuth.getCurrentUser().getUid(), new UserDetailsCallback() {
+                @Override
+                public void onUserDetailsFetched(DbUser userDetails) {
+                    callback.onUserDetailsFetched(userDetails);
+                }
 
-            @Override
-            public void onUserDetailsFetchFailed(String errorMessage) {
-                callback.onUserDetailsFetchFailed(errorMessage);
-            }
-        });
+                @Override
+                public void onUserDetailsFetchFailed(String errorMessage) {
+                    callback.onUserDetailsFetchFailed(errorMessage);
+                }
+            });
+        }
+        else {
+            callback.onUserDetailsFetchFailed("User details not found");
+        }
     }
 
     @Override

@@ -15,6 +15,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.utils.StringResourceHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -54,9 +56,21 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             mRegProgress.dismiss();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            dataSource.getCurrentUserDetails(new UserDetailsCallback() {
+                                @Override
+                                public void onUserDetailsFetched(DbUser userDetails) {
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onUserDetailsFetchFailed(String errorMessage) {
+                                    Intent intent = new Intent(getApplicationContext(), SignUpDetailsActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         }
 
                         @Override

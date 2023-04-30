@@ -67,13 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         mRegProgress.dismiss();
-                        if (dataSource.isUserDetailsExist()) {
-                            Snackbar.make(rootLayout, "Verification email sent to " + user.getEmail(), Snackbar.LENGTH_LONG).show();
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), SignUpDetailsActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                        Snackbar.make(rootLayout, "Verification email sent to " + user.getEmail(), Snackbar.LENGTH_LONG).show();
                     }
 
                     @Override
