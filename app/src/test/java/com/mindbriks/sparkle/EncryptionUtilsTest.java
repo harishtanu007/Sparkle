@@ -1,6 +1,5 @@
 package com.mindbriks.sparkle;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.mindbriks.sparkle.model.DbUser;
@@ -8,6 +7,7 @@ import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.EncryptedDbUser;
 import com.mindbriks.sparkle.model.GenderPreference;
 import com.mindbriks.sparkle.model.Interest;
+import com.mindbriks.sparkle.model.Location;
 import com.mindbriks.sparkle.model.SmokingPreference;
 import com.mindbriks.sparkle.utils.EncryptionUtils;
 
@@ -23,7 +23,21 @@ public class EncryptionUtilsTest {
     @Test
     public void testEncryptionDecryption() {
         List<Interest> interestList = getInterests();
-        DbUser dbUser = new DbUser("123", "Harish Kunta", "harishtanu007@gmail.com", GenderPreference.MAN.name(), 123456789, interestList, "test", "4.2", SmokingPreference.NEVER, DrinkingPreference.OCCASIONALLY);
+
+        DbUser.Builder builder = new DbUser.Builder();
+        builder.id("123");
+        builder.name("Harish Kunta");
+        builder.email("harishtanu007@gmail.com");
+        builder.gender(GenderPreference.MAN.name());
+        builder.dob(123456789);
+        builder.interests(interestList);
+        builder.profile_image("test");
+        builder.height("4.2");
+        builder.smoke_preference(SmokingPreference.NEVER);
+        builder.drinking_preference(DrinkingPreference.OCCASIONALLY);
+        builder.location(new Location(0, 0));
+        builder.encrypted(true);
+        DbUser dbUser = builder.build();
 
         EncryptedDbUser encrypted = EncryptionUtils.encryptUser(dbUser, SAMPLE_KEY);
         DbUser decryptedDbUser = EncryptionUtils.decryptUser(encrypted, SAMPLE_KEY);

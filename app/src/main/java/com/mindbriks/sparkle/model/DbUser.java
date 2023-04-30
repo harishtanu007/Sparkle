@@ -1,6 +1,7 @@
 package com.mindbriks.sparkle.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,33 +18,17 @@ public class DbUser implements Serializable {
     DrinkingPreference drinking_preference;
     double compatibilityScore;
     Location location;
+    boolean encrypted;
 
-    public DbUser(String id, String name, String email, String gender, long dob, List<Interest> interests, String profileImage, String height, SmokingPreference smoke_preference, DrinkingPreference drinking_preference, Location location) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.gender = gender;
-        this.dob = dob;
-        this.interests = interests;
-        this.profile_image = profileImage;
-        this.height = height;
-        this.smoke_preference = smoke_preference;
-        this.drinking_preference = drinking_preference;
-        this.location = location;
+    private DbUser() {
     }
 
-    public DbUser(String id, String email) {
-        this.id = id;
-        this.email = email;
+    public boolean isEncrypted() {
+        return encrypted;
     }
 
-    public DbUser(String id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-
-    public DbUser() {
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
     }
 
     public Location getLocation() {
@@ -152,5 +137,106 @@ public class DbUser implements Serializable {
         }
         DbUser other = (DbUser) obj;
         return Objects.equals(interests, other.interests) && Objects.equals(profile_image, other.profile_image) && Objects.equals(height, other.height) && Objects.equals(id, other.id) && Objects.equals(name, other.name) && Objects.equals(email, other.email) && Objects.equals(gender, other.gender) && dob == other.dob && smoke_preference == other.smoke_preference && drinking_preference == other.drinking_preference;
+    }
+
+    public static class Builder {
+        private List<Interest> interests = new ArrayList<>();
+        private String profile_image = "";
+        private String height = "";
+        private String id = "";
+        private String name = "";
+        private String email = "";
+        private String gender = "";
+        private long dob = 0L;
+        private SmokingPreference smoke_preference = SmokingPreference.NEVER;
+        private DrinkingPreference drinking_preference = DrinkingPreference.NEVER;
+        private double compatibilityScore = 0.0;
+        private Location location = new Location(0.0, 0.0);
+        private boolean encrypted = false;
+
+        public Builder() {
+        } // public constructor
+
+        public Builder interests(List<Interest> interests) {
+            this.interests = interests;
+            return this;
+        }
+
+        public Builder profile_image(String profile_image) {
+            this.profile_image = profile_image;
+            return this;
+        }
+
+        public Builder height(String height) {
+            this.height = height;
+            return this;
+        }
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder gender(String gender) {
+            this.gender = gender;
+            return this;
+        }
+
+        public Builder dob(long dob) {
+            this.dob = dob;
+            return this;
+        }
+
+        public Builder smoke_preference(SmokingPreference smoke_preference) {
+            this.smoke_preference = smoke_preference;
+            return this;
+        }
+
+        public Builder drinking_preference(DrinkingPreference drinking_preference) {
+            this.drinking_preference = drinking_preference;
+            return this;
+        }
+
+        public Builder compatibilityScore(double compatibilityScore) {
+            this.compatibilityScore = compatibilityScore;
+            return this;
+        }
+
+        public Builder location(Location location) {
+            this.location = location;
+            return this;
+        }
+        public Builder encrypted(boolean encrypted) {
+            this.encrypted = encrypted;
+            return this;
+        }
+
+        public DbUser build() {
+            DbUser user = new DbUser();
+            user.interests = this.interests;
+            user.profile_image = this.profile_image;
+            user.height = this.height;
+            user.id = this.id;
+            user.name = this.name;
+            user.email = this.email;
+            user.gender = this.gender;
+            user.dob = this.dob;
+            user.smoke_preference = this.smoke_preference;
+            user.drinking_preference = this.drinking_preference;
+            user.compatibilityScore = this.compatibilityScore;
+            user.location = this.location;
+            user.encrypted = this.encrypted;
+            return user;
+        }
     }
 }

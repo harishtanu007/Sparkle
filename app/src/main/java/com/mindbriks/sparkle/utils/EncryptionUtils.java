@@ -12,15 +12,12 @@ import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.Location;
 import com.mindbriks.sparkle.model.SmokingPreference;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -39,10 +36,6 @@ public class EncryptionUtils {
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
     static int keyLength = 128;
-
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static EncryptedDbUser encryptUser(DbUser user, String firebaseUserId) {
@@ -118,7 +111,20 @@ public class EncryptionUtils {
             double longitude = decryptField(cipher, encryptedLocation.getLongitude(), double.class) == null ? 0 : ((Number) decryptField(cipher, encryptedLocation.getLongitude(), double.class)).doubleValue();
             Location location = new Location(latitude, longitude);
 
-            DbUser dbUser = new DbUser(id, name, email, gender, dob, decryptedInterests, profileImage, height, smokingPreference, drinkingPreference, location);
+            DbUser.Builder builder = new DbUser.Builder();
+            builder.id(id);
+            builder.name(name);
+            builder.email(email);
+            builder.gender(gender);
+            builder.dob(dob);
+            builder.interests(decryptedInterests);
+            builder.profile_image(profileImage);
+            builder.height(height);
+            builder.smoke_preference(smokingPreference);
+            builder.drinking_preference(drinkingPreference);
+            builder.location(location);
+            builder.encrypted(true);
+            DbUser dbUser = builder.build();
             return dbUser;
         } catch (Exception e) {
             e.printStackTrace();

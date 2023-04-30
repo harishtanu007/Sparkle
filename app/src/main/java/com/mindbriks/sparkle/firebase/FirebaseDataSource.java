@@ -84,7 +84,10 @@ public class FirebaseDataSource implements DataSource {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        DbUser dbUser = new DbUser(firebaseUser.getUid(), user.getEmail());
+                        DbUser.Builder builder = new DbUser.Builder();
+                        builder.id(firebaseUser.getUid());
+                        builder.email(user.getEmail());
+                        DbUser dbUser = builder.build();
                         usersRef.child(firebaseUser.getUid()).setValue(dbUser)
                                 .addOnCompleteListener(innerTask -> {
                                     if (innerTask.isSuccessful()) {
@@ -131,7 +134,20 @@ public class FirebaseDataSource implements DataSource {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSuccess(String imageUrl) {
-                DbUser dbUser = new DbUser(firebaseUser.getUid(), saveDetailsModel.getName(), firebaseUser.getEmail(), saveDetailsModel.getGender(), saveDetailsModel.getDob(), saveDetailsModel.getInterests(), imageUrl, saveDetailsModel.getHeight(), saveDetailsModel.getSmokePreference(), saveDetailsModel.getDrinkingPreference(), saveDetailsModel.getLocation());
+                DbUser.Builder builder = new DbUser.Builder();
+                builder.id(firebaseUser.getUid());
+                builder.name(saveDetailsModel.getName());
+                builder.email(firebaseUser.getEmail());
+                builder.gender(saveDetailsModel.getGender());
+                builder.dob(saveDetailsModel.getDob());
+                builder.interests(saveDetailsModel.getInterests());
+                builder.profile_image(imageUrl);
+                builder.height(saveDetailsModel.getHeight());
+                builder.smoke_preference(saveDetailsModel.getSmokePreference());
+                builder.drinking_preference(saveDetailsModel.getDrinkingPreference());
+                builder.location(saveDetailsModel.getLocation());
+                DbUser dbUser = builder.build();
+
                 //encrypt user data
                 EncryptedDbUser encryptedDbUser = EncryptionUtils.encryptUser(dbUser, firebaseUser.getUid());
 
