@@ -29,10 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        rootLayout = binding.rootLayout;
         dataSource = DataSourceHelper.getDataSource();
         dataSource.getCurrentUserDetails(new UserDetailsCallback() {
             @Override
@@ -42,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
                     logoutUser();
                 }
                 getIntent().putExtra("user", currentUser);
-
+                binding = ActivityMainBinding.inflate(getLayoutInflater());
+                setContentView(binding.getRoot());
+                rootLayout = binding.rootLayout;
                 BottomNavigationView navView = binding.navView;
                 // Passing each menu ID as a set of Ids because each
                 // menu should be considered as top level destinations.

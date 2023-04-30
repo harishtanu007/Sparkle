@@ -1,5 +1,6 @@
 package com.mindbriks.sparkle.main_fragments.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
@@ -59,11 +61,15 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
         View root = binding.getRoot();
         rootLayout = binding.rootLayout;
 
-
         cardStackView = binding.cardStackView;
         filterButton = binding.filter;
         layoutManager = new CardStackLayoutManager(getContext(), this);
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
+        Intent i = getActivity().getIntent();
+        mUser = (DbUser) i.getSerializableExtra("user");
+        if (mUser == null) {
+            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+        }
         setupButton(binding);
         populateUsers();
         filterButton.setOnClickListener(v -> {
@@ -74,7 +80,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     }
 
     private void populateUsers() {
-        profileAdapter = new ProfileAdapter(getContext());
+        profileAdapter = new ProfileAdapter(getContext(), mUser);
         cardStackView.setAdapter(profileAdapter);
         homeViewModel.getMatchedUsers().observe(getViewLifecycleOwner(), new Observer<List<DbUser>>() {
             @Override

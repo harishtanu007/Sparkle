@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.UserProfileActivity;
 import com.mindbriks.sparkle.model.DbUser;
-import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.utils.DistanceHelper;
 import com.mindbriks.sparkle.utils.DobHelper;
 
 import java.util.ArrayList;
@@ -25,10 +25,12 @@ import java.util.List;
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     private final Context context;
     private List<DbUser> profileList;
+    private DbUser currentUser;
 
-    public ProfileAdapter(@NonNull Context context) {
+    public ProfileAdapter(@NonNull Context context, @NonNull DbUser currentUser) {
         this.context = context;
         this.profileList = new ArrayList<>();
+        this.currentUser = currentUser;
     }
 
     public void setMyDataList(List<DbUser> profileList) {
@@ -50,7 +52,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         final DbUser profile = profileList.get(position);
         if (profile != null) {
             holder.cardViewName.setText(profile.getName() + ", " + DobHelper.calculateAge(profile.getDob()));
-            holder.cardViewDistance.setText(profile.getHeight() + " " + getDistanceMetric());
+            holder.cardViewDistance.setText((int) Math.round(DistanceHelper.getDistance(currentUser.getLocation(), profile.getLocation())) + " " + getDistanceMetric());
             String imageUrl = profile.getProfile_image();
 
             if (imageUrl == null || imageUrl.isEmpty()) {
@@ -99,7 +101,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             cardViewImage = itemView.findViewById(R.id.item_image);
             cardViewName = itemView.findViewById(R.id.item_name);
             cardViewDistance = itemView.findViewById(R.id.item_distance);
-
         }
     }
 }
