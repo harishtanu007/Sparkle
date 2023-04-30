@@ -68,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onSuccess() {
                         mRegProgress.dismiss();
                         Snackbar.make(rootLayout, "Verification email sent to " + user.getEmail(), Snackbar.LENGTH_LONG).show();
+                        openLoginPage();
                     }
 
                     @Override
@@ -81,9 +82,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         TextView loginText = binding.loginText;
         loginText.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            finish();
+            openLoginPage();
         });
+
+
+    }
+
+    private void openLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
