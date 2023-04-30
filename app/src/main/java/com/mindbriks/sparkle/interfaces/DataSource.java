@@ -32,4 +32,6 @@ public interface DataSource {
     void getUserDetails(String userId, UserDetailsCallback callback);
 
     String getCurrentUserId();
+
+    void deleteUser(String password, DataSourceCallback callback);
 }

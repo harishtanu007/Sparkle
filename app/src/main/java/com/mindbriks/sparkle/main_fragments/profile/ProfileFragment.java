@@ -1,6 +1,7 @@
 package com.mindbriks.sparkle.main_fragments.profile;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,11 +9,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,19 +58,21 @@ public class ProfileFragment extends Fragment {
 
     ActivityResultLauncher<String> getImageFromGallery;
     ActivityResultLauncher<Intent> getImageFromCamera;
+    DataSource dataSource;
     private FragmentProfileBinding binding;
     private ImageView mProfileImage;
     private TextView mProfileName;
     private List<ProfileItem> profileItemList = new ArrayList<>();
     private List<ProfileItem> basicsItemList = new ArrayList<>();
     private ProfileListAdapter profileListAdapter, basicsListAdapter;
-
     private DbUser mUser;
-
     private CoordinatorLayout rootLayout;
+    private ProgressDialog mRegProgress;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        dataSource = DataSourceHelper.getDataSource();
 
         Intent i = getActivity().getIntent();
 
@@ -81,6 +86,7 @@ public class ProfileFragment extends Fragment {
 
         registerImagePickers();
         setupLogOut();
+        setupDeleteAccount();
         mProfileImage = binding.profileImage;
         mProfileName = binding.profileName;
         populateUserProfilePage();
@@ -124,6 +130,60 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
+    private void setupDeleteAccount() {
+        Button deleteAccount = binding.profileDeleteAccountButton;
+        deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                // Set up the input
+                final EditText inputPassword = new EditText(getActivity());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                inputPassword.setHint("Enter user password");
+                builder.setView(inputPassword);
+
+                builder
+                        .setMessage("Are you sure you want to delete account?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteUser(inputPassword.getText().toString());
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
+    }
+
+    private void deleteUser(String password) {
+        mRegProgress = new ProgressDialog(getContext(), R.style.AppThemeDialog);
+        mRegProgress.setIndeterminate(true);
+        mRegProgress.setCanceledOnTouchOutside(false);
+        mRegProgress.setMessage("Deleting user");
+        mRegProgress.show();
+        dataSource.deleteUser(password, new DataSourceCallback() {
+            @Override
+            public void onSuccess() {
+                mRegProgress.dismiss();
+                Snackbar.make(rootLayout, "User Account deleted successfully", Snackbar.LENGTH_LONG).show();
+                sendToStart();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                mRegProgress.dismiss();
+                Snackbar.make(rootLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void populateUserProfilePage() {
         setupProfileBar();
     }
@@ -135,7 +195,7 @@ public class ProfileFragment extends Fragment {
 
     private void setProfileName() {
         String profileName = mUser.getName();
-        mProfileName.setText(profileName+", "+ DobHelper.calculateAge(mUser.getDob()));
+        mProfileName.setText(profileName + ", " + DobHelper.calculateAge(mUser.getDob()));
     }
 
     private void setProfileImage() {
@@ -169,18 +229,15 @@ public class ProfileFragment extends Fragment {
                 builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataSource dataSource = DataSourceHelper.getDataSource();
                         dataSource.logoutUser(new DataSourceCallback() {
                             @Override
                             public void onSuccess() {
-                                Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
+                                sendToStart();
                             }
 
                             @Override
                             public void onFailure(String errorMessage) {
-
+                                Snackbar.make(rootLayout, errorMessage, Snackbar.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -190,12 +247,17 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-
                     }
                 });
                 builderSingle.show();
             }
         });
+    }
+
+    private void sendToStart() {
+        Intent intent = new Intent(getContext(), ChooseLoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void registerImagePickers() {
