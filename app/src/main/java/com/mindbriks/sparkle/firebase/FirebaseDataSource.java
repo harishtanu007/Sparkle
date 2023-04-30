@@ -83,17 +83,25 @@ public class FirebaseDataSource implements DataSource {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+//                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+//                        DbUser.Builder builder = new DbUser.Builder();
+//                        builder.id(firebaseUser.getUid());
+//                        builder.email(user.getEmail());
+//                        DbUser dbUser = builder.build();
+//                        usersRef.child(firebaseUser.getUid()).setValue(dbUser)
+//                                .addOnCompleteListener(innerTask -> {
+//                                    if (innerTask.isSuccessful()) {
+//                                        callback.onSuccess();
+//                                    } else {
+//                                        callback.onFailure(innerTask.getException().getMessage());
+//                                    }
+//                                });
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        DbUser.Builder builder = new DbUser.Builder();
-                        builder.id(firebaseUser.getUid());
-                        builder.email(user.getEmail());
-                        DbUser dbUser = builder.build();
-                        usersRef.child(firebaseUser.getUid()).setValue(dbUser)
-                                .addOnCompleteListener(innerTask -> {
-                                    if (innerTask.isSuccessful()) {
+                        firebaseUser.sendEmailVerification()
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        // Redirect the user to the OTP verification page
                                         callback.onSuccess();
-                                    } else {
-                                        callback.onFailure(innerTask.getException().getMessage());
                                     }
                                 });
                     } else {
@@ -181,7 +189,27 @@ public class FirebaseDataSource implements DataSource {
     public void login(String email, String password, DataSourceCallback callback) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    callback.onSuccess();
+                    if (mAuth.getCurrentUser().isEmailVerified()) {
+                        // user is signed in and email is verified
+                        callback.onSuccess();
+                    } else {
+                        // user is signed in but email is not verified
+                        // callback.onFailure("Please verify your email to login");
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        firebaseUser.sendEmailVerification()
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        // Redirect the user to the OTP verification page
+                                        callback.onFailure("Verification email sent to " + firebaseUser.getEmail());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        callback.onFailure("Error sending verification email");
+                                    }
+                                });
+                    }
                 })
                 .addOnFailureListener(e -> {
                     callback.onFailure(e.getMessage());
@@ -191,7 +219,15 @@ public class FirebaseDataSource implements DataSource {
     @Override
     public void onLoginVerification(LoginVerificationListener listener) {
         boolean isLoggedIn = mAuth.getCurrentUser() != null;
-        listener.onLoginVerification(isLoggedIn);
+        if (isLoggedIn) {
+            if (mAuth.getCurrentUser().isEmailVerified()) {
+                listener.onLoginVerificationSuccess();
+            } else {
+                listener.onUserEmailNotVerified();
+            }
+        } else {
+            listener.onLoginVerificationFailure();
+        }
     }
 
     @Override

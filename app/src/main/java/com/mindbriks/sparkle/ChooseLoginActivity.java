@@ -58,12 +58,24 @@ public class ChooseLoginActivity extends AppCompatActivity {
         DataSource dataSource = DataSourceHelper.getDataSource();
         dataSource.onLoginVerification(new LoginVerificationListener() {
             @Override
-            public void onLoginVerification(boolean isLoggedIn) {
-                if(isLoggedIn){
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            public void onLoginVerificationSuccess() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onUserEmailNotVerified() {
+                Button mSignInEmailButton = findViewById(R.id.login_email_button);
+                mSignInEmailButton.setOnClickListener(view -> {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
-                    finish();
-                }
+                });
+            }
+
+            @Override
+            public void onLoginVerificationFailure() {
+
             }
         });
         return true;

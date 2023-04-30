@@ -1,5 +1,7 @@
 package com.mindbriks.sparkle.interfaces;
 
 public interface LoginVerificationListener {
-    void onLoginVerification(boolean isLoggedIn);
+    void onLoginVerificationSuccess();
+    void onUserEmailNotVerified();
+    void onLoginVerificationFailure();
 }

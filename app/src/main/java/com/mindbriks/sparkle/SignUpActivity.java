@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mindbriks.sparkle.databinding.ActivitySignUpBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.firebase.FirebaseDataSource;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.DataSourceCallback;
 import com.mindbriks.sparkle.model.User;
@@ -69,9 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onSuccess() {
                         mRegProgress.dismiss();
                         if (dataSource.isUserDetailsExist()) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            Snackbar.make(rootLayout, "Verification email sent to " + user.getEmail(), Snackbar.LENGTH_LONG).show();
                         } else {
                             Intent intent = new Intent(getApplicationContext(), SignUpDetailsActivity.class);
                             startActivity(intent);
