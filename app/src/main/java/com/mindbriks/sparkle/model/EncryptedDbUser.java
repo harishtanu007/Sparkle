@@ -14,6 +14,7 @@ public class EncryptedDbUser {
     String smoke_preference;
     String drinking_preference;
     EncryptedLocation location;
+    boolean encrypted;
 
     public EncryptedDbUser(String id, String name, String email, String gender, String dob, List<Interest> interests, String profileImage, String height, String smoke_preference, String drinking_preference, EncryptedLocation location) {
         this.id = id;
@@ -41,6 +42,14 @@ public class EncryptedDbUser {
     }
 
     public EncryptedDbUser() {
+    }
+
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
     }
 
     public EncryptedLocation getLocation() {

@@ -12,7 +12,6 @@ import com.mindbriks.sparkle.interfaces.AllUserDetailsCallback;
 import com.mindbriks.sparkle.interfaces.DataSource;
 import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
-import com.mindbriks.sparkle.utils.MatchingAlgorithm;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;

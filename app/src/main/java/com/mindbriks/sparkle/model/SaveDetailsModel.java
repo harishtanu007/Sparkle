@@ -15,8 +15,9 @@ public class SaveDetailsModel {
     SmokingPreference smokePreference;
     DrinkingPreference drinkingPreference;
     Location location;
+    boolean encrypted;
 
-    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, SmokingPreference userSmokePreference, DrinkingPreference userDrinkingPreference, Location location) {
+    public SaveDetailsModel(String userFullNameText, Uri userProfilePictureUri, long userDob, String userGender, List<Interest> userInterests, String userHeight, SmokingPreference userSmokePreference, DrinkingPreference userDrinkingPreference, Location location, boolean encrypted) {
         this.name = userFullNameText;
         this.profileImageUri = userProfilePictureUri;
         this.dob = userDob;
@@ -26,6 +27,15 @@ public class SaveDetailsModel {
         this.smokePreference = userSmokePreference;
         this.drinkingPreference = userDrinkingPreference;
         this.location = location;
+        this.encrypted = encrypted;
+    }
+
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
     }
 
     public Location getLocation() {

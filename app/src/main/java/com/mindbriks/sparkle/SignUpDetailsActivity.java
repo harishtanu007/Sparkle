@@ -109,13 +109,13 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         DrinkingPreference userDrinkingPreference = signUpDrinkFragment.getDrinkingPreference();
         Location currentLocation = signUpLocationFragment.getCurrentLocation();
 
-        SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference, currentLocation);
+        DataSource dataSource = DataSourceHelper.getDataSource();
+        SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference, currentLocation, DataSourceHelper.shouldEncryptUser());
         mRegProgress = new ProgressDialog(SignUpDetailsActivity.this, R.style.AppThemeDialog);
         mRegProgress.setIndeterminate(true);
         mRegProgress.setCanceledOnTouchOutside(false);
         mRegProgress.setMessage("Saving user details...");
         mRegProgress.show();
-        DataSource dataSource = DataSourceHelper.getDataSource();
         dataSource.saveDetails(saveDetailsModel, new DataSourceCallback() {
             @Override
             public void onSuccess() {
