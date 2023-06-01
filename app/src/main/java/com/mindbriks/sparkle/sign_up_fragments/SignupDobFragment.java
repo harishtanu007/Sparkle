@@ -15,11 +15,13 @@ import com.mindbriks.sparkle.R;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SignupDobFragment extends Fragment {
 
     private EditText dobText;
     private Calendar calendar;
+    private long dobUnix;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +52,9 @@ public class SignupDobFragment extends Fragment {
                         DecimalFormat mFormat = new DecimalFormat("00");
                         mFormat.setRoundingMode(RoundingMode.DOWN);
                         String date = mFormat.format(Double.valueOf(dayOfMonth)) + "/" + mFormat.format(Double.valueOf(month)) + "/" + year;
+                        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+
+                        dobUnix = calendar.getTimeInMillis() / 1000L;
                         dobText.setText(date);
                     }
                 },
@@ -64,7 +69,7 @@ public class SignupDobFragment extends Fragment {
     }
 
     public long getDateOfBirthUnix() {
-        return calendar.getTimeInMillis() / 1000L;
+        return dobUnix;
     }
 
 }

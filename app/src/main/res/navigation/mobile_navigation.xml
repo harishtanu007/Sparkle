@@ -7,33 +7,26 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
+        class="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-<!--        <action-->
-<!--            android:id="@+id/action_homeFragment_to_profileFragment"-->
-<!--            app:destination="@id/navigation_profile"-->
-<!--            app:popUpTo="@id/navigation_home"-->
-<!--            app:popUpToInclusive="true" />-->
-    </fragment>
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/navigation_likes"
-        android:name="com.mindbriks.sparkle.main_fragments.likes.LikesFragment"
+        class="com.mindbriks.sparkle.main_fragments.likes.LikesFragment"
         android:label="@string/menu_likes"
         tools:layout="@layout/fragment_likes" />
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.mindbriks.sparkle.main_fragments.chats.ChatsFragment"
+        class="com.mindbriks.sparkle.main_fragments.chats.ChatsFragment"
         android:label="@string/menu_chats"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.mindbriks.sparkle.main_fragments.profile.ProfileFragment"
+        class="com.mindbriks.sparkle.main_fragments.profile.ProfileFragment"
         android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_profile">
-    </fragment>
+        tools:layout="@layout/fragment_profile"></fragment>
 
 </navigation>

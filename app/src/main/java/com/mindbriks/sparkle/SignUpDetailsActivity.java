@@ -14,8 +14,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.adapter.SignUpPagerAdapter;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.model.DrinkingPreference;
 import com.mindbriks.sparkle.model.Interest;
 import com.mindbriks.sparkle.model.Location;
@@ -109,14 +109,14 @@ public class SignUpDetailsActivity extends AppCompatActivity {
         DrinkingPreference userDrinkingPreference = signUpDrinkFragment.getDrinkingPreference();
         Location currentLocation = signUpLocationFragment.getCurrentLocation();
 
-        DataSource dataSource = DataSourceHelper.getDataSource();
+        IDataSource dataSource = DataSourceHelper.getDataSource();
         SaveDetailsModel saveDetailsModel = new SaveDetailsModel(userFullNameText, userProfilePictureUri, userDob, userGender, userInterests, userHeight, userSmokePreference, userDrinkingPreference, currentLocation, DataSourceHelper.shouldEncryptUser());
         mRegProgress = new ProgressDialog(SignUpDetailsActivity.this, R.style.AppThemeDialog);
         mRegProgress.setIndeterminate(true);
         mRegProgress.setCanceledOnTouchOutside(false);
         mRegProgress.setMessage("Saving user details...");
         mRegProgress.show();
-        dataSource.saveDetails(saveDetailsModel, new DataSourceCallback() {
+        dataSource.saveDetails(saveDetailsModel, new IDataSourceCallback() {
             @Override
             public void onSuccess() {
                 mRegProgress.dismiss();

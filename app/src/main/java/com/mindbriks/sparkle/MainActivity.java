@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -12,43 +13,40 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.mindbriks.sparkle.cache.UserCache;
 import com.mindbriks.sparkle.databinding.ActivityMainBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.DataSourceCallback;
-import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
-    DataSource dataSource;
+    IDataSource dataSource;
     private ActivityMainBinding binding;
-    private DbUser currentUser;
     private ConstraintLayout rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        rootLayout = binding.rootLayout;
+        BottomNavigationView navView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_likes, R.id.navigation_chats, R.id.navigation_profile).build();
+        NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //navController.navigate(ProfileFragmentDirections.actionGlobalHomeFragment(currentUser));
+        NavigationUI.setupWithNavController(binding.navView, navController);
+
         dataSource = DataSourceHelper.getDataSource();
-        dataSource.getCurrentUserDetails(new UserDetailsCallback() {
+        dataSource.getCurrentUserDetails(new IUserDetailsCallback() {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
-                currentUser = userDetails;
-                if (currentUser == null) {
-                    logoutUser();
-                }
-                getIntent().putExtra("user", currentUser);
-                binding = ActivityMainBinding.inflate(getLayoutInflater());
-                setContentView(binding.getRoot());
-                rootLayout = binding.rootLayout;
-                BottomNavigationView navView = binding.navView;
-                // Passing each menu ID as a set of Ids because each
-                // menu should be considered as top level destinations.
-                AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_likes, R.id.navigation_chats, R.id.navigation_profile).build();
-                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main);
-                //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-                //navController.navigate(ProfileFragmentDirections.actionGlobalHomeFragment(currentUser));
-                NavigationUI.setupWithNavController(binding.navView, navController);
+                UserCache.getInstance().cacheUser(userDetails);
             }
 
             @Override
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        dataSource.logoutUser(new DataSourceCallback() {
+        dataSource.logoutUser(new IDataSourceCallback() {
             @Override
             public void onSuccess() {
                 sendToStart();

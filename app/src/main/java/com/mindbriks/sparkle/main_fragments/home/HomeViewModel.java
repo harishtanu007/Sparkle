@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.AllUserDetailsCallback;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -23,7 +23,7 @@ import java.util.List;
 public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
-    private DataSource dataSource;
+    private IDataSource dataSource;
     private MutableLiveData<List<DbUser>> matchedUsers;
 
     public HomeViewModel() {
@@ -58,10 +58,10 @@ public class HomeViewModel extends ViewModel {
         dataSource = DataSourceHelper.getDataSource();
         String currentUserId = dataSource.getCurrentUserId();
 
-        dataSource.getCurrentUserDetails(new UserDetailsCallback() {
+        dataSource.getCurrentUserDetails(new IUserDetailsCallback() {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
-                dataSource.getAllUserDetails(currentUserId, new AllUserDetailsCallback() {
+                dataSource.getAllUserDetails(currentUserId, new IAllUserDetailsCallback() {
                     @Override
                     public void onUserDetailsFetched(List<DbUser> users) {
                         //List<DbUser> matchedUsers = MatchingAlgorithm.getTopMatches(userDetails, users);

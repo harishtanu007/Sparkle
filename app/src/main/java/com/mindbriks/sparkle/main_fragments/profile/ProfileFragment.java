@@ -45,11 +45,14 @@ import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileListAdapter;
 import com.mindbriks.sparkle.databinding.FragmentProfileBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.DataSourceCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IUserManager;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.ProfileItem;
 import com.mindbriks.sparkle.utils.DobHelper;
+import com.mindbriks.sparkle.utils.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,8 @@ public class ProfileFragment extends Fragment {
 
     ActivityResultLauncher<String> getImageFromGallery;
     ActivityResultLauncher<Intent> getImageFromCamera;
-    DataSource dataSource;
+    IDataSource dataSource;
+    IUserManager userManager;
     private FragmentProfileBinding binding;
     private ImageView mProfileImage;
     private TextView mProfileName;
@@ -73,10 +77,21 @@ public class ProfileFragment extends Fragment {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         dataSource = DataSourceHelper.getDataSource();
+        userManager = UserManager.getInstance();
 
-        Intent i = getActivity().getIntent();
+        // Retrieve user details from cache or create a default user
+        userManager.getCurrentUserDetails(getContext(), new IUserDetailsCallback() {
+            @Override
+            public void onUserDetailsFetched(DbUser userDetails) {
+                mUser = userDetails;
+            }
 
-        mUser = (DbUser) i.getSerializableExtra("user");
+            @Override
+            public void onUserDetailsFetchFailed(String errorMessage) {
+
+            }
+        });
+
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         rootLayout = binding.rootLayout;
@@ -168,7 +183,7 @@ public class ProfileFragment extends Fragment {
         mRegProgress.setCanceledOnTouchOutside(false);
         mRegProgress.setMessage("Deleting user");
         mRegProgress.show();
-        dataSource.deleteUser(password, new DataSourceCallback() {
+        dataSource.deleteUser(password, new IDataSourceCallback() {
             @Override
             public void onSuccess() {
                 mRegProgress.dismiss();
@@ -229,7 +244,7 @@ public class ProfileFragment extends Fragment {
                 builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dataSource.logoutUser(new DataSourceCallback() {
+                        dataSource.logoutUser(new IDataSourceCallback() {
                             @Override
                             public void onSuccess() {
                                 sendToStart();

@@ -30,12 +30,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mindbriks.sparkle.interfaces.AllUserDetailsCallback;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.DataSourceCallback;
-import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
-import com.mindbriks.sparkle.interfaces.OnUploadProfileImageListener;
-import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
+import com.mindbriks.sparkle.interfaces.ILoginVerificationListener;
+import com.mindbriks.sparkle.interfaces.IOnUploadProfileImageListener;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.EncryptedDbUser;
 import com.mindbriks.sparkle.model.Profile;
@@ -47,21 +47,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FirebaseDataSource implements DataSource {
+public class FirebaseDataSource implements IDataSource {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser firebaseUser;
     private StorageReference storageReference;
     private DatabaseReference usersRef;
+    private FirebaseDatabase firebaseDatabase;
 
 
     public FirebaseDataSource() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = firebaseDatabase.getReference();
+        mDatabase.keepSynced(true);
         firebaseUser = mAuth.getCurrentUser();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        usersRef = FirebaseDatabase.getInstance().getReference(USERS);
+        usersRef = firebaseDatabase.getReference(USERS);
+        usersRef.keepSynced(true);
     }
 
     public String getCurrentUserId() {
@@ -69,7 +73,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void deleteUser(String password, DataSourceCallback callback) {
+    public void deleteUser(String password, IDataSourceCallback callback) {
         // Get auth credentials from the user for re-authentication. The example below shows
         // email and password credentials but there are multiple possible providers,
         // such as GoogleAuthProvider or FacebookAuthProvider.
@@ -130,7 +134,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void createUser(User user, DataSourceCallback callback) {
+    public void createUser(User user, IDataSourceCallback callback) {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
 //                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -160,7 +164,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void uploadProfileImage(Uri imageUri, OnUploadProfileImageListener listener) {
+    public void uploadProfileImage(Uri imageUri, IOnUploadProfileImageListener listener) {
         String fileName = firebaseUser.getUid();
         StorageReference imageRef = storageReference.child(PROFILE_IMAGES).child(fileName + ".jpg");
         imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
@@ -177,8 +181,8 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void saveDetails(SaveDetailsModel saveDetailsModel, DataSourceCallback callback) {
-        uploadProfileImage(saveDetailsModel.getProfileImageUri(), new OnUploadProfileImageListener() {
+    public void saveDetails(SaveDetailsModel saveDetailsModel, IDataSourceCallback callback) {
+        uploadProfileImage(saveDetailsModel.getProfileImageUri(), new IOnUploadProfileImageListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSuccess(String imageUrl) {
@@ -229,7 +233,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void login(String email, String password, DataSourceCallback callback) {
+    public void login(String email, String password, IDataSourceCallback callback) {
         mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
             if (mAuth.getCurrentUser().isEmailVerified()) {
                 // user is signed in and email is verified
@@ -256,7 +260,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void onLoginVerification(LoginVerificationListener listener) {
+    public void onLoginVerification(ILoginVerificationListener listener) {
         boolean isLoggedIn = mAuth.getCurrentUser() != null;
         if (isLoggedIn) {
             if (mAuth.getCurrentUser().isEmailVerified()) {
@@ -270,15 +274,15 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void logoutUser(DataSourceCallback callback) {
+    public void logoutUser(IDataSourceCallback callback) {
         mAuth.signOut();
         callback.onSuccess();
     }
 
     @Override
-    public void getCurrentUserDetails(UserDetailsCallback callback) {
+    public void getCurrentUserDetails(IUserDetailsCallback callback) {
         if (mAuth.getCurrentUser() != null) {
-            getUserDetails(mAuth.getCurrentUser().getUid(), new UserDetailsCallback() {
+            getUserDetails(mAuth.getCurrentUser().getUid(), new IUserDetailsCallback() {
                 @Override
                 public void onUserDetailsFetched(DbUser userDetails) {
                     callback.onUserDetailsFetched(userDetails);
@@ -295,7 +299,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void getAllUserDetails(String userId, AllUserDetailsCallback callback) {
+    public void getAllUserDetails(String userId, IAllUserDetailsCallback callback) {
         List<DbUser> profileList = new ArrayList<>();
         usersRef.addChildEventListener(new ChildEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -341,7 +345,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @Override
-    public void getUserDetails(String userId, UserDetailsCallback callback) {
+    public void getUserDetails(String userId, IUserDetailsCallback callback) {
         DatabaseReference userRef = usersRef.child(userId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -358,7 +362,7 @@ public class FirebaseDataSource implements DataSource {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void addUserDetails(DataSnapshot snapshot, String userId, UserDetailsCallback callback) {
+    private void addUserDetails(DataSnapshot snapshot, String userId, IUserDetailsCallback callback) {
         if (snapshot.exists()) {
             boolean encrypted = (boolean) snapshot.child("encrypted").getValue();
             if (encrypted) {

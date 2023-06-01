@@ -1,15 +1,24 @@
 package com.mindbriks.sparkle.firebase;
 
-import com.mindbriks.sparkle.interfaces.DataSource;
+import com.mindbriks.sparkle.interfaces.IDataSource;
 
 public class DataSourceHelper {
     public static final boolean userEncryption = false;
 
-    public static boolean shouldEncryptUser() {
-        return userEncryption;
+    private static IDataSource instance;
+
+    private DataSourceHelper() {
+        // Private constructor to enforce singleton pattern
     }
 
-    public static DataSource getDataSource() {
-        return new FirebaseDataSource();
+    public static IDataSource getDataSource() {
+        if (instance == null) {
+            instance = new FirebaseDataSource();
+        }
+        return instance;
+    }
+
+    public static boolean shouldEncryptUser() {
+        return userEncryption;
     }
 }

@@ -10,9 +10,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.LoginVerificationListener;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.ILoginVerificationListener;
 
 public class ChooseLoginActivity extends AppCompatActivity {
 
@@ -21,6 +22,8 @@ public class ChooseLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         SplashScreen.installSplashScreen(this);
         View content = findViewById(android.R.id.content);
 
@@ -55,8 +58,8 @@ public class ChooseLoginActivity extends AppCompatActivity {
 
     //TODO: Update this method to check if the user has already logged in
     private boolean verifyUserLoggedIn() {
-        DataSource dataSource = DataSourceHelper.getDataSource();
-        dataSource.onLoginVerification(new LoginVerificationListener() {
+        IDataSource dataSource = DataSourceHelper.getDataSource();
+        dataSource.onLoginVerification(new ILoginVerificationListener() {
             @Override
             public void onLoginVerificationSuccess() {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

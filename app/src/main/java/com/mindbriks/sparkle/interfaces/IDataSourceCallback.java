@@ -1,6 +1,6 @@
 package com.mindbriks.sparkle.interfaces;
 
-public interface OnUploadProfileImageListener {
-    void onSuccess(String imageUrl);
+public interface IDataSourceCallback {
+    void onSuccess();
     void onFailure(String errorMessage);
 }

@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
-import com.mindbriks.sparkle.interfaces.DataSource;
-import com.mindbriks.sparkle.interfaces.DataSourceCallback;
-import com.mindbriks.sparkle.interfaces.UserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.utils.StringResourceHelper;
 
@@ -51,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.setMessage("Logging in...");
                     mRegProgress.show();
-                    DataSource dataSource = DataSourceHelper.getDataSource();
-                    dataSource.login(userEmailText, userPasswordText, new DataSourceCallback() {
+                    IDataSource dataSource = DataSourceHelper.getDataSource();
+                    dataSource.login(userEmailText, userPasswordText, new IDataSourceCallback() {
                         @Override
                         public void onSuccess() {
                             mRegProgress.dismiss();
-                            dataSource.getCurrentUserDetails(new UserDetailsCallback() {
+                            dataSource.getCurrentUserDetails(new IUserDetailsCallback() {
                                 @Override
                                 public void onUserDetailsFetched(DbUser userDetails) {
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
