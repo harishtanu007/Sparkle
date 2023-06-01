@@ -8,3 +8,4 @@
 /captures
 *.lock
 *.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
