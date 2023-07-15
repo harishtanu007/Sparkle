@@ -1,6 +1,7 @@
 package com.mindbriks.sparkle.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.UserProfileActivity;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
 import com.mindbriks.sparkle.utils.DistanceHelper;
@@ -60,7 +62,12 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesViewHolder> {
                 // If the image value is not null, load the actual image using Glide
                 Glide.with(context).load(imageUrl).into(holder.mUserImage);
             }
-            holder.itemView.setOnClickListener(v -> {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), UserProfileActivity.class);
+                    v.getContext().startActivity(intent);
+                }
             });
         }
     }
