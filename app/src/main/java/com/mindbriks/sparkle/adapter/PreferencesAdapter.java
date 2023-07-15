@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
-import com.mindbriks.sparkle.viewholder.PreferencesViewHolder;
+import com.mindbriks.sparkle.utils.viewholder.PreferencesViewHolder;
 
 import java.util.List;
 

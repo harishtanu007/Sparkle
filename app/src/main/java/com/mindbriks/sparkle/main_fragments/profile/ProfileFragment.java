@@ -76,6 +76,10 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        rootLayout = binding.rootLayout;
+
         dataSource = DataSourceHelper.getDataSource();
         userManager = UserManager.getInstance();
 
@@ -84,6 +88,52 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
                 mUser = userDetails;
+                if (mUser == null) {
+                    Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+                }
+
+                registerImagePickers();
+                setupLogOut();
+                setupDeleteAccount();
+                mProfileImage = binding.profileImage;
+                mProfileName = binding.profileName;
+                populateUserProfilePage();
+                RecyclerView mProfileList = binding.profileListView;
+                LinearLayoutManager profileListLayoutManager = new LinearLayoutManager(getContext());
+                mProfileList.setLayoutManager(profileListLayoutManager);
+                mProfileList.setClipToPadding(false);
+                mProfileList.setHasFixedSize(true);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mProfileList.getContext(), profileListLayoutManager.getOrientation());
+                mProfileList.addItemDecoration(dividerItemDecoration);
+
+                // Add items to the list adapter
+                profileItemList.add(new ProfileItem("Full Name", mUser.getName()));
+                profileItemList.add(new ProfileItem("Date of Birth", DobHelper.getDateFromUnixTime(mUser.getDob())));
+                profileItemList.add(new ProfileItem("Gender", mUser.getGender()));
+                profileItemList.add(new ProfileItem("Sexuality", mUser.getGender()));
+
+                profileListAdapter = new ProfileListAdapter(profileItemList, getContext());
+
+                mProfileList.setAdapter(profileListAdapter);
+
+                RecyclerView mBasicsList = binding.basicsListView;
+                LinearLayoutManager basicsListLayoutManager = new LinearLayoutManager(getContext());
+                mBasicsList.setLayoutManager(basicsListLayoutManager);
+                mBasicsList.setClipToPadding(false);
+                mBasicsList.setHasFixedSize(true);
+                DividerItemDecoration dividerItemDecoration1 = new DividerItemDecoration(mBasicsList.getContext(), basicsListLayoutManager.getOrientation());
+                mBasicsList.addItemDecoration(dividerItemDecoration1);
+
+                // Add items to the list adapter
+                basicsItemList.add(new ProfileItem("Education", "Harvard"));
+                basicsItemList.add(new ProfileItem("Religion", "Hindu"));
+                basicsItemList.add(new ProfileItem("Height", mUser.getHeight()));
+                basicsItemList.add(new ProfileItem("Smoking", mUser.getSmoke_preference().toString()));
+                basicsItemList.add(new ProfileItem("Drinking", mUser.getDrinking_preference().toString()));
+
+                basicsListAdapter = new ProfileListAdapter(basicsItemList, getContext());
+
+                mBasicsList.setAdapter(basicsListAdapter);
             }
 
             @Override
@@ -91,56 +141,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        rootLayout = binding.rootLayout;
-        if (mUser == null) {
-            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
-        }
-
-        registerImagePickers();
-        setupLogOut();
-        setupDeleteAccount();
-        mProfileImage = binding.profileImage;
-        mProfileName = binding.profileName;
-        populateUserProfilePage();
-        RecyclerView mProfileList = binding.profileListView;
-        LinearLayoutManager profileListLayoutManager = new LinearLayoutManager(getContext());
-        mProfileList.setLayoutManager(profileListLayoutManager);
-        mProfileList.setClipToPadding(false);
-        mProfileList.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mProfileList.getContext(), profileListLayoutManager.getOrientation());
-        mProfileList.addItemDecoration(dividerItemDecoration);
-
-        // Add items to the list adapter
-        profileItemList.add(new ProfileItem("Full Name", mUser.getName()));
-        profileItemList.add(new ProfileItem("Date of Birth", DobHelper.getDateFromUnixTime(mUser.getDob())));
-        profileItemList.add(new ProfileItem("Gender", mUser.getGender()));
-        profileItemList.add(new ProfileItem("Sexuality", mUser.getGender()));
-
-        profileListAdapter = new ProfileListAdapter(profileItemList, getContext());
-
-        mProfileList.setAdapter(profileListAdapter);
-
-        RecyclerView mBasicsList = binding.basicsListView;
-        LinearLayoutManager basicsListLayoutManager = new LinearLayoutManager(getContext());
-        mBasicsList.setLayoutManager(basicsListLayoutManager);
-        mBasicsList.setClipToPadding(false);
-        mBasicsList.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration1 = new DividerItemDecoration(mBasicsList.getContext(), basicsListLayoutManager.getOrientation());
-        mBasicsList.addItemDecoration(dividerItemDecoration1);
-
-        // Add items to the list adapter
-        basicsItemList.add(new ProfileItem("Education", "Harvard"));
-        basicsItemList.add(new ProfileItem("Religion", "Hindu"));
-        basicsItemList.add(new ProfileItem("Height", mUser.getHeight()));
-        basicsItemList.add(new ProfileItem("Smoking", mUser.getSmoke_preference().toString()));
-        basicsItemList.add(new ProfileItem("Drinking", mUser.getDrinking_preference().toString()));
-
-        basicsListAdapter = new ProfileListAdapter(basicsItemList, getContext());
-
-        mBasicsList.setAdapter(basicsListAdapter);
 
         return root;
     }

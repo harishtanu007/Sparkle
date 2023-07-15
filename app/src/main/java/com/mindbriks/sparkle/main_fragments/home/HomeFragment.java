@@ -23,6 +23,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
+import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -65,22 +67,29 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
         filterButton = binding.filter;
         layoutManager = new CardStackLayoutManager(getContext(), this);
         homeViewModel.setUpCardStack(layoutManager, cardStackView);
-        Intent i = getActivity().getIntent();
-        mUser = (DbUser) i.getSerializableExtra("user");
-        if (mUser == null) {
-            Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
-        }
-        setupButton(binding);
-        populateUsers();
-        filterButton.setOnClickListener(v -> {
-            FilterFragment filterFragment = new FilterFragment();
-            filterFragment.show(getFragmentManager(), "FilterFragment");
+        DataSourceHelper.getDataSource().getCurrentUserDetails(new IUserDetailsCallback() {
+            @Override
+            public void onUserDetailsFetched(DbUser userDetails) {
+                if (userDetails == null) {
+                    Snackbar.make(binding.rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+                }
+                setupButton(binding);
+                populateUsers(homeViewModel, userDetails);
+                filterButton.setOnClickListener(v -> {
+                    FilterFragment filterFragment = new FilterFragment();
+                    filterFragment.show(getFragmentManager(), "FilterFragment");
+                });
+            }
+            @Override
+            public void onUserDetailsFetchFailed(String errorMessage) {
+
+            }
         });
         return root;
     }
 
-    private void populateUsers() {
-        profileAdapter = new ProfileAdapter(getContext(), mUser);
+    private void populateUsers(HomeViewModel homeViewModel, DbUser dbUser) {
+        profileAdapter = new ProfileAdapter(getContext(), dbUser);
         cardStackView.setAdapter(profileAdapter);
         homeViewModel.getMatchedUsers().observe(getViewLifecycleOwner(), new Observer<List<DbUser>>() {
             @Override

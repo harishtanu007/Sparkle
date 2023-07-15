@@ -69,6 +69,8 @@ public class FirebaseDataSource implements IDataSource {
     }
 
     public String getCurrentUserId() {
+        if (firebaseUser == null)
+            firebaseUser = mAuth.getCurrentUser();
         return firebaseUser.getUid();
     }
 
@@ -77,45 +79,50 @@ public class FirebaseDataSource implements IDataSource {
         // Get auth credentials from the user for re-authentication. The example below shows
         // email and password credentials but there are multiple possible providers,
         // such as GoogleAuthProvider or FacebookAuthProvider.
-        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(firebaseUser.getEmail()), password);
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(firebaseUser.getEmail()), password);
 
-        // Prompt the user to re-provide their sign-in credentials
-        firebaseUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                usersRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            userSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    firebaseUser.delete().addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            callback.onFailure(e.getMessage());
-                                        }
-                                    }).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                callback.onSuccess();
+            // Prompt the user to re-provide their sign-in credentials
+            firebaseUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    usersRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                userSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        firebaseUser.delete().addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                callback.onFailure(e.getMessage());
                                             }
-                                        }
-                                    });
-                                }
-                            });
+                                        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    callback.onSuccess();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        callback.onFailure(databaseError.getMessage());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            callback.onFailure(databaseError.getMessage());
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+        } else {
+            callback.onFailure("Error deleting the user");
+        }
     }
 
     @Override
@@ -137,99 +144,114 @@ public class FirebaseDataSource implements IDataSource {
     public void createUser(User user, IDataSourceCallback callback) {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-//                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-//                        DbUser.Builder builder = new DbUser.Builder();
-//                        builder.id(firebaseUser.getUid());
-//                        builder.email(user.getEmail());
-//                        DbUser dbUser = builder.build();
-//                        usersRef.child(firebaseUser.getUid()).setValue(dbUser)
-//                                .addOnCompleteListener(innerTask -> {
-//                                    if (innerTask.isSuccessful()) {
-//                                        callback.onSuccess();
-//                                    } else {
-//                                        callback.onFailure(innerTask.getException().getMessage());
-//                                    }
-//                                });
                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                firebaseUser.sendEmailVerification().addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        // Redirect the user to the OTP verification page
-                        callback.onSuccess();
-                    }
-                });
+                if (firebaseUser != null) {
+                    firebaseUser.sendEmailVerification().addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            // Redirect the user to the OTP verification page
+                            callback.onSuccess();
+                        }
+                    });
+                } else {
+                    callback.onFailure(task.getException().getMessage());
+                }
             } else {
-                callback.onFailure(task.getException().getMessage());
+                callback.onFailure("Error creating the user");
             }
         });
     }
 
     @Override
     public void uploadProfileImage(Uri imageUri, IOnUploadProfileImageListener listener) {
-        String fileName = firebaseUser.getUid();
-        StorageReference imageRef = storageReference.child(PROFILE_IMAGES).child(fileName + ".jpg");
-        imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-            // Get image URL after successful upload
-            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String imageUrl = uri.toString();
-                listener.onSuccess(imageUrl);
-            }).addOnFailureListener(e -> {
-                listener.onFailure(e.getMessage());
-            });
-        }).addOnFailureListener(e -> {
-            listener.onFailure(e.getMessage());
-        });
+        if (imageUri != null) {
+            String userId = getCurrentUserId();
+            if (userId != null) {
+                StorageReference imageRef = storageReference.child(PROFILE_IMAGES).child(userId + ".jpg");
+                imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                    // Get image URL after successful upload
+                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        listener.onSuccess(imageUrl);
+                    }).addOnFailureListener(e -> {
+                        listener.onFailure(e.getMessage());
+                    });
+                }).addOnFailureListener(e -> {
+                    listener.onFailure(e.getMessage());
+                });
+            } else {
+                listener.onFailure("Error uploading the user profile picture");
+            }
+        }
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void saveDetails(SaveDetailsModel saveDetailsModel, IDataSourceCallback callback) {
-        uploadProfileImage(saveDetailsModel.getProfileImageUri(), new IOnUploadProfileImageListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onSuccess(String imageUrl) {
-                DbUser.Builder builder = new DbUser.Builder();
-                builder.id(firebaseUser.getUid());
-                builder.name(saveDetailsModel.getName());
-                builder.email(firebaseUser.getEmail());
-                builder.gender(saveDetailsModel.getGender());
-                builder.dob(saveDetailsModel.getDob());
-                builder.interests(saveDetailsModel.getInterests());
-                builder.profile_image(imageUrl);
-                builder.height(saveDetailsModel.getHeight());
-                builder.smoke_preference(saveDetailsModel.getSmokePreference());
-                builder.drinking_preference(saveDetailsModel.getDrinkingPreference());
-                builder.location(saveDetailsModel.getLocation());
-                builder.encrypted(saveDetailsModel.isEncrypted());
-                DbUser dbUser = builder.build();
-                Object encryptedDbUser;
-                if (DataSourceHelper.shouldEncryptUser()) {
-                    //encrypt user data
-                    encryptedDbUser = EncryptionUtils.encryptUser(dbUser, firebaseUser.getUid());
-                } else {
-                    encryptedDbUser = dbUser;
-                }
-                if (encryptedDbUser == null) {
-                    callback.onFailure("Error while encrypting the data");
-                } else {
-                    //TODO: verify the error message and change it to on complete listener if error message is too long
-                    usersRef.child(firebaseUser.getUid()).setValue(encryptedDbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            callback.onSuccess();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            callback.onFailure(e.getMessage());
-                        }
-                    });
-                }
-            }
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            if (saveDetailsModel.getProfileImageUri() != null) {
+                uploadProfileImage(saveDetailsModel.getProfileImageUri(), new IOnUploadProfileImageListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onSuccess(String imageUrl) {
+                        uploadUser(firebaseUser, saveDetailsModel, callback, imageUrl);
+                    }
 
-            @Override
-            public void onFailure(String errorMessage) {
-                callback.onFailure(errorMessage);
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        callback.onFailure(errorMessage);
+                    }
+                });
+            } else {
+                uploadUser(firebaseUser, saveDetailsModel, callback, null);
             }
-        });
+        } else {
+            callback.onFailure("Error saving the user details");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void uploadUser(FirebaseUser firebaseUser, SaveDetailsModel saveDetailsModel, IDataSourceCallback callback, String imageUrl) {
+        DbUser.Builder builder = new DbUser.Builder();
+        builder.id(firebaseUser.getUid());
+        builder.name(saveDetailsModel.getName());
+        builder.email(firebaseUser.getEmail());
+        builder.gender(saveDetailsModel.getGender());
+        builder.dob(saveDetailsModel.getDob());
+        builder.interests(saveDetailsModel.getInterests());
+        if (imageUrl != null) {
+            builder.profile_image(imageUrl);
+        }
+        builder.height(saveDetailsModel.getHeight());
+        builder.smoke_preference(saveDetailsModel.getSmokePreference());
+        builder.drinking_preference(saveDetailsModel.getDrinkingPreference());
+        builder.location(saveDetailsModel.getLocation());
+        builder.encrypted(saveDetailsModel.isEncrypted());
+        DbUser dbUser = builder.build();
+        Object encryptedDbUser;
+        if (DataSourceHelper.shouldEncryptUser()) {
+            //encrypt user data
+            encryptedDbUser = EncryptionUtils.encryptUser(dbUser, firebaseUser.getUid());
+        } else {
+            encryptedDbUser = dbUser;
+        }
+        if (encryptedDbUser == null) {
+            callback.onFailure("Error while encrypting the data");
+        } else {
+            //TODO: verify the error message and change it to on complete listener if error message is too long
+            usersRef.child(firebaseUser.getUid()).setValue(encryptedDbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    callback.onSuccess();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -242,17 +264,21 @@ public class FirebaseDataSource implements IDataSource {
                 // user is signed in but email is not verified
                 // callback.onFailure("Please verify your email to login");
                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                firebaseUser.sendEmailVerification().addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        // Redirect the user to the OTP verification page
-                        callback.onFailure("Verification email sent to " + firebaseUser.getEmail());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onFailure("Error sending verification email");
-                    }
-                });
+                if (firebaseUser != null) {
+                    firebaseUser.sendEmailVerification().addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            // Redirect the user to the OTP verification page
+                            callback.onFailure("Verification email sent to " + firebaseUser.getEmail());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            callback.onFailure("Error sending verification email");
+                        }
+                    });
+                } else {
+                    callback.onFailure("Error logging in");
+                }
             }
         }).addOnFailureListener(e -> {
             callback.onFailure(e.getMessage());

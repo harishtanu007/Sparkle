@@ -2,6 +2,7 @@ package com.mindbriks.sparkle.interfaces;
 
 import android.net.Uri;
 
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
 import com.mindbriks.sparkle.model.SaveDetailsModel;
 import com.mindbriks.sparkle.model.User;

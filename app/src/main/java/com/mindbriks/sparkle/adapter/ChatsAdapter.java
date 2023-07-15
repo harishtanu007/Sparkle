@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mindbriks.sparkle.ChatActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.ChatThread;
-import com.mindbriks.sparkle.viewholder.ChatsViewHolder;
+import com.mindbriks.sparkle.utils.viewholder.ChatsViewHolder;
 
 import java.util.List;
 

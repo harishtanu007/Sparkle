@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Profile;
-import com.mindbriks.sparkle.viewholder.LikesViewHolder;
+import com.mindbriks.sparkle.utils.viewholder.LikesViewHolder;
 
 import java.util.List;
 

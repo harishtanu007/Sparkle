@@ -7,26 +7,26 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        class="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"></fragment>
+        android:name="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_likes"
-        class="com.mindbriks.sparkle.main_fragments.likes.LikesFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.likes.LikesFragment"
         android:label="@string/menu_likes"
         tools:layout="@layout/fragment_likes" />
 
     <fragment
         android:id="@+id/navigation_chats"
-        class="com.mindbriks.sparkle.main_fragments.chats.ChatsFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.chats.ChatsFragment"
         android:label="@string/menu_chats"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        class="com.mindbriks.sparkle.main_fragments.profile.ProfileFragment"
+        android:name="com.mindbriks.sparkle.main_fragments.profile.ProfileFragment"
         android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_profile"></fragment>
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>
