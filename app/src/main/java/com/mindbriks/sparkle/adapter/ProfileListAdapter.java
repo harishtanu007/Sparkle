@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mindbriks.sparkle.EditProfileActivity;
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.ProfileItem;
-import com.mindbriks.sparkle.viewholder.ProfileViewHolder;
+import com.mindbriks.sparkle.utils.viewholder.ProfileViewHolder;
 
 import java.util.List;
 

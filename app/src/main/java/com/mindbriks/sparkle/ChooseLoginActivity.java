@@ -22,7 +22,6 @@ public class ChooseLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         SplashScreen.installSplashScreen(this);
         View content = findViewById(android.R.id.content);

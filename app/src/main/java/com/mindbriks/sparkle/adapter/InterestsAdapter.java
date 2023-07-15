@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.model.Interest;
-import com.mindbriks.sparkle.viewholder.InterestsViewHolder;
+import com.mindbriks.sparkle.utils.viewholder.InterestsViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

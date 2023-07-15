@@ -1,4 +1,4 @@
-package com.mindbriks.sparkle.viewholder;
+package com.mindbriks.sparkle.utils.viewholder;
 
 import android.view.View;
 import android.widget.TextView;
