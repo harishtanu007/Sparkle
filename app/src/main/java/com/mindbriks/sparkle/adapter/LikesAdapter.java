@@ -5,21 +5,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mindbriks.sparkle.R;
+import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.model.Profile;
+import com.mindbriks.sparkle.utils.DistanceHelper;
+import com.mindbriks.sparkle.utils.DobHelper;
 import com.mindbriks.sparkle.utils.viewholder.LikesViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LikesAdapter extends RecyclerView.Adapter<LikesViewHolder> {
-    private final List<Profile> likesList;
     private final Context context;
+    private List<DbUser> profileList;
+    private DbUser currentUser;
 
-    public LikesAdapter(List<Profile> likesList, Context context) {
-        this.likesList = likesList;
+    public LikesAdapter(@NonNull Context context, @NonNull DbUser currentUser) {
         this.context = context;
+        this.profileList = new ArrayList<>();
+        this.currentUser = currentUser;
+    }
+
+    public void setMyDataList(List<DbUser> profileList) {
+        this.profileList = profileList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -35,20 +48,30 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesViewHolder> {
     public void onBindViewHolder(LikesViewHolder holder, int position) {
         //Set ViewTag
         holder.itemView.setTag(position);
-        Profile profile = likesList.get(position);
-        holder.mUserName.setText(profile.getName() + ", " + profile.getAge());
-        holder.mUserDistance.setText(profile.getDistance() + " " + getDistanceMetric());
-        holder.setPostImage(profile, holder.itemView.getContext());
-        holder.itemView.setOnClickListener(v -> {
-        });
-    }
-
-    private String getDistanceMetric() {
-        return "miles";
+        final DbUser profile = profileList.get(position);
+        if (profile != null) {
+            holder.mUserName.setText(profile.getName() + ", " + DobHelper.calculateAge(profile.getDob()));
+            holder.mUserDistance.setText((int) Math.round(DistanceHelper.getDistance(currentUser.getLocation(), profile.getLocation())) + " " + getDistanceMetric());
+            String imageUrl = profile.getProfile_image();
+            if (imageUrl == null || imageUrl.isEmpty()) {
+                // If the image value is null, load a default placeholder image
+                Glide.with(context).load(R.drawable.card_view_place_holder_image).into(holder.mUserImage);
+            } else {
+                // If the image value is not null, load the actual image using Glide
+                Glide.with(context).load(imageUrl).into(holder.mUserImage);
+            }
+            holder.itemView.setOnClickListener(v -> {
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return this.likesList.size();
+        if (profileList == null) return 0;
+        return profileList.size();
+    }
+
+    private String getDistanceMetric() {
+        return "miles";
     }
 }

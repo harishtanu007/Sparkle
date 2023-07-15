@@ -23,22 +23,4 @@ public class LikesViewHolder extends RecyclerView.ViewHolder {
         mUserDistance = (TextView) itemView.findViewById(R.id.item_distance);
         mUserImage = (ImageView) itemView.findViewById(R.id.item_image);
     }
-
-    public void setPostImage(Profile profile, Context context) {
-        mUserId = profile.getId();
-
-        String imageUrl = profile.getProfilePic();
-
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            // If the image value is null, load a default placeholder image
-            Glide.with(context)
-                    .load(R.drawable.card_view_place_holder_image)
-                    .into(mUserImage);
-        } else {
-            // If the image value is not null, load the actual image using Glide
-            Glide.with(context)
-                    .load(imageUrl)
-                    .into(mUserImage);
-        }
-    }
 }
