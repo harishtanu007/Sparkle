@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.mindbriks.sparkle.main_fragments.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment

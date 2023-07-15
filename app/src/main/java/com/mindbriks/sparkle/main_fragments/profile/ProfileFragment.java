@@ -83,6 +83,7 @@ public class ProfileFragment extends Fragment {
         dataSource = DataSourceHelper.getDataSource();
         userManager = UserManager.getInstance();
 
+        setupLogOut();
         // Retrieve user details from cache or create a default user
         userManager.getCurrentUserDetails(getContext(), new IUserDetailsCallback() {
             @Override
@@ -93,7 +94,6 @@ public class ProfileFragment extends Fragment {
                 }
 
                 registerImagePickers();
-                setupLogOut();
                 setupDeleteAccount();
                 mProfileImage = binding.profileImage;
                 mProfileName = binding.profileName;
