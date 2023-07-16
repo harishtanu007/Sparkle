@@ -37,4 +37,6 @@ public interface IDataSource {
     String getCurrentUserId();
 
     void deleteUser(String password, IDataSourceCallback callback);
+
+    void checkIsConnectionMatch(String currentUserId, String likedUserId, IChatCreationCallback callback);
 }

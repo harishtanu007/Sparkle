@@ -5,21 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
-import com.mindbriks.sparkle.databinding.ButtonContainerBinding;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.IChatCreationCallback;
 import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
@@ -41,7 +45,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
     private ImageView filterButton;
-    private DbUser mCurrentUser;
+    private DbUser mUserOnCard;
     private LinearLayout rootLayout;
 
     @Override
@@ -137,24 +141,49 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     @Override
     public void onCardSwiped(Direction direction) {
         if (direction.equals(Direction.Right)) {
-//            AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
-//            LayoutInflater inflater = LayoutInflater.from(getContext());
-//            View customView = inflater.inflate(R.layout.match_layout, null);
-//            builderSingle.setView(customView);
-//            builderSingle.setCancelable(false);
-//            AlertDialog dialog = builderSingle.create();
-//            dialog.show();
-//            Button sendMessage = customView.findViewById(R.id.match_send_message);
-//            sendMessage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                }
-//            });
-            homeViewModel.setUserLiked(mCurrentUser);
-        }
-        else {
-            homeViewModel.setUserDisLiked(mCurrentUser, new IDataSourceCallback() {
+            homeViewModel.setUserLiked(mUserOnCard, new IDataSourceCallback() {
+                @Override
+                public void onSuccess() {
+                    homeViewModel.isConnectionMatch(mUserOnCard.getId(), new IChatCreationCallback() {
+                        @Override
+                        public void onChatCreationSuccess(String chatId) {
+                            AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
+                            LayoutInflater inflater = LayoutInflater.from(getContext());
+                            View customView = inflater.inflate(R.layout.match_layout, null);
+                            builderSingle.setView(customView);
+                            builderSingle.setCancelable(false);
+                            AlertDialog dialog = builderSingle.create();
+                            dialog.show();
+                            Button sendMessage = customView.findViewById(R.id.match_send_message);
+                            sendMessage.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    openChatWindow(chatId);
+                                }
+                            });
+                            Button keepSwiping = customView.findViewById(R.id.match_keep_swiping);
+                            keepSwiping.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onChatCreationFailed(String errorMessage) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+
+                }
+            });
+        } else {
+            homeViewModel.setUserDisLiked(mUserOnCard, new IDataSourceCallback() {
                 @Override
                 public void onSuccess() {
 
@@ -166,6 +195,10 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
                 }
             });
         }
+    }
+
+    private void openChatWindow(String chatId) {
+
     }
 
     @Override
@@ -185,7 +218,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
             binding.buttonContainer.buttonContainer.setVisibility(View.GONE);
         } else {
             binding.buttonContainer.buttonContainer.setVisibility(View.VISIBLE);
-            mCurrentUser = users.get(position);
+            mUserOnCard = users.get(position);
         }
     }
 
@@ -203,9 +236,9 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
 
     }
 
-    private void updateUi(int position){
+    private void updateUi(int position) {
         List<DbUser> users = homeViewModel.getMatchedUsers().getValue();
-        if(users.get(position) != null)
+        if (users.get(position) != null)
             users.remove(position);
         if (users.isEmpty())
             binding.buttonContainer.buttonContainer.setVisibility(View.GONE);

@@ -1,14 +1,20 @@
 package com.mindbriks.sparkle.main_fragments.home;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IChatCreationCallback;
 import com.mindbriks.sparkle.interfaces.IDataSource;
 import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
@@ -26,6 +32,7 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<String> mText;
     private IDataSource dataSource;
     private MutableLiveData<List<DbUser>> matchedUsers;
+    private Context context;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -88,18 +95,18 @@ public class HomeViewModel extends ViewModel {
         return matchedUsers;
     }
 
-    public void setUserLiked(DbUser likedUser) {
+    public void setUserLiked(DbUser likedUser, IDataSourceCallback callback) {
         dataSource = DataSourceHelper.getDataSource();
         String currentUserId = dataSource.getCurrentUserId();
         dataSource.setUserLiked(currentUserId, likedUser.getId(), new IDataSourceCallback() {
             @Override
             public void onSuccess() {
-
+                callback.onSuccess();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-
+                callback.onFailure(errorMessage);
             }
         });
     }
@@ -116,6 +123,22 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onFailure(String errorMessage) {
                 callback.onFailure(errorMessage);
+            }
+        });
+    }
+
+    public void isConnectionMatch(String likedUserId, IChatCreationCallback callback) {
+        dataSource = DataSourceHelper.getDataSource();
+        String currentUserId = dataSource.getCurrentUserId();
+        dataSource.checkIsConnectionMatch(currentUserId, likedUserId, new IChatCreationCallback() {
+            @Override
+            public void onChatCreationSuccess(String chatId) {
+                callback.onChatCreationSuccess(chatId);
+            }
+
+            @Override
+            public void onChatCreationFailed(String errorMessage) {
+                callback.onChatCreationFailed(errorMessage);
             }
         });
     }

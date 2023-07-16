@@ -1,5 +1,8 @@
 package com.mindbriks.sparkle.firebase;
 
+import static com.mindbriks.sparkle.model.FirebaseConstants.CHATS;
+import static com.mindbriks.sparkle.model.FirebaseConstants.CHAT_ID;
+import static com.mindbriks.sparkle.model.FirebaseConstants.CHAT_MEMBERS;
 import static com.mindbriks.sparkle.model.FirebaseConstants.CONNECTIONS;
 import static com.mindbriks.sparkle.model.FirebaseConstants.GENDER;
 import static com.mindbriks.sparkle.model.FirebaseConstants.NOPE;
@@ -12,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
+import com.mindbriks.sparkle.interfaces.IChatCreationCallback;
 import com.mindbriks.sparkle.interfaces.IDataSource;
 import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.ILoginVerificationListener;
@@ -54,6 +57,7 @@ public class FirebaseDataSource implements IDataSource {
     private FirebaseUser firebaseUser;
     private StorageReference storageReference;
     private DatabaseReference usersDb;
+    private DatabaseReference chatsDb;
     private FirebaseDatabase firebaseDatabase;
 
 
@@ -67,6 +71,8 @@ public class FirebaseDataSource implements IDataSource {
         storageReference = storage.getReference();
         usersDb = firebaseDatabase.getReference(USERS);
         usersDb.keepSynced(true);
+        chatsDb = firebaseDatabase.getReference(CHATS);
+        chatsDb.keepSynced(true);
     }
 
     public String getCurrentUserId() {
@@ -124,6 +130,59 @@ public class FirebaseDataSource implements IDataSource {
         } else {
             callback.onFailure("Error deleting the user");
         }
+    }
+
+    @Override
+    public void checkIsConnectionMatch(String currentUserId, String likedUserId, IChatCreationCallback callback) {
+        usersDb.child(currentUserId).child(CONNECTIONS).child(YEPS).child(likedUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //Generate chat id
+                    String chatId = mDatabase.child(CHATS).push().getKey();
+                    //add chat id to current user
+                    usersDb.child(currentUserId).child(CONNECTIONS).child(likedUserId).child(CHAT_ID).setValue(chatId);
+                    //add chat id to liked user
+                    usersDb.child(likedUserId).child(CONNECTIONS).child(currentUserId).child(CHAT_ID).setValue(chatId);
+
+                    createChatThread(currentUserId, likedUserId, chatId, new IChatCreationCallback() {
+                        @Override
+                        public void onChatCreationSuccess(String chatId) {
+                            callback.onChatCreationSuccess(chatId);
+                        }
+
+                        @Override
+                        public void onChatCreationFailed(String errorMessage) {
+                            callback.onChatCreationFailed(errorMessage);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void createChatThread(String currentUserId, String likedUserId, String chatId, IChatCreationCallback callback) {
+        ArrayList<String> members = new ArrayList<>();
+        members.add(likedUserId);
+        members.add(currentUserId);
+        chatsDb.child(chatId).child(CHAT_MEMBERS).setValue(members)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onChatCreationSuccess(chatId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onChatCreationFailed(e.getMessage());
+                    }
+                });
     }
 
     @Override
