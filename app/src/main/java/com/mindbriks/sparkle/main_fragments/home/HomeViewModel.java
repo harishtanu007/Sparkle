@@ -5,11 +5,13 @@ import android.view.animation.LinearInterpolator;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
 import com.mindbriks.sparkle.interfaces.IDataSource;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -84,5 +86,37 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<List<DbUser>> getMatchedUsers() {
         return matchedUsers;
+    }
+
+    public void setUserLiked(DbUser likedUser) {
+        dataSource = DataSourceHelper.getDataSource();
+        String currentUserId = dataSource.getCurrentUserId();
+        dataSource.setUserLiked(currentUserId, likedUser.getId(), new IDataSourceCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+
+            }
+        });
+    }
+
+    public void setUserDisLiked(DbUser dislikedUser, IDataSourceCallback callback) {
+        dataSource = DataSourceHelper.getDataSource();
+        String currentUserId = dataSource.getCurrentUserId();
+        dataSource.setUserDisliked(currentUserId, dislikedUser.getId(), new IDataSourceCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+        });
     }
 }

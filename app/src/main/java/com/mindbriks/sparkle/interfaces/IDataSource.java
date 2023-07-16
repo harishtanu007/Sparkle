@@ -30,6 +30,10 @@ public interface IDataSource {
 
     void getUserDetails(String userId, IUserDetailsCallback callback);
 
+    void setUserLiked(String currentUserId, String likedUserId, IDataSourceCallback callback);
+
+    void setUserDisliked(String currentUserId, String dislikedUserId, IDataSourceCallback callback);
+
     String getCurrentUserId();
 
     void deleteUser(String password, IDataSourceCallback callback);

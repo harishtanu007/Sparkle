@@ -52,7 +52,7 @@ public class FirebaseDataSource implements IDataSource {
     private DatabaseReference mDatabase;
     private FirebaseUser firebaseUser;
     private StorageReference storageReference;
-    private DatabaseReference usersRef;
+    private DatabaseReference usersDb;
     private FirebaseDatabase firebaseDatabase;
 
 
@@ -64,8 +64,8 @@ public class FirebaseDataSource implements IDataSource {
         firebaseUser = mAuth.getCurrentUser();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        usersRef = firebaseDatabase.getReference(USERS);
-        usersRef.keepSynced(true);
+        usersDb = firebaseDatabase.getReference(USERS);
+        usersDb.keepSynced(true);
     }
 
     public String getCurrentUserId() {
@@ -87,7 +87,7 @@ public class FirebaseDataSource implements IDataSource {
             firebaseUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    usersRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    usersDb.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
@@ -240,7 +240,7 @@ public class FirebaseDataSource implements IDataSource {
             callback.onFailure("Error while encrypting the data");
         } else {
             //TODO: verify the error message and change it to on complete listener if error message is too long
-            usersRef.child(firebaseUser.getUid()).setValue(encryptedDbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            usersDb.child(firebaseUser.getUid()).setValue(encryptedDbUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     callback.onSuccess();
@@ -327,7 +327,7 @@ public class FirebaseDataSource implements IDataSource {
     @Override
     public void getAllUserDetails(String userId, IAllUserDetailsCallback callback) {
         List<DbUser> profileList = new ArrayList<>();
-        usersRef.addChildEventListener(new ChildEventListener() {
+        usersDb.addChildEventListener(new ChildEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
@@ -372,7 +372,7 @@ public class FirebaseDataSource implements IDataSource {
 
     @Override
     public void getUserDetails(String userId, IUserDetailsCallback callback) {
-        DatabaseReference userRef = usersRef.child(userId);
+        DatabaseReference userRef = usersDb.child(userId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -385,6 +385,41 @@ public class FirebaseDataSource implements IDataSource {
                 callback.onUserDetailsFetchFailed(error.getMessage());
             }
         });
+    }
+
+    @Override
+    public void setUserLiked(String currentUserId, String likedUserId, IDataSourceCallback callback) {
+        usersDb.child(likedUserId).child(CONNECTIONS).child(YEPS).child(currentUserId).setValue("true")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                })
+        ;
+    }
+
+    @Override
+    public void setUserDisliked(String currentUserId, String dislikedUserId, IDataSourceCallback callback) {
+        usersDb.child(dislikedUserId).child(CONNECTIONS).child(NOPE).child(currentUserId).setValue("true")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e.getMessage());
+                    }
+                });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

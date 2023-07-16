@@ -1,29 +1,26 @@
 package com.mindbriks.sparkle.main_fragments.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.mindbriks.sparkle.R;
 import com.mindbriks.sparkle.adapter.ProfileAdapter;
+import com.mindbriks.sparkle.databinding.ButtonContainerBinding;
 import com.mindbriks.sparkle.databinding.FragmentHomeBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
+import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -44,7 +41,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     private CardStackView cardStackView;
     private ProfileAdapter profileAdapter;
     private ImageView filterButton;
-    private DbUser mUser;
+    private DbUser mCurrentUser;
     private LinearLayout rootLayout;
 
     @Override
@@ -71,15 +68,16 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
             @Override
             public void onUserDetailsFetched(DbUser userDetails) {
                 if (userDetails == null) {
-                    Snackbar.make(binding.rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootLayout, "Error while retrieving user details", Snackbar.LENGTH_LONG).show();
                 }
-                setupButton(binding);
+                setupButton();
                 populateUsers(homeViewModel, userDetails);
                 filterButton.setOnClickListener(v -> {
                     FilterFragment filterFragment = new FilterFragment();
                     filterFragment.show(getFragmentManager(), "FilterFragment");
                 });
             }
+
             @Override
             public void onUserDetailsFetchFailed(String errorMessage) {
 
@@ -100,9 +98,9 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     }
 
     // set up buttons actions
-    private void setupButton(FragmentHomeBinding homeView) {
+    private void setupButton() {
         // skip button
-        FloatingActionButton skip = homeView.buttonContainer.skipButton.skipButton;
+        FloatingActionButton skip = binding.buttonContainer.skipButton.skipButton;
         skip.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
                     .setDirection(Direction.Left)
@@ -139,18 +137,32 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     @Override
     public void onCardSwiped(Direction direction) {
         if (direction.equals(Direction.Right)) {
-            AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            View customView = inflater.inflate(R.layout.match_layout, null);
-            builderSingle.setView(customView);
-            builderSingle.setCancelable(false);
-            AlertDialog dialog = builderSingle.create();
-            dialog.show();
-            Button sendMessage = customView.findViewById(R.id.match_send_message);
-            sendMessage.setOnClickListener(new View.OnClickListener() {
+//            AlertDialog.Builder builderSingle = new MaterialAlertDialogBuilder(getContext(), R.style.MyRoundedMaterialDialog);
+//            LayoutInflater inflater = LayoutInflater.from(getContext());
+//            View customView = inflater.inflate(R.layout.match_layout, null);
+//            builderSingle.setView(customView);
+//            builderSingle.setCancelable(false);
+//            AlertDialog dialog = builderSingle.create();
+//            dialog.show();
+//            Button sendMessage = customView.findViewById(R.id.match_send_message);
+//            sendMessage.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                }
+//            });
+            homeViewModel.setUserLiked(mCurrentUser);
+        }
+        else {
+            homeViewModel.setUserDisLiked(mCurrentUser, new IDataSourceCallback() {
                 @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
+                public void onSuccess() {
+                    
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Snackbar.make(rootLayout, "Error while sending like to this user", Snackbar.LENGTH_LONG).show();
                 }
             });
         }
@@ -168,16 +180,26 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
 
     @Override
     public void onCardAppeared(View view, int position) {
-
+        List<DbUser> users = homeViewModel.getMatchedUsers().getValue();
+        mCurrentUser = users.get(position);
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
-
     }
 
     @Override
     public void onFilterSelected(int distance, int minAge, int maxAge, int gender) {
 
+    }
+
+    private void updateUi(int position){
+        List<DbUser> users = homeViewModel.getMatchedUsers().getValue();
+        if(users.get(position) != null)
+            users.remove(position);
+        if (users.isEmpty())
+            binding.buttonContainer.buttonContainer.setVisibility(View.GONE);
+        else
+            binding.buttonContainer.buttonContainer.setVisibility(View.VISIBLE);
     }
 }
