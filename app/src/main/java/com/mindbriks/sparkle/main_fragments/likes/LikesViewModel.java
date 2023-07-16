@@ -21,7 +21,7 @@ public class LikesViewModel extends ViewModel {
         likedUsers = new MutableLiveData<>();
     }
 
-    public void loadMyData() {
+    public void loadLikedUsers() {
         dataSource = DataSourceHelper.getDataSource();
         String currentUserId = dataSource.getCurrentUserId();
 
@@ -49,7 +49,7 @@ public class LikesViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<DbUser>> getMatchedUsers() {
+    public LiveData<List<DbUser>> getLikedUsers() {
         return likedUsers;
     }
 }

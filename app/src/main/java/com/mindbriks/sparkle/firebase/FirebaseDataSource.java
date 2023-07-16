@@ -5,6 +5,7 @@ import static com.mindbriks.sparkle.model.FirebaseConstants.CHAT_ID;
 import static com.mindbriks.sparkle.model.FirebaseConstants.CHAT_MEMBERS;
 import static com.mindbriks.sparkle.model.FirebaseConstants.CONNECTIONS;
 import static com.mindbriks.sparkle.model.FirebaseConstants.GENDER;
+import static com.mindbriks.sparkle.model.FirebaseConstants.MATCHES;
 import static com.mindbriks.sparkle.model.FirebaseConstants.NOPE;
 import static com.mindbriks.sparkle.model.FirebaseConstants.PROFILE_IMAGES;
 import static com.mindbriks.sparkle.model.FirebaseConstants.USERS;
@@ -13,6 +14,7 @@ import static com.mindbriks.sparkle.utils.EncryptionUtils.decryptUser;
 
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -38,6 +40,7 @@ import com.mindbriks.sparkle.interfaces.IChatCreationCallback;
 import com.mindbriks.sparkle.interfaces.IDataSource;
 import com.mindbriks.sparkle.interfaces.IDataSourceCallback;
 import com.mindbriks.sparkle.interfaces.ILoginVerificationListener;
+import com.mindbriks.sparkle.interfaces.IMatchedUsersCallback;
 import com.mindbriks.sparkle.interfaces.IOnUploadProfileImageListener;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
 import com.mindbriks.sparkle.model.DbUser;
@@ -141,9 +144,9 @@ public class FirebaseDataSource implements IDataSource {
                     //Generate chat id
                     String chatId = mDatabase.child(CHATS).push().getKey();
                     //add chat id to current user
-                    usersDb.child(currentUserId).child(CONNECTIONS).child(likedUserId).child(CHAT_ID).setValue(chatId);
+                    usersDb.child(currentUserId).child(CONNECTIONS).child(MATCHES).child(likedUserId).child(CHAT_ID).setValue(chatId);
                     //add chat id to liked user
-                    usersDb.child(likedUserId).child(CONNECTIONS).child(currentUserId).child(CHAT_ID).setValue(chatId);
+                    usersDb.child(likedUserId).child(CONNECTIONS).child(MATCHES).child(currentUserId).child(CHAT_ID).setValue(chatId);
 
                     createChatThread(currentUserId, likedUserId, chatId, new IChatCreationCallback() {
                         @Override
@@ -174,6 +177,11 @@ public class FirebaseDataSource implements IDataSource {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        //remove like in current user db
+//                        usersDb.child(currentUserId).child(CONNECTIONS).child(YEPS).child(likedUserId).removeValue();
+
+                        //remove like in other user db
+//                        usersDb.child(likedUserId).child(CONNECTIONS).child(YEPS).child(currentUserId).removeValue();
                         callback.onChatCreationSuccess(chatId);
                     }
                 })
@@ -432,32 +440,74 @@ public class FirebaseDataSource implements IDataSource {
 
     @Override
     public void getLikedUserDetails(String userId, IAllUserDetailsCallback callback) {
-        List<DbUser> likedUserList = new ArrayList<>();
+        List<String> likedUserIds = new ArrayList<>();
         usersDb.child(userId).child(CONNECTIONS).child(YEPS).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot likedUser : snapshot.getChildren()) {
-                        getLikedUser(likedUser.getKey(), new IUserDetailsCallback() {
-                            @Override
-                            public void onUserDetailsFetched(DbUser userDetails) {
-                                likedUserList.add(userDetails);
-                                callback.onUserDetailsFetched(likedUserList);
-                            }
-
-                            @Override
-                            public void onUserDetailsFetchFailed(String errorMessage) {
-                                callback.onUserDetailsFetchFailed(errorMessage);
-                            }
-                        });
-
+                        likedUserIds.add(likedUser.getKey());
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                callback.onUserDetailsFetchFailed(error.getMessage());
+            }
+        });
 
+        getMatchedUsers(userId, new IMatchedUsersCallback() {
+            @Override
+            public void onMatchedUsersFound(List<String> matchedUsers) {
+                likedUserIds.removeAll(matchedUsers);
+                populateLikedUsers(likedUserIds, callback);
+            }
+
+            @Override
+            public void onMatchedUsersFailed(String errorMessage) {
+                populateLikedUsers(likedUserIds, callback);
+            }
+        });
+    }
+
+    private void populateLikedUsers(List<String> likedUserIds, IAllUserDetailsCallback callback) {
+        List<DbUser> likedUserList = new ArrayList<>();
+        for (String likedUser : likedUserIds) {
+            getLikedUser(likedUser, new IUserDetailsCallback() {
+                @Override
+                public void onUserDetailsFetched(DbUser userDetails) {
+                    likedUserList.add(userDetails);
+                    callback.onUserDetailsFetched(likedUserList);
+                }
+
+                @Override
+                public void onUserDetailsFetchFailed(String errorMessage) {
+                    callback.onUserDetailsFetchFailed(errorMessage);
+                }
+            });
+        }
+    }
+
+    private void getMatchedUsers(String userId, IMatchedUsersCallback callback) {
+        List<String> matchedUserIds = new ArrayList<>();
+        usersDb.child(userId).child(CONNECTIONS).child(MATCHES).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot matchedUser : snapshot.getChildren()) {
+                        matchedUserIds.add(matchedUser.getKey());
+                    }
+                    callback.onMatchedUsersFound(matchedUserIds);
+                }
+                else {
+                    callback.onMatchedUsersFailed("");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onMatchedUsersFailed(error.getMessage());
             }
         });
     }

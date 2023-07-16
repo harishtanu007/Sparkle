@@ -5,6 +5,7 @@ public class FirebaseConstants {
     public static final String PROFILE_IMAGES = "profile_images";
     public static final String GENDER = "gender";
     public static final String CONNECTIONS = "connections";
+    public static final String MATCHES = "matches";
     public static final String CHAT_ID= "chat_id";
     public static final String CHAT_MEMBERS= "chat_members";
     public static final String CHATS= "chats";
