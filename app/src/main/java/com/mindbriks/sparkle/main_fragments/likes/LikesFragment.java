@@ -30,6 +30,7 @@ public class LikesFragment extends Fragment {
     private FragmentLikesBinding binding;
     private LikesAdapter mLikesAdapter;
     private NestedScrollView rootLayout;
+    private RecyclerView mLikesList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +40,14 @@ public class LikesFragment extends Fragment {
 
         binding = FragmentLikesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mLikesList = binding.likes;
+        mLikesList.setLayoutManager(layoutManager);
+        mLikesList.setClipToPadding(false);
+        mLikesList.setHasFixedSize(true);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
+        mLikesList.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
         rootLayout = binding.rootLayout;
 
         DataSourceHelper.getDataSource().getCurrentUserDetails(new IUserDetailsCallback() {
@@ -59,14 +68,6 @@ public class LikesFragment extends Fragment {
     }
 
     private void populateUsers(LikesViewModel likesViewModel, DbUser dbUser) {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        RecyclerView mLikesList = binding.likes;
-        mLikesList.setLayoutManager(layoutManager);
-        mLikesList.setClipToPadding(false);
-        mLikesList.setHasFixedSize(true);
-
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
-        mLikesList.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
         mLikesAdapter = new LikesAdapter(getContext(), dbUser);
         mLikesList.setAdapter(mLikesAdapter);
         likesViewModel.getLikedUsers().observe(getViewLifecycleOwner(), new Observer<List<DbUser>>() {

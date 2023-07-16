@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-
+        homeViewModel.loadMyData();
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         rootLayout = binding.rootLayout;
