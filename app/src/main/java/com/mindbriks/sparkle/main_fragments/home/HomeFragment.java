@@ -52,14 +52,14 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.loadMyData();
+        homeViewModel.loadUsers();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.loadMyData();
+        homeViewModel.loadUsers();
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         rootLayout = binding.rootLayout;

@@ -1,17 +1,13 @@
 package com.mindbriks.sparkle.main_fragments.home;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.IAllUserDetailsCallback;
 import com.mindbriks.sparkle.interfaces.IChatCreationCallback;
@@ -63,7 +59,7 @@ public class HomeViewModel extends ViewModel {
         cardStackView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    public void loadMyData() {
+    public void loadUsers() {
         dataSource = DataSourceHelper.getDataSource();
         String currentUserId = dataSource.getCurrentUserId();
 

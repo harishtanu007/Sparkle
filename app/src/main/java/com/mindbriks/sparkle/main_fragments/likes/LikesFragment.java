@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -19,6 +20,7 @@ import com.mindbriks.sparkle.adapter.LikesAdapter;
 import com.mindbriks.sparkle.databinding.FragmentLikesBinding;
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
 import com.mindbriks.sparkle.interfaces.IUserDetailsCallback;
+import com.mindbriks.sparkle.main_fragments.home.HomeViewModel;
 import com.mindbriks.sparkle.model.DbUser;
 import com.mindbriks.sparkle.utils.GridSpacingItemDecoration;
 
@@ -31,6 +33,13 @@ public class LikesFragment extends Fragment {
     private LikesAdapter mLikesAdapter;
     private NestedScrollView rootLayout;
     private RecyclerView mLikesList;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        likesViewModel = new ViewModelProvider(this).get(LikesViewModel.class);
+        likesViewModel.loadLikedUsers();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
