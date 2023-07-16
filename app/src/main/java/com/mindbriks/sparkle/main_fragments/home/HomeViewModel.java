@@ -5,7 +5,6 @@ import android.view.animation.LinearInterpolator;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.mindbriks.sparkle.firebase.DataSourceHelper;
@@ -34,6 +33,7 @@ public class HomeViewModel extends ViewModel {
         mText.setValue("This is home fragment");
 
     }
+
     public LiveData<String> getText() {
         return mText;
     }
@@ -67,7 +67,7 @@ public class HomeViewModel extends ViewModel {
                     @Override
                     public void onUserDetailsFetched(List<DbUser> users) {
                         //List<DbUser> matchedUsers = MatchingAlgorithm.getTopMatches(userDetails, users);
-                        HomeViewModel.this.matchedUsers.setValue(users);
+                        matchedUsers.setValue(users);
                     }
 
                     @Override

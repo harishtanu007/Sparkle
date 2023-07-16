@@ -27,7 +27,7 @@ public interface IDataSource {
     void getCurrentUserDetails(IUserDetailsCallback callback);
 
     void getAllUserDetails(String userId, IAllUserDetailsCallback callback);
-
+    void getLikedUserDetails(String userId, IAllUserDetailsCallback callback);
     void getUserDetails(String userId, IUserDetailsCallback callback);
 
     void setUserLiked(String currentUserId, String likedUserId, IDataSourceCallback callback);

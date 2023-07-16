@@ -157,7 +157,7 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
             homeViewModel.setUserDisLiked(mCurrentUser, new IDataSourceCallback() {
                 @Override
                 public void onSuccess() {
-                    
+
                 }
 
                 @Override
@@ -181,11 +181,21 @@ public class HomeFragment extends Fragment implements CardStackListener, FilterF
     @Override
     public void onCardAppeared(View view, int position) {
         List<DbUser> users = homeViewModel.getMatchedUsers().getValue();
-        mCurrentUser = users.get(position);
+        if (users == null || users.isEmpty()) {
+            binding.buttonContainer.buttonContainer.setVisibility(View.GONE);
+        } else {
+            binding.buttonContainer.buttonContainer.setVisibility(View.VISIBLE);
+            mCurrentUser = users.get(position);
+        }
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
+        List<DbUser> users = homeViewModel.getMatchedUsers().getValue();
+        if (users == null || users.size() <= 1)
+            binding.buttonContainer.buttonContainer.setVisibility(View.GONE);
+        else
+            binding.buttonContainer.buttonContainer.setVisibility(View.VISIBLE);
     }
 
     @Override

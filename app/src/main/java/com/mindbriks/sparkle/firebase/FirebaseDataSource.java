@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -371,9 +372,55 @@ public class FirebaseDataSource implements IDataSource {
     }
 
     @Override
+    public void getLikedUserDetails(String userId, IAllUserDetailsCallback callback) {
+        List<DbUser> likedUserList = new ArrayList<>();
+        usersDb.child(userId).child(CONNECTIONS).child(YEPS).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot likedUser : snapshot.getChildren()) {
+                        getLikedUser(likedUser.getKey(), new IUserDetailsCallback() {
+                            @Override
+                            public void onUserDetailsFetched(DbUser userDetails) {
+                                likedUserList.add(userDetails);
+                                callback.onUserDetailsFetched(likedUserList);
+                            }
+
+                            @Override
+                            public void onUserDetailsFetchFailed(String errorMessage) {
+                                callback.onUserDetailsFetchFailed(errorMessage);
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getLikedUser(String likedUserId, IUserDetailsCallback callback) {
+        getUserDetails(likedUserId, new IUserDetailsCallback() {
+            @Override
+            public void onUserDetailsFetched(DbUser userDetails) {
+                callback.onUserDetailsFetched(userDetails);
+            }
+
+            @Override
+            public void onUserDetailsFetchFailed(String errorMessage) {
+                callback.onUserDetailsFetchFailed(errorMessage);
+            }
+        });
+    }
+
+    @Override
     public void getUserDetails(String userId, IUserDetailsCallback callback) {
         DatabaseReference userRef = usersDb.child(userId);
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -382,7 +429,7 @@ public class FirebaseDataSource implements IDataSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                callback.onUserDetailsFetchFailed(error.getMessage());
+
             }
         });
     }
